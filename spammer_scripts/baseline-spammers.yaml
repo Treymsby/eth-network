@@ -1,15 +1,4 @@
-# baseline-with-blobs-and-contracts.yaml
-# Mix:
-# - 33% simple ETH (33 tx/slot)
-# - 27% ERC-20 transfers (27 tx/slot)
-# - 15% swaps / DEX-like (15 tx/slot)
-# - 10% NFT mints/transfers (≈10 tx/slot via 5 cycles × 2 tx)
-# - 8%  blobs (8 tx/slot)
-# - 3%  contract calls (3 tx/slot)
-# - 2%  contract deploys (2 tx/slot)
-# - 2%  maintenance ops (2 tx/slot)
-# - 10% Blob transactions (10 tx/slot)
-# Total: 120 tx/slot
+# Total: 110 tx/slot
 
 # https://github.com/ethpandaops/spamoor/blob/master/scenarios/eoatx/README.md
 - scenario: eoatx
@@ -50,34 +39,13 @@
     max_wallets: 80
     base_fee: 20
     tip_fee: 3
-
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/calltx/README.md
-- scenario: calltx
-  name: "Contract calls (6%)"
-  config:
-    seed: mix-call
-    throughput: 6
-    max_pending: 60
-    max_wallets: 40
-    base_fee: 20
-    tip_fee: 2
-# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploytx
-- scenario: deploytx
-  name: "Contract deploys (3%)"
-  config:
-    seed: mix-deploy
-    throughput: 3
-    max_pending: 30
-    max_wallets: 20
-    base_fee: 25
-    tip_fee: 3
-    
+   
 # https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploy-destruct
 - scenario: deploy-destruct
   name: "Deploy + selfdestruct (1%)"
   config:
     seed: mix-destr
-    throughput: 1
+    throughput: 10
     max_pending: 20
     max_wallets: 10
     base_fee: 25
