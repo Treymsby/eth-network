@@ -1,0 +1,85 @@
+1) Goals (what "baseline" means)
+
+Produce repeatable, realistic traffic patterns (simple transfers + common contract calls) at controlled rates.
+
+Measure node / chain health before, during and after load: TPS, average gas used / block, block production latency, txpool size & tail latencies, RPC latency, fork/reorgs, memory/CPU, and block gas fullness.
+
+Keep all testing on your isolated local network (do not broadcast to mainnet).
+
+Key sources for tooling/approach: Kurtosis Ethereum package (includes a transaction spammer and reproducible local nets), benchmark examples for Besu/EVM, and node speed/latency tools. 
+GitHub
++2
+GitHub
++2
+
+2) Recommended high-level approach (safe & repeatable)
+
+Spin up an isolated local testnet (geth / besu / hardhat / ganache / kurtosis). Record genesis, client versions, block time, baseFee (EIP-1559) settings and block gas limit. 
+brodan.biz
++1
+
+Instrument everything: enable client metrics (Prometheus / node metrics), collect node logs, monitor RPC latencies, and capture txpool stats. Use Netdata/Prometheus+Grafana or similar. 
+Netdata
+
+Create baseline traffic types (below) and ramp them at controlled rates. Run each baseline scenario long enough to reach steady state (e.g., 5–15 mins per level).
+
+Record snapshots of all metrics before/after each run. Keep non-attacked baseline runs for later comparison.
+
+Run controlled griefing scenarios (only on this local net) and compare to baseline. Start small and increase intensity.
+
+Automate and repeat (same genesis + same seed accounts + same rates) for reproducibility.
+
+3) What baseline traffic to generate
+
+Make traffic mixes that reflect realistic usage and also stress different subsystems:
+
+A. Simple ETH transfers (many small 0.01–0.1 ETH transfers, signed, varying gasPrice/baseFee).
+B. Token transfers (ERC-20) — cheap but exercise contract execution and storage reads/writes.
+C. Contract calls that use moderate gas (e.g., simple state updates, events) — tests EVM execution.
+D. Contract deployments (heavy gas) — low frequency, high cost.
+E. EIP-1559 style txs vs legacy gas-price txs — test mempool handling differences.
+F. Mixed nonce patterns (non-sequential nonces) and multiple accounts — tests txpool eviction/pinning behavior.
+
+Use a matrix of rates: e.g., 10 tps, 50 tps, 100 tps, 300 tps (adjust to what your node can handle). See benchmarking examples (Besu benchmark repo, EVM speed tester). 
+GitHub
++1
+
+4) Metrics to capture (must-haves)
+
+Transactions/sec (accepted / mined) (per-node and cluster-wide).
+
+Gas used per block and block gas fullness (%).
+
+Average / p95 / p99 transaction latency: time from submit → included in block. (tools like txping show how to measure). 
+QuickNode
+
+Txpool size and age distribution (stalled/pending).
+
+RPC latency and error rates (eth_sendRawTransaction, eth_getTransactionReceipt).
+
+Node resource usage: CPU, memory, disk I/O, network I/O.
+
+Reorgs / uncle rates / block time variance.
+
+Client-specific metrics (goroutines, GC pauses for go-clients, DB metrics). Use Prometheus exporters. 
+Netdata
+
+Capture logs, full metric timeseries and the raw transaction lists (for later forensic comparison).
+
+5) Experiment matrix (examples)
+
+For each traffic type above, run these levels:
+
+Baseline: 10 TPS for 10 minutes.
+
+Medium: 50 TPS for 10 minutes.
+
+High: 100 TPS for 10 minutes (or until node saturation).
+
+Stress: increase until you see mempool growth/failures (document the exact rate).
+
+For each run, vary: number of distinct sending accounts (small = 10 accounts vs many = 1000 accounts), tx gas usage (low vs high), EIP-1559 vs legacy.
+
+6) Safe, repeatable tx generator (example)
+
+Below is a benign Node.js / ethers.js generator you can run against a local RPC endpoint (e.g., http://localhost:8545) to create controlled, repeated transfers. It creates many accounts and sends signed transfers at a target rate. (This is intended only for isolated/local testnets.)

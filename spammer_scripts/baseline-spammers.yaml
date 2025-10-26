@@ -1,0 +1,71 @@
+# baseline-spammers.yaml
+# A realistic everyday mix:
+# ~60% EOA->EOA ETH transfers, ~25% ERC20 transfers/approvals, ~15% simple contract calls.
+
+- scenario: eoatx
+  name: "Baseline ETH transfers"
+  description: "Randomized ETH sends between rotating EOAs"
+  config:
+    seed: baseline-eoa
+    # Wallet funding from the root (make sure your root key has ETH)
+    refill_amount: 1000000000000000000      # 1 ETH (wei) topped up per refill
+    refill_balance: 500000000000000000      # keep child at >= 0.5 ETH
+    refill_interval: 600                    # seconds
+    # Volume (per slot)
+    throughput: 120                         # ~60% of total
+    max_pending: 240
+    max_wallets: 200
+    # Fees (gwei)
+    base_fee: 20
+    tip_fee: 2
+    # Value pattern
+    amount: 1000000000000000                # 0.001 ETH (wei)
+    random_amount: true
+    random_target: true
+
+- scenario: erctx
+  name: "ERC20 transfers & approvals"
+  description: "Deploy an ERC20 and mix transfers/approvals"
+  config:
+    seed: baseline-erc20
+    refill_amount: 1000000000000000000
+    refill_balance: 500000000000000000
+    refill_interval: 600
+    throughput: 50                          # ~25% of total
+    max_pending: 100
+    max_wallets: 150
+    base_fee: 20
+    tip_fee: 2
+    # Token amounts are scenario-handled; simple integer amounts are fine
+    amount: 50
+    random_amount: true
+
+- scenario: calltx
+  name: "Simple contract calls"
+  description: "Deploy a tiny contract (e.g., counter) and call it repeatedly"
+  config:
+    seed: baseline-call
+    refill_amount: 1000000000000000000
+    refill_balance: 500000000000000000
+    refill_interval: 600
+    throughput: 30                          # ~15% of total
+    max_pending: 60
+    max_wallets: 60
+    base_fee: 20
+    tip_fee: 2
+
+# OPTIONAL: sprinkle some rare deployments (uncomment and provide init_code if you want)
+# - scenario: factorydeploytx
+#   name: "Occasional CREATE2 deployments"
+#   description: "Deploy small contracts at predictable addresses"
+#   config:
+#     seed: baseline-deploy
+#     throughput: 5                         # low rate
+#     max_pending: 10
+#     max_wallets: 10
+#     base_fee: 20
+#     tip_fee: 2
+#     gas_limit: 1500000
+#     well_known_factory: true
+#     init_code: "0x..."                    # required: hex init code of the contract to deploy
+#     start_salt: 0

@@ -1,0 +1,1102 @@
+# Specification of the participants in the network
+participants:
+  # EL(Execution Layer) Specific flags
+    # The type of EL client that should be started
+    # Valid values are geth, nethermind, erigon, besu, ethereumjs, reth, nimbus-eth1
+  - el_type: geth
+
+    # The Docker image that should be used for the EL client; leave blank to use the default for the client type
+    # Defaults by client:
+    # - geth: ethereum/client-go:latest
+    # - erigon: erigontech/erigon:latest
+    # - nethermind: ethpandaops/nethermind:master
+    # - besu: hyperledger/besu:latest
+    # - reth: ghcr.io/paradigmxyz/reth
+    # - ethereumjs: ethpandaops/ethereumjs:master
+    # - nimbus-eth1: statusim/nimbus-eth1:master
+    # - ethrex: ghcr.io/lambdaclass/ethrex:latest
+    el_image: ""
+
+    # The log level string that this participant's EL client should log at
+    # If this is emptystring then the global `logLevel` parameter's value will be translated into a string appropriate for the client (e.g. if
+    # global `logLevel` = `info` then Geth would receive `3`, Besu would receive `INFO`, etc.)
+    # If this is not emptystring, then this value will override the global `logLevel` setting to allow for fine-grained control
+    # over a specific participant's logging
+    el_log_level: ""
+
+    # A list of optional extra env_vars the el container should spin up with
+    el_extra_env_vars: {}
+
+    # A list of optional extra labels the el container should spin up with
+    # Example; el_extra_labels: {"ethereum-package.partition": "1"}
+    el_extra_labels: {}
+
+    # A list of optional extra params that will be passed to the EL client container for modifying its behaviour
+    el_extra_params: []
+
+    # A list of optional extra mount points that will be passed to the EL client container
+    # Key is the mount path (becomes a directory), value MUST reference a key from extra_files
+    # The file will be available at <mount_path>/<extra_files_key>
+    # Example: el_extra_mounts: {"/config": "my_config_file"}  # Creates /config/my_config_file
+    el_extra_mounts: {}
+
+    # A list of tolerations that will be passed to the EL client container
+    # Only works with Kubernetes
+    # Example: el_tolerations:
+    # - key: "key"
+    #   operator: "Equal"
+    #   value: "value"
+    #   effect: "NoSchedule"
+    #   toleration_seconds: 3600
+    # Defaults to empty
+    el_tolerations: []
+
+    # Persistent storage size for the EL client container (in MB)
+    # Defaults to 0, which means that the default size for the client will be used
+    # Default values can be found in /src/package_io/constants.star VOLUME_SIZE
+    el_volume_size: 0
+
+    # Resource management for el containers
+    # CPU is milicores
+    # RAM is in MB
+    # Defaults to 0, which results in no resource limits
+    el_min_cpu: 0
+    el_max_cpu: 0
+    el_min_mem: 0
+    el_max_mem: 0
+
+  # CL(Consensus Layer) Specific flags
+    # The type of CL client that should be started
+    # Valid values are nimbus, lighthouse, lodestar, teku, prysm, and grandine
+    cl_type: lighthouse
+
+    # The Docker image that should be used for the CL client; leave blank to use the default for the client type
+    # Defaults by client:
+    # - lighthouse: ethpandaops/lighthouse:unstable
+    # - teku: ethpandaops/teku:master
+    # - nimbus: statusim/nimbus-eth2:multiarch-latest
+    # - prysm: ethpandaops/prysm-beacon-chain:develop
+    # - lodestar: chainsafe/lodestar:latest
+    # - grandine: sifrai/grandine:stable
+    cl_image: ""
+
+    # The log level string that this participant's CL client should log at
+    # If this is emptystring then the global `logLevel` parameter's value will be translated into a string appropriate for the client (e.g. if
+    # global `logLevel` = `info` then Teku would receive `INFO`, Prysm would receive `info`, etc.)
+    # If this is not emptystring, then this value will override the global `logLevel` setting to allow for fine-grained control
+    # over a specific participant's logging
+    cl_log_level: ""
+
+    # A list of optional extra env_vars the cl container should spin up with
+    cl_extra_env_vars: {}
+
+    # A list of optional extra labels that will be passed to the CL client Beacon container.
+    # Example; cl_extra_labels: {"ethereum-package.partition": "1"}
+    cl_extra_labels: {}
+
+    # A list of optional extra params that will be passed to the CL client Beacon container for modifying its behaviour
+    # If the client combines the Beacon & validator nodes (e.g. Teku, Nimbus), then this list will be passed to the combined Beacon-validator node
+    cl_extra_params: []
+
+    # A list of optional extra mount points that will be passed to the CL client container
+    # Key is the mount path (becomes a directory), value MUST reference a key from extra_files
+    # The file will be available at <mount_path>/<extra_files_key>
+    # Example: cl_extra_mounts: {"/config": "my_config_file"}  # Creates /config/my_config_file
+    cl_extra_mounts: {}
+
+    # A list of tolerations that will be passed to the CL client container
+    # Only works with Kubernetes
+    # Example: el_tolerations:
+    # - key: "key"
+    #   operator: "Equal"
+    #   value: "value"
+    #   effect: "NoSchedule"
+    #   toleration_seconds: 3600
+    # Defaults to empty
+    cl_tolerations: []
+
+    # Persistent storage size for the CL client container (in MB)
+    # Defaults to 0, which means that the default size for the client will be used
+    # Default values can be found in /src/package_io/constants.star VOLUME_SIZE
+    cl_volume_size: 0
+
+    # Resource management for cl containers
+    # CPU is milicores
+    # RAM is in MB
+    # Defaults to 0, which results in no resource limits
+    cl_min_cpu: 0
+    cl_max_cpu: 0
+    cl_min_mem: 0
+    cl_max_mem: 0
+
+    # Whether to act as a supernode for the network
+    # Supernodes will subscribe to all subnet topics
+    # This flag should only be used with peerdas
+    # Defaults to false
+    supernode: false
+
+    # Whether to use a separate validator client attached to the CL client.
+    # Defaults to false for clients that can run both in one process (Teku, Nimbus)
+    use_separate_vc: true
+
+  # VC (Validator Client) Specific flags
+    # The type of validator client that should be used
+    # Valid values are nimbus, lighthouse, lodestar, teku, prysm and vero
+    # ( The prysm validator only works with a prysm CL client )
+    # Defaults to matching the chosen CL client (cl_type)
+    vc_type: ""
+
+    # The Docker image that should be used for the separate validator client
+    # Defaults by client:
+    # - lighthouse: sigp/lighthouse:latest
+    # - lodestar: chainsafe/lodestar:latest
+    # - nimbus: statusim/nimbus-validator-client:multiarch-latest
+    # - prysm: ethpandaops/prysm-validator:develop
+    # - teku: ethpandaops/teku:master
+    # - vero: ghcr.io/serenita-org/vero:latest
+    vc_image: ""
+
+    # The log level string that this participant's validator client should log at
+    # If this is emptystring then the global `logLevel` parameter's value will be translated into a string appropriate for the client (e.g. if
+    # global `logLevel` = `info` then Teku would receive `INFO`, Prysm would receive `info`, etc.)
+    # If this is not emptystring, then this value will override the global `logLevel` setting to allow for fine-grained control
+    # over a specific participant's logging
+    vc_log_level: ""
+
+    # A list of optional extra env_vars the vc container should spin up with
+    vc_extra_env_vars: {}
+
+    # A list of optional extra labels that will be passed to the validator client validator container.
+    # Example; vc_extra_labels: {"ethereum-package.partition": "1"}
+    vc_extra_labels: {}
+
+    # A list of optional extra params that will be passed to the validator client container for modifying its behaviour
+    # If the client combines the Beacon & validator nodes (e.g. Teku, Nimbus), then this list will also be passed to the combined Beacon-validator node
+    vc_extra_params: []
+
+    # A list of optional extra mount points that will be passed to the validator client container
+    # Key is the mount path (becomes a directory), value MUST reference a key from extra_files
+    # The file will be available at <mount_path>/<extra_files_key>
+    # Example: vc_extra_mounts: {"/config": "my_validator_config"}  # Creates /config/my_validator_config
+    vc_extra_mounts: {}
+
+    # A list of tolerations that will be passed to the validator container
+    # Only works with Kubernetes
+    # Example: el_tolerations:
+    # - key: "key"
+    #   operator: "Equal"
+    #   value: "value"
+    #   effect: "NoSchedule"
+    #   toleration_seconds: 3600
+    # Defaults to empty
+    vc_tolerations: []
+
+    # Resource management for vc containers
+    # CPU is milicores
+    # RAM is in MB
+    # Defaults to 0, which results in no resource limits
+    vc_min_cpu: 0
+    vc_max_cpu: 0
+    vc_min_mem: 0
+    vc_max_mem: 0
+
+    # A list of indices of the beacon nodes that the validator client should connect to
+    # Defaults to null
+    vc_beacon_node_indices: null
+
+    # Count of the number of validators you want to run for a given participant
+    # Default to null, which means that the number of validators will be using the
+    # network parameter num_validator_keys_per_node
+    validator_count: null
+
+    # Whether to use a remote signer instead of the vc directly handling keys
+    # Note Lighthouse VC does not support this flag
+    # Defaults to false
+    use_remote_signer: false
+
+  # Remote signer Specific flags
+    # The type of remote signer that should be used
+    # Valid values are web3signer
+    # Defaults to web3signer
+    remote_signer_type: "web3signer"
+
+    # The Docker image that should be used for the remote signer
+    # Defaults to "consensys/web3signer:latest"
+    remote_signer_image: "consensys/web3signer:latest"
+
+    # A list of optional extra env_vars the remote signer container should spin up with
+    remote_signer_extra_env_vars: {}
+
+    # A list of optional extra labels that will be passed to the remote signer container.
+    # Example; remote_signer_extra_labels: {"ethereum-package.partition": "1"}
+    remote_signer_extra_labels: {}
+
+    # A list of optional extra params that will be passed to the remote signer container for modifying its behaviour
+    remote_signer_extra_params: []
+
+    # A list of tolerations that will be passed to the remote signer container
+    # Only works with Kubernetes
+    # Example: remote_signer_tolerations:
+    # - key: "key"
+    #   operator: "Equal"
+    #   value: "value"
+    #   effect: "NoSchedule"
+    #   toleration_seconds: 3600
+    # Defaults to empty
+    remote_signer_tolerations: []
+
+    # Resource management for remote signer containers
+    # CPU is milicores
+    # RAM is in MB
+    # Defaults to 0, which results in no resource limits
+    remote_signer_min_cpu: 0
+    remote_signer_max_cpu: 0
+    remote_signer_min_mem: 0
+    remote_signer_max_mem: 0
+
+  # Participant specific flags
+    # Node selector
+    # Only works with Kubernetes
+    # Example: node_selectors: { "disktype": "ssd" }
+    # Defaults to empty
+    node_selectors: {}
+
+    # A list of tolerations that will be passed to the EL/CL/validator containers
+    # This is to be used when you don't want to specify the tolerations for each container separately
+    # Only works with Kubernetes
+    # Example: tolerations:
+    # - key: "key"
+    #   operator: "Equal"
+    #   value: "value"
+    #   effect: "NoSchedule"
+    #   toleration_seconds: 3600
+    # Defaults to empty
+    tolerations: []
+
+    # Count of nodes to spin up for this participant
+    # Default to 1
+    count: 1
+
+    # Snooper local flag for a participant.
+    # Snooper can be enabled with the `snooper_enabled` flag per client or globally
+    # Snooper dumps all JSON-RPC requests and responses including BeaconAPI, EngineAPI and ExecutionAPI.
+    # Default to null
+    snooper_enabled: null
+
+    # Enables Ethereum Metrics Exporter for this participant. Can be set globally.
+    # Defaults null and then set to global ethereum_metrics_exporter_enabled (false)
+    ethereum_metrics_exporter_enabled: null
+
+    # Enables Xatu Sentry for this participant. Can be set globally.
+    # Defaults null and then set to global xatu_sentry_enabled (false)
+    xatu_sentry_enabled: null
+
+    # Prometheus additional configuration for a given participant prometheus target.
+    # Execution, beacon and validator client targets on prometheus will include this
+    # configuration.
+    prometheus_config:
+      # Scrape interval to be used. Default to 15 seconds
+      scrape_interval: 15s
+      # Additional labels to be added. Default to empty
+      labels: {}
+
+    # Blobber can be enabled with the `blobber_enabled` flag per client or globally
+    # Defaults to false
+    blobber_enabled: false
+
+    # Blobber extra params can be passed in to the blobber container
+    # Defaults to empty
+    blobber_extra_params: []
+
+    # Blobber image to be used for the blobber container
+    # Defaults to empty
+    blobber_image: ethpandaops/blobber:latest
+
+    # A set of parameters the node needs to reach an external block building network
+    # If `null` then the builder infrastructure will not be instantiated
+    # Example:
+    #
+    # "relay_endpoints": [
+    #  "https://0xdeadbeefcafa@relay.example.com",
+    #  "https://0xdeadbeefcafb@relay.example.com",
+    #  "https://0xdeadbeefcafc@relay.example.com",
+    #  "https://0xdeadbeefcafd@relay.example.com"
+    # ]
+    builder_network_params: null
+
+    # Participant flag for keymanager api
+    # This will open up http ports to your validator services!
+    # Defaults null and then set to default global keymanager_enabled (false)
+    keymanager_enabled: null
+
+# Participants matrix creates a participant for each combination of EL, CL and VC clients
+# Each EL/CL/VC item can provide the same parameters as a standard participant
+participants_matrix: {}
+  # el:
+  #   - el_type: geth
+  #   - el_type: besu
+  # cl:
+  #   - cl_type: prysm
+  #   - cl_type: lighthouse
+  # vc:
+  #   - vc_type: prysm
+  #   - vc_type: lighthouse
+
+
+# Default configuration parameters for the network
+network_params:
+  # Network name, used to enable syncing of alternative networks
+  # Defaults to "kurtosis"
+  # You can sync any public network by setting this to the network name (e.g. "mainnet", "sepolia", "holesky", "hoodi")
+  # You can sync any devnet by setting this to the network name (e.g. "dencun-devnet-12", "verkle-gen-devnet-2")
+  network: "kurtosis"
+
+  # The network ID of the network.
+  network_id: "3151908"
+
+  # The address of the staking contract address on the Eth1 chain
+  deposit_contract_address: "0x00000000219ab540356cBB839Cbe05303d7705Fa"
+
+  # Number of seconds per slot on the Beacon chain
+  seconds_per_slot: 12
+
+  # Duration of a slot in milliseconds
+  # Defaults to 12000ms (12 seconds)
+  slot_duration_ms: 12000
+
+  # Gloas fork timing parameters (optimized for faster slots)
+  # Attestation due timing for Gloas fork
+  # Defaults to 2500 basis points (25% of slot duration)
+  attestation_due_bps_gloas: 2500
+
+  # Aggregate due timing for Gloas fork
+  # Defaults to 5000 basis points (50% of slot duration)
+  aggregate_due_bps_gloas: 5000
+
+  # Sync message due timing for Gloas fork
+  # Defaults to 2500 basis points (25% of slot duration)
+  sync_message_due_bps_gloas: 2500
+
+  # Contribution due timing for Gloas fork
+  # Defaults to 5000 basis points (50% of slot duration)
+  contribution_due_bps_gloas: 5000
+
+  # Payload attestation due timing for Gloas fork
+  # Defaults to 7500 basis points (75% of slot duration)
+  payload_attestation_due_bps: 7500
+
+  # EIP-7805 timing parameters
+  # View freeze cutoff timing
+  # Defaults to 7500 basis points (75% of slot duration)
+  view_freeze_cutoff_bps: 7500
+
+  # Inclusion list submission due timing
+  # Defaults to 6667 basis points (~67% of slot duration)
+  inclusion_list_submission_due_bps: 6667
+
+  # Proposer inclusion list cutoff timing
+  # Defaults to 9167 basis points (~92% of slot duration)
+  proposer_inclusion_list_cutoff_bps: 9167
+
+  # Maximum request blocks for Deneb fork
+  # Defaults to 128
+  max_request_blocks_deneb: 128
+
+  # Maximum request blob sidecars for Electra fork
+  # Defaults to 1152 (128 * 9 blobs)
+  max_request_blob_sidecars_electra: 1152
+
+  # The number of validator keys that each CL validator node should get
+  num_validator_keys_per_node: 64
+
+  # This mnemonic will a) be used to create keystores for all the types of validators that we have and b) be used to generate a CL genesis.ssz that has the children
+  # validator keys already preregistered as validators
+  preregistered_validator_keys_mnemonic: "giant issue aisle success illegal bike spike question tent bar rely arctic volcano long crawl hungry vocal artwork sniff fantasy very lucky have athlete"
+
+  # The number of pre-registered validators for genesis. If 0 or not specified then the value will be calculated from the participants
+  preregistered_validator_count: 0
+
+  # How long you want the network to wait before starting up
+  genesis_delay: 20
+
+  # Unix timestamp for genesis. If specified (non-zero), this overrides genesis_delay.
+  # When set to 0 (default), the genesis time is automatically calculated based on current time and genesis_delay.
+  # Use this field to set a specific genesis time for the network.
+  # Defaults to 0
+  genesis_time: 0
+
+  # The gas limit of the network set at genesis
+  # Defaults to 60000000
+
+  genesis_gaslimit: 60000000
+
+  # Max churn rate for the network introduced by
+  # EIP-7514 https://eips.ethereum.org/EIPS/eip-7514
+  # Defaults to 8
+  max_per_epoch_activation_churn_limit: 8
+
+  # Churn limit quotient for the network
+  # Defaults to 65536
+  churn_limit_quotient: 65536
+
+  # Ejection balance
+  # Defaults to 16ETH
+  # 16000000000 gwei
+  ejection_balance: 16000000000
+
+  # ETH1 follow distance
+  # Defaults to 2048
+  eth1_follow_distance: 2048
+
+  # The number of epochs to wait validators to be able to withdraw
+  # Defaults to 256 epochs ~27 hours
+  min_validator_withdrawability_delay: 256
+
+  # The period of the shard committee
+  # Defaults to 256 epoch ~27 hours
+  shard_committee_period: 256
+
+  # The epoch at which the deneb/electra/fulu forks are set to occur. Note: PeerDAS and Electra clients are currently
+  # working on forks. So set either one of the below forks.
+  # Altair fork epoch
+  # Defaults to 0
+  altair_fork_epoch: 0
+
+  # Bellatrix fork epoch
+  # Defaults to 0
+  bellatrix_fork_epoch: 0
+
+  # Capella fork epoch
+  # Defaults to 0
+  capella_fork_epoch: 0
+
+  # Deneb fork epoch
+  # Defaults to 0
+  deneb_fork_epoch: 0
+
+  # Electra fork epoch
+  # Defaults to 0
+  electra_fork_epoch: 0
+
+  # Fulu fork epoch
+  # Defaults to 18446744073709551615
+  fulu_fork_epoch: 18446744073709551615
+
+  # Gloas fork epoch
+  # Defaults to 18446744073709551615
+  gloas_fork_epoch: 18446744073709551615
+
+  # Network sync base url for syncing public networks from a custom snapshot (mostly useful for shadowforks)
+  # Defaults to "https://snapshots.ethpandaops.io/"
+  # If you have a local snapshot, you can set this to the local url:
+  # network_snapshot_url_base = "http://10.10.101.21:10000/snapshots/"
+  # The snapshots are taken with https://github.com/ethpandaops/snapshotter
+  network_sync_base_url: https://snapshots.ethpandaops.io/
+
+  # Force network sync with a custom snapshot
+  # This enables quicker EL sync (use with caution)
+  # Defaults to false
+  force_snapshot_sync: false
+
+  # The block height of the shadowfork
+  # This is used to sync the network from a snapshot at a specific block height
+  # Defaults to "latest"
+  # Example: shadowfork_block_height: 340000 for hoodi
+  shadowfork_block_height: "latest"
+
+  # The number of data column sidecar subnets used in the gossipsub protocol
+  data_column_sidecar_subnet_count: 128
+  # Number of DataColumn random samples a node queries per slot
+  samples_per_slot: 8
+
+  # Minimum number of subnets an honest node custodies and serves samples from
+  # Defaults to 4
+  custody_requirement: 4
+
+  # Maximum number of blobs per block for Electra fork (default 9)
+  max_blobs_per_block_electra: 9
+  # Target number of blobs per block for Electra fork (default 6)
+  target_blobs_per_block_electra: 6
+  # Base fee update fraction for Electra fork (default 5007716)
+  base_fee_update_fraction_electra: 5007716
+
+  # EIP-7805 fork epoch
+  # Defaults to 18446744073709551615
+  eip7805_fork_epoch: 18446744073709551615
+
+
+  # Preset for the network
+  # Default: "mainnet"
+  # Options: "mainnet", "minimal"
+  # "minimal" preset will spin up a network with minimal preset. This is useful for rapid testing and development.
+  # 192 seconds to get to finalized epoch vs 1536 seconds with mainnet defaults
+  # Please note that minimal preset requires alternative client images.
+  # For an example of minimal preset, please refer to [minimal.yaml](.github/tests/minimal.yaml)
+  preset: "mainnet"
+
+  # Preloaded contracts for the chain
+  additional_preloaded_contracts: {}
+  # Example:
+  # additional_preloaded_contracts: '{
+  #  "0x123463a4B065722E99115D6c222f267d9cABb524":
+  #   {
+  #     balance: "1ETH",
+  #     code: "0x1234",
+  #     storage: {},
+  #     nonce: 0,
+  #     secretKey: "0x",
+  #   }
+  # }'
+
+  # Repository override for devnet networks
+  # Default: ethpandaops
+  devnet_repo: ethpandaops
+
+  # A number of prefunded accounts to be created
+  # Defaults to no prefunded accounts
+  # Example:
+  # prefunded_accounts: '{"0x25941dC771bB64514Fc8abBce970307Fb9d477e9": {"balance": "10ETH"}}'
+  # 10ETH to the account 0x25941dC771bB64514Fc8abBce970307Fb9d477e9
+  # To prefund multiple accounts, separate them with a comma
+  #
+  # prefunded_accounts: '{"0x25941dC771bB64514Fc8abBce970307Fb9d477e9": {"balance": "10ETH"}, "0x4107be99052d895e3ee461C685b042Aa975ab5c0": {"balance": "1ETH"}}'
+  prefunded_accounts: {}
+
+  # Maximum size of gossip messages in bytes
+  # 10 * 2**20 (= 10485760, 10 MiB)
+  # Defaults to 10485760 (10MB)
+  max_payload_size: 10485760
+
+  # Enable Perfect PeerDAS
+  # This flag is meant to be used with 16 nodes where each node gets 8 unique columns
+  # Ensure that you set the number of validator keys per node to less than or equal to 8 so that validator custody is not affected
+  # Defaults to false
+  perfect_peerdas_enabled: false
+
+  # Gas limit for the network
+  # Default to 0
+  # If set to 0, the gas limit will be set to the default gas limit for the clients
+  # Set this value to gas limit in millionths of a gwei
+  # Example: gas_limit: 60000000
+  # This will override the gas limit for each EL client
+  # Do not confuse with genesis_gaslimit which sets the gas limit at the genesis file level
+  gas_limit: 0
+
+
+  # BPO
+  # BPO1-5 epoch (default 18446744073709551615)
+  bpo_1_epoch: 18446744073709551615
+  # Maximum number of blobs per block for BPO1-5
+  # If only max is set, target is auto-calculated as 2/3 of max
+  # If only target is set, max is auto-calculated as 3/2 of target
+  bpo_1_max_blobs: 0
+  # Target number of blobs per block for BPO1-5
+  bpo_1_target_blobs: 0
+  # Base fee update fraction for BPO1-5 (default 0)
+  bpo_1_base_fee_update_fraction: 0
+
+  bpo_2_epoch: 18446744073709551615
+  bpo_2_max_blobs: 0
+  bpo_2_target_blobs: 0
+  bpo_2_base_fee_update_fraction: 0
+
+  bpo_3_epoch: 18446744073709551615
+  bpo_3_max_blobs: 0
+  bpo_3_target_blobs: 0
+  bpo_3_base_fee_update_fraction: 0
+
+  bpo_4_epoch: 18446744073709551615
+  bpo_4_max_blobs: 0
+  bpo_4_target_blobs: 0
+  bpo_4_base_fee_update_fraction: 0
+
+  bpo_5_epoch: 18446744073709551615
+  bpo_5_max_blobs: 0
+  bpo_5_target_blobs: 0
+  bpo_5_base_fee_update_fraction: 0
+
+  # Withdrawal type - available options (0x00, 0x01, 0x02)
+  # Default to "0x00"
+  withdrawal_type: "0x00"
+
+  # Withdrawal address
+  # Default to "0x8943545177806ED17B9F23F0a21ee5948eCaa776" - 0 address of mnemonic
+  withdrawal_address: "0x8943545177806ED17B9F23F0a21ee5948eCaa776"
+
+  # Validator balance (available ranges: 32-2048)
+  # Default to 32 ETH
+  validator_balance: 32
+
+  # Minimum number of epochs for data column sidecars requests
+  # Default to 4096
+  min_epochs_for_data_column_sidecars_requests: 4096
+
+  # Minimum number of epochs for block requests
+  # Default to 33024
+  min_epochs_for_block_requests: 33024
+
+# Global parameters for the network
+
+# By default includes
+# - A transaction spammer & blob spammer is launched to fake transactions sent to the network
+# - Forkmon for EL will be launched
+# - A prometheus will be started, coupled with grafana
+# - A beacon metrics gazer will be launched
+# - A light beacon chain explorer will be launched
+# - Default: []
+additional_services:
+  - assertoor
+  - broadcaster
+  - tx_fuzz
+  - custom_flood
+  - spamoor
+  - forkmon
+  - blockscout
+  - dora
+  - full_beaconchain_explorer
+  - prometheus
+  - grafana
+  - tempo
+  - blobscan
+  - dugtrio
+  - blutgang
+  - forky
+  - apache
+  - tracoor
+
+# Configuration place for blockscout explorer - https://github.com/blockscout/blockscout
+blockscout_params:
+  # blockscout docker image to use
+  # Defaults to ghcr.io/blockscout/blockscout:latest
+  image: "ghcr.io/blockscout/blockscout:latest"
+  # blockscout smart contract verifier image to use
+  # Defaults to ghcr.io/blockscout/smart-contract-verifier:latest
+  verif_image: "ghcr.io/blockscout/smart-contract-verifier:latest"
+  # Frontend image
+  # Defaults to ghcr.io/blockscout/frontend:latest
+  frontend_image: "ghcr.io/blockscout/frontend:latest"
+
+# Configuration place for dora the explorer - https://github.com/ethpandaops/dora
+dora_params:
+  # Dora docker image to use
+  # Defaults to the latest image
+  image: "ethpandaops/dora:latest"
+  # A list of optional extra env_vars the dora container should spin up with
+  env: {}
+
+# Define custom file contents to be mounted into containers
+# These files are referenced by name in el_extra_mounts, cl_extra_mounts, and vc_extra_mounts
+extra_files: {}
+  # Example:
+  # my_config_file.yaml: |
+  #   setting1: value1
+  #   setting2: value2
+  # my_script.sh: |
+  #   #!/bin/bash
+  #   echo "Custom script"
+
+# Configuration place for transaction spammer - https://github.com/MariusVanDerWijden/tx-fuzz
+tx_fuzz_params:
+  # TX Spammer docker image to use
+  # Defaults to the latest master image
+  image: "ethpandaops/tx-fuzz:master"
+  # A list of optional extra params that will be passed to the TX Spammer container for modifying its behaviour
+  tx_fuzz_extra_args: []
+
+# Configuration place for prometheus
+prometheus_params:
+  storage_tsdb_retention_time: "1d"
+  storage_tsdb_retention_size: "512MB"
+  # Resource management for prometheus container
+  # CPU is milicores
+  # RAM is in MB
+  min_cpu: 10
+  max_cpu: 1000
+  min_mem: 128
+  max_mem: 2048
+  # Prometheus docker image to use
+  # Defaults to the latest image
+  image: "prom/prometheus:latest"
+
+# Configuration place for grafana
+grafana_params:
+  # A list of locators for grafana dashboards to be loaded be the grafana service
+  additional_dashboards: []
+  # Resource management for grafana container
+  # CPU is milicores
+  # RAM is in MB
+  min_cpu: 10
+  max_cpu: 1000
+  min_mem: 128
+  max_mem: 2048
+  # Grafana docker image to use
+  # Defaults to the latest image
+  image: "grafana/grafana:latest"
+
+# Configuration place for tempo tracing backend
+tempo_params:
+  # How long to retain traces
+  retention_duration: "12h"
+  # Rate limiting for trace ingestion (bytes per second)
+  ingestion_rate_limit: 20971520  # 20MB
+  # Burst limit for trace ingestion (bytes)
+  ingestion_burst_limit: 52428800  # 50MB
+  # Maximum duration for trace searches
+  max_search_duration: "30s"
+  # Maximum bytes per individual trace
+  max_bytes_per_trace: 52428800  # 50MB
+  # Resource management for tempo container
+  # CPU is milicores
+  # RAM is in MB
+  min_cpu: 10
+  max_cpu: 1000
+  min_mem: 128
+  max_mem: 2048
+  # Tempo docker image to use
+  # Defaults to the latest image
+  image: "grafana/tempo:latest"
+
+# Configuration place for the assertoor testing tool - https://github.com/ethpandaops/assertoor
+assertoor_params:
+  # Assertoor docker image to use
+  # Defaults to the latest image
+  image: "ethpandaops/assertoor:latest"
+
+  # Check chain stability
+  # This check monitors the chain and succeeds if:
+  # - all clients are synced
+  # - chain is finalizing for min. 2 epochs
+  # - >= 98% correct target votes
+  # - >= 80% correct head votes
+  # - no reorgs with distance > 2 blocks
+  # - no more than 2 reorgs per epoch
+  run_stability_check: false
+
+  # Check block proposals
+  # This check monitors the chain and succeeds if:
+  # - all client pairs have proposed a block
+  run_block_proposal_check: false
+
+  # Run normal transaction test
+  # This test generates random EOA transactions and checks inclusion with/from all client pairs
+  # This test checks for:
+  # - block proposals with transactions from all client pairs
+  # - transaction inclusion when submitting via each client pair
+  # test is done twice, first with legacy (type 0) transactions, then with dynfee (type 2) transactions
+  run_transaction_test: false
+
+  # Run blob transaction test
+  # This test generates blob transactions and checks inclusion with/from all client pairs
+  # This test checks for:
+  # - block proposals with blobs from all client pairs
+  # - blob inclusion when submitting via each client pair
+  run_blob_transaction_test: false
+
+  # Run all-opcodes transaction test
+  # This test generates a transaction that triggers all EVM OPCODES once
+  # This test checks for:
+  # - all-opcodes transaction success
+  run_opcodes_transaction_test: false
+
+  # Run validator lifecycle test (~48h to complete)
+  # This test requires exactly 500 active validator keys.
+  # The test will cause a temporary chain unfinality when running.
+  # This test checks:
+  # - Deposit inclusion with/from all client pairs
+  # - BLS Change inclusion with/from all client pairs
+  # - Voluntary Exit inclusion with/from all client pairs
+  # - Attester Slashing inclusion with/from all client pairs
+  # - Proposer Slashing inclusion with/from all client pairs
+  # all checks are done during finality & unfinality
+  run_lifecycle_test: false
+
+  # Run additional tests from external test definitions
+  # Entries may be simple strings (link to the test file) or dictionaries with more flexibility
+  # eg:
+  #   - https://raw.githubusercontent.com/ethpandaops/assertoor/master/example/tests/block-proposal-check.yaml
+  #   - file: "https://raw.githubusercontent.com/ethpandaops/assertoor/master/example/tests/block-proposal-check.yaml"
+  #     config:
+  #       someCustomTestConfig: "some value"
+  tests: []
+
+
+# If set, the package will block until a finalized epoch has occurred.
+wait_for_finalization: false
+
+# The global log level that all clients should log at
+# Valid values are "error", "warn", "info", "debug", and "trace"
+# This value will be overridden by participant-specific values
+global_log_level: "info"
+
+# Snooper global flag for all participants
+# Snooper can be enabled with the `snooper_enabled` flag per client or globally
+# Snooper dumps all JSON-RPC requests and responses including BeaconAPI, EngineAPI and ExecutionAPI.
+# Default to false
+snooper_enabled: false
+
+# Enables Ethereum Metrics Exporter for all participants
+# Defaults to false
+ethereum_metrics_exporter_enabled: false
+
+# Parallelizes keystore generation so that each node has keystores being generated in their own container
+# This will result in a large number of containers being spun up than normal. We advise users to only enable this on a sufficiently large machine or in the cloud as it can be resource consuming on a single machine.
+parallel_keystore_generation: false
+
+# Disable peer scoring to prevent nodes impacted by faults from being permanently ejected from the network
+# Default to false
+disable_peer_scoring: false
+
+# Whether the environment should be persistent; this is WIP and is slowly being rolled out across services
+# Note this requires Kurtosis greater than 0.85.49 to work
+# Note Erigon, Besu, Teku persistence is not currently supported with docker.
+# Defaults to false
+persistent: false
+
+# Docker cache url enables all docker images to be pulled through a custom docker registry
+# Disabled by default
+# Defaults to empty cache url
+# Images pulled from dockerhub will be prefixed with "/dh/" by default (docker.io)
+# Images pulled from github registry will be prefixed with "/gh/" by default (ghcr.io)
+# Images pulled from google registry will be prefixed with "/gcr/" by default (gcr.io)
+# If you want to use a local image in combination with the cache, do not put "/" in your local image name
+docker_cache_params:
+  enabled: false
+  url: ""
+  dockerhub_prefix: "/dh/"
+  github_prefix: "/gh/"
+  google_prefix: "/gcr/"
+
+# Supports four values
+# Default: "null" - no mev boost, mev builder, mev flood or relays are spun up
+# "mock" - mock-builder & mev-boost are spun up
+# "flashbots" - mev-boost, relays, flooder and builder are all spun up, powered by [flashbots](https://github.com/flashbots)
+# "mev-rs" - mev-boost, relays and builder are all spun up, powered by [mev-rs](https://github.com/ralexstokes/mev-rs/)
+# "commit-boost" - mev-boost, relays and builder are all spun up, powered by [commit-boost](https://github.com/Commit-Boost/commit-boost-client)
+# We have seen instances of multibuilder instances failing to start mev-relay-api with non zero epochs
+mev_type: null
+
+# Parameters if MEV is used
+mev_params:
+  # The image to use for MEV boost relay
+  mev_relay_image: ethpandaops/mev-boost-relay:main
+  # The image to use for the builder
+  mev_builder_image: ethpandaops/reth-rbuilder:develop
+  # The image to use for the CL builder
+  mev_builder_cl_image: sigp/lighthouse:latest
+  # The subsidy to use for the builder (in ETH)
+  mev_builder_subsidy: 0
+  # The image to use for mev-boost
+  mev_boost_image: ethpandaops/mev-boost:develop
+  # Parameters for MEV Boost. This overrides all arguments of the mev-boost container
+  mev_boost_args: []
+  # Extra parameters to send to the API
+  mev_relay_api_extra_args: []
+  # Extra environment variables to send to the API
+  mev_relay_api_extra_env_vars: {}
+  # Extra parameters to send to the housekeeper
+  mev_relay_housekeeper_extra_args: []
+  # Extra environment variables to send to the housekeeper
+  mev_relay_housekeeper_extra_env_vars: {}
+  # Extra parameters to send to the website
+  mev_relay_website_extra_args: []
+  # Extra environment variables to send to the website
+  mev_relay_website_extra_env_vars: {}
+  # Extra parameters to send to the builder
+  mev_builder_extra_args: []
+  # Prometheus additional configuration for the mev builder participant.
+  # Execution, beacon and validator client targets on prometheus will include this configuration.
+  mev_builder_prometheus_config:
+    # Scrape interval to be used. Default to 15 seconds
+    scrape_interval: 15s
+    # Additional labels to be added. Default to empty
+    labels: {}
+  # Image to use for mock mev
+  mock_mev_image: ethpandaops/rustic-builder:main
+  # Whether to launch Adminer for the MEV relay PostgreSQL database
+  launch_adminer: false
+
+# Enables Xatu Sentry for all participants
+# Defaults to false
+xatu_sentry_enabled: false
+
+# Xatu Sentry params
+xatu_sentry_params:
+  # The image to use for Xatu Sentry
+  xatu_sentry_image: ethpandaops/xatu:latest
+  # GRPC Endpoint of Xatu Server to send events to
+  xatu_server_addr: localhost:8080
+  # Enables TLS to Xatu Server
+  xatu_server_tls: false
+  # Headers to add on to Xatu Server requests
+  xatu_server_headers: {}
+  # Beacon event stream topics to subscribe to
+  beacon_subscriptions:
+    - attestation
+    - block
+    - chain_reorg
+    - finalized_checkpoint
+    - head
+    - voluntary_exit
+    - contribution_and_proof
+    - blob_sidecar
+
+# Apache params
+# Apache public port to port forward to local machine
+# Default to port None, only set if apache additional service is activated
+apache_port: null
+
+# Global tolerations that will be passed to all containers (unless overridden by a more specific toleration)
+# Only works with Kubernetes
+# Example: tolerations:
+# - key: "key"
+#   operator: "Equal"
+#   value: "value"
+#   effect: "NoSchedule"
+#   toleration_seconds: 3600
+# Defaults to empty
+global_tolerations: []
+
+# Global node selector that will be passed to all containers (unless overridden by a more specific node selector)
+# Only works with Kubernetes
+# Example: global_node_selectors: { "disktype": "ssd" }
+# Defaults to empty
+global_node_selectors: {}
+
+# Global parameters for keymanager api
+# This will open up http ports to your validator services!
+# Defaults to false
+keymanager_enabled: false
+
+# Global flag to enable checkpoint sync across the network
+checkpoint_sync_enabled: false
+
+# Global flag to set checkpoint sync url
+checkpoint_sync_url: ""
+
+# Configuration place for spamoor as transaction spammer
+spamoor_params:
+  # The image to use for spamoor
+  image: ethpandaops/spamoor:latest
+  # Resource management for spamoor
+  # CPU is milicores
+  # RAM is in MB
+  min_cpu: 10
+  max_cpu: 1000
+  min_mem: 20
+  max_mem: 300
+  # A list of spammers to launch on startup
+  # example:
+  # - scenario: eoatx  # The spamoor scenario to use (see https://github.com/ethpandaops/spamoor)
+  #   name: "Optional name for this example spammer"
+  #   config:
+  #     throughput: 10  # 10 tx per block
+  # - scenario: erctx
+  #   config:
+  #     throughput: 10  # 10 tx per block
+  spammers: []
+  # A list of optional params that will be passed to the spamoor command for modifying its behaviour
+  extra_args: []
+
+# Ethereum genesis generator params
+ethereum_genesis_generator_params:
+  # The image to use for ethereum genesis generator
+  image: ethpandaops/ethereum-genesis-generator:5.0.8
+
+# Configuration for public ports and NAT exit IP addresses
+port_publisher:
+  # Global NAT exit IP address for all services (optional)
+  # If set, this will be used for all service groups (overrides individual nat_exit_ip settings)
+  # Set to "auto" to automatically detect public IP from ident.me
+  # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (uses per-service settings)
+  nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # Execution Layer public port exposed to your local machine
+  # Disabled by default
+  # Public port start defaults to 32000
+  # You can't run multiple enclaves on the same port settings
+  el:
+    enabled: false
+    public_port_start: 32000
+    # nat_exit_ip: IP address to expose for EL P2P networking (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # Consensus Layer public port exposed to your local machine
+  # Disabled by default
+  # Public port start defaults to 33000
+  # You can't run multiple enclaves on the same port settings
+  cl:
+    enabled: false
+    public_port_start: 33000
+    # nat_exit_ip: IP address to expose for CL P2P networking (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # Validator client public port exposed to your local machine
+  # Disabled by default
+  # Public port start defaults to 34000
+  # You can't run multiple enclaves on the same port settings
+  vc:
+    enabled: false
+    public_port_start: 34000
+    # nat_exit_ip: IP address to expose for VC networking (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # remote signer public port exposed to your local machine
+  # Disabled by default
+  # Public port start defaults to 35000
+  # You can't run multiple enclaves on the same port settings
+  remote_signer:
+    enabled: false
+    public_port_start: 35000
+    # nat_exit_ip: IP address to expose for remote signer networking (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # Additional services public port exposed to your local machine
+  # Disabled by default
+  # Public port start defaults to 36000
+  # You can't run multiple enclaves on the same port settings
+  additional_services:
+    enabled: false
+    public_port_start: 36000
+    # nat_exit_ip: IP address to expose for additional services (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # MEV public port exposed to your local machine
+  # Disabled by default
+  # Public port start defaults to 37000
+  # You can't run multiple enclaves on the same port settings
+  mev:
+    enabled: false
+    public_port_start: 37000
+    # nat_exit_ip: IP address to expose for MEV services (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
+
+  # Other public port exposed to your local machine (like ethereum metrics exporter, snooper)
+  # Disabled by default
+  # Public port start defaults to 38000
+  # You can't run multiple enclaves on the same port settings
+  other:
+    enabled: false
+    public_port_start: 38000
+    # nat_exit_ip: IP address to expose for other services (optional)
+    # Only used if global nat_exit_ip is not set
+    # Set to "auto" to automatically detect public IP from ident.me
+    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
+    nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
