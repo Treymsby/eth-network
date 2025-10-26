@@ -17,26 +17,26 @@ network_params:
   network_id: "585858"
   # Number of seconds per slot
   seconds_per_slot: 12
-  # How long you want the network to wait before starting up
-  genesis_delay: 20
+  # Gas limit for the genesis block
+  genesis_gaslimit: 30000000
 
 additional_services:
-#  - dora
-#  - prometheus
-#  - grafana
+  - dora
+  - prometheus
+  - grafana
 #  - broadcaster
   - spamoor
-#  - blockscout
+  - blockscout
 #  - assertoor
 
 ethereum_metrics_exporter_enabled: true
 
-assertoor_params:
-  run_transaction_test: false
+#assertoor_params:
+#  run_transaction_test: false
 
 spamoor_params:
   image: ethpandaops/spamoor:latest
   spammers: []
   extra_args:
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/ethereum_testnet/refs/heads/main/baseline-spammers.yaml
+    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml
     - --startup-delay=30

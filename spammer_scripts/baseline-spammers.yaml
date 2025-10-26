@@ -1,59 +1,163 @@
-# baseline-spammers.yaml
-# A realistic everyday mix:
-# ~60% EOA->EOA ETH transfers, ~25% ERC20 transfers/approvals, ~15% simple contract calls.
+# baseline-with-blobs-and-contracts.yaml
+# Mix:
+# - 33% simple ETH (33 tx/slot)
+# - 27% ERC-20 transfers (27 tx/slot)
+# - 15% swaps / DEX-like (15 tx/slot)
+# - 10% NFT mints/transfers (≈10 tx/slot via 5 cycles × 2 tx)
+# - 8%  blobs (8 tx/slot)
+# - 3%  contract calls (3 tx/slot)
+# - 2%  contract deploys (2 tx/slot)
+# - 2%  maintenance ops (2 tx/slot)
+# Total: 100 tx/slot
 
 - scenario: eoatx
-  name: "Baseline ETH transfers"
-  description: "Randomized ETH sends between rotating EOAs"
+  name: "Simple ETH transfers (33%)"
+  description: "Basic EOA→EOA ETH transfers"
   config:
     seed: baseline-eoa
-    # Wallet funding from the root (make sure your root key has ETH)
-    refill_amount: 1000000000000000000      # 1 ETH (wei) topped up per refill
-    refill_balance: 500000000000000000      # keep child at >= 0.5 ETH
-    refill_interval: 600                    # seconds
-    # Volume (per slot)
-    throughput: 120                         # ~60% of total
-    max_pending: 240
+    throughput: 33
+    max_pending: 132
     max_wallets: 200
-    # Fees (gwei)
-    base_fee: 20
-    tip_fee: 2
-    # Value pattern
-    amount: 1000000000000000                # 0.001 ETH (wei)
+    base_fee: 20        # gwei
+    tip_fee: 2          # gwei
+    amount: 100         # wei per transfer
     random_amount: true
     random_target: true
 
 - scenario: erctx
-  name: "ERC20 transfers & approvals"
-  description: "Deploy an ERC20 and mix transfers/approvals"
+  name: "ERC-20 transfers (27%)"
+  description: "ERC-20 token transfers"
   config:
     seed: baseline-erc20
-    refill_amount: 1000000000000000000
-    refill_balance: 500000000000000000
-    refill_interval: 600
-    throughput: 50                          # ~25% of total
-    max_pending: 100
+    throughput: 27
+    max_pending: 108
     max_wallets: 150
     base_fee: 20
     tip_fee: 2
-    # Token amounts are scenario-handled; simple integer amounts are fine
     amount: 50
     random_amount: true
-    random_target: true
 
+- scenario: uniswap-swaps
+  name: "DEX-like swaps (15%)"
+  description: "Uniswap-style swaps"
+  config:
+    seed: baseline-dex
+    throughput: 15
+    max_pending: 60
+    max_wallets: 100
+    base_fee: 20
+    tip_fee: 2
 
-# OPTIONAL: sprinkle some rare deployments (uncomment and provide init_code if you want)
-# - scenario: factorydeploytx
-#   name: "Occasional CREATE2 deployments"
-#   description: "Deploy small contracts at predictable addresses"
-#   config:
-#     seed: baseline-deploy
-#     throughput: 5                         # low rate
-#     max_pending: 10
-#     max_wallets: 10
-#     base_fee: 20
-#     tip_fee: 2
-#     gas_limit: 1500000
-#     well_known_factory: true
-#     init_code: "0x..."                    # required: hex init code of the contract to deploy
-#     start_salt: 0
+# NFT mints/transfers via taskrunner:
+# Each cycle emits 2 tx (mint + transfer) → 5 cycles/slot ≈ 10 tx/slot
+- scenario: taskrunner
+  name: "NFT mints + transfers (10%)"
+  description: "Deploy ERC-721 once, then mint & transfer each cycle"
+  config:
+    throughput: 5            # cycles per slot
+    max_pending: 20
+    max_wallets: 50
+    base_fee: 20
+    tip_fee: 2
+    await_txs: false
+    tasks_config: |
+      init:
+        - type: deploy
+          name: nft
+          data:
+            # Replace with your actual compiled artifact paths/URLs:
+            contract_file: "https://example.com/artifacts/MyERC721.bin"
+            # Optional: constructor args if needed
+            # contract_args: "<encoded args>"
+      execution:
+        - type: call
+          name: mint
+          data:
+            target: "{contract:nft}"
+            call_abi_file: "https://example.com/artifacts/MyERC721.abi.json"
+            call_fn_name: "safeMint"
+            call_args: ["{randomaddr}"]
+        - type: call
+          name: transfer
+          data:
+            target: "{contract:nft}"
+            call_abi_file: "https://example.com/artifacts/MyERC721.abi.json"
+            call_fn_name: "safeTransferFrom"
+            call_args: ["{randomaddr}", "{randomaddr}", "{random:10000}"]
+
+# ── New: Contract calls (3%) ───────────────────────────────────────────────────
+# Deploy once in init, then 1 call per cycle → 3 tx/slot total.
+- scenario: taskrunner
+  name: "Contract calls (3%)"
+  description: "Deploy a small contract once and call a function each cycle"
+  config:
+    throughput: 3            # cycles/slot → 3 calls/slot
+    max_pending: 12
+    max_wallets: 80
+    base_fee: 20
+    tip_fee: 2
+    await_txs: false
+    tasks_config: |
+      init:
+        - type: deploy
+          name: counter
+          data:
+            # Provide your compiled bytecode:
+            contract_file: "https://example.com/artifacts/Counter.bin"
+            # If your constructor needs args, encode them and pass via contract_args
+            # contract_args: "<encoded args>"
+      execution:
+        - type: call
+          name: inc
+          data:
+            target: "{contract:counter}"
+            # Point to the ABI JSON that includes the function below
+            call_abi_file: "https://example.com/artifacts/Counter.abi.json"
+            # either "increment" (no args) or change to "setValue(uint256)" etc.
+            call_fn_name: "increment"
+            call_args: []
+
+# ── New: Contract deploys (2%) ─────────────────────────────────────────────────
+# 1 deploy per cycle → 2 tx/slot. Uses {txid} in the name to keep registry entries unique.
+- scenario: taskrunner
+  name: "Fresh contract deploys (2%)"
+  description: "Continuously deploy a tiny contract to exercise CREATE"
+  config:
+    throughput: 2            # cycles/slot → 2 deploys/slot
+    max_pending: 8
+    max_wallets: 50
+    base_fee: 20
+    tip_fee: 2
+    await_txs: false
+    tasks_config: |
+      execution:
+        - type: deploy
+          name: temp-{txid}
+          data:
+            contract_file: "https://example.com/artifacts/Minimal.bin"
+            # Optional gas_limit override:
+            # gas_limit: 1500000
+            # Optional constructor args:
+            # contract_args: "<encoded args>"
+
+- scenario: blobs
+  name: "Blob tx (8%)"
+  description: "EIP-4844 blob-carrying transactions"
+  config:
+    seed: baseline-blobs
+    throughput: 8
+    max_pending: 32
+    max_wallets: 50
+    base_fee: 20
+    tip_fee: 2
+
+- scenario: gasburnertx
+  name: "Maintenance ops (2%)"
+  description: "Light operations to keep blocks warm"
+  config:
+    seed: baseline-maint
+    throughput: 2
+    max_pending: 8
+    max_wallets: 20
+    base_fee: 20
+    tip_fee: 2
