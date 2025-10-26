@@ -17,14 +17,14 @@ network_params:
   network_id: "585858"
   # Number of seconds per slot
   seconds_per_slot: 12
-  # Gas limit for the genesis block
-  genesis_gaslimit: 30000000
+  # Gas limit for the genesis block based on mainnet: https://eips.ethereum.org/EIPS/eip-7935
+  genesis_gaslimit: 36000000
 
 additional_services:
   - dora
   - prometheus
   - grafana
-#  - broadcaster
+  - broadcaster
   - spamoor
   - blockscout
 #  - assertoor

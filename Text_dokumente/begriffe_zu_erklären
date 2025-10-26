@@ -11,3 +11,13 @@ Transation type
 
 My metrics
 
+Gas: 
+https://ethereum.org/developers/docs/gas/
+
+Gas Limit (per block) = 36M but in review to be raised to 60M
+https://eips.ethereum.org/EIPS/eip-7935
+
+Transation Gas Limit (Last call) 
+https://eips.ethereum.org/EIPS/eip-7825
+
+Gas Griefing

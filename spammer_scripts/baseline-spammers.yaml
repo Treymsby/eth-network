@@ -8,156 +8,117 @@
 # - 3%  contract calls (3 tx/slot)
 # - 2%  contract deploys (2 tx/slot)
 # - 2%  maintenance ops (2 tx/slot)
-# Total: 100 tx/slot
+# - 10% Blob transactions (10 tx/slot)
+# Total: 120 tx/slot
 
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/eoatx/README.md
 - scenario: eoatx
-  name: "Simple ETH transfers (33%)"
-  description: "Basic EOA→EOA ETH transfers"
+  name: "EOA transfers (35%)"
   config:
-    seed: baseline-eoa
-    throughput: 33
-    max_pending: 132
-    max_wallets: 200
-    base_fee: 20        # gwei
-    tip_fee: 2          # gwei
-    amount: 100         # wei per transfer
+    seed: mix-eoa
+    throughput: 35
+    max_pending: 200
+    max_wallets: 120
+    base_fee: 20     # gwei
+    tip_fee: 2       # gwei
     random_amount: true
     random_target: true
+    refill_amount: 1000000000000000000   # 1 ETH
+    refill_balance: 500000000000000000   # 0.5 ETH
+    refill_interval: 600                 # seconds
 
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/erctx/README.md
 - scenario: erctx
-  name: "ERC-20 transfers (27%)"
-  description: "ERC-20 token transfers"
+  name: "ERC-20 transfers (30%)"
   config:
-    seed: baseline-erc20
-    throughput: 27
-    max_pending: 108
-    max_wallets: 150
+    seed: mix-erc20
+    throughput: 30
+    max_pending: 200
+    max_wallets: 100
     base_fee: 20
     tip_fee: 2
     amount: 50
     random_amount: true
 
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/uniswap-swaps/README.md
 - scenario: uniswap-swaps
   name: "DEX-like swaps (15%)"
-  description: "Uniswap-style swaps"
   config:
-    seed: baseline-dex
+    seed: mix-swaps
     throughput: 15
-    max_pending: 60
-    max_wallets: 100
-    base_fee: 20
-    tip_fee: 2
-
-# NFT mints/transfers via taskrunner:
-# Each cycle emits 2 tx (mint + transfer) → 5 cycles/slot ≈ 10 tx/slot
-- scenario: taskrunner
-  name: "NFT mints + transfers (10%)"
-  description: "Deploy ERC-721 once, then mint & transfer each cycle"
-  config:
-    throughput: 5            # cycles per slot
-    max_pending: 20
-    max_wallets: 50
-    base_fee: 20
-    tip_fee: 2
-    await_txs: false
-    tasks_config: |
-      init:
-        - type: deploy
-          name: nft
-          data:
-            # Replace with your actual compiled artifact paths/URLs:
-            contract_file: "https://example.com/artifacts/MyERC721.bin"
-            # Optional: constructor args if needed
-            # contract_args: "<encoded args>"
-      execution:
-        - type: call
-          name: mint
-          data:
-            target: "{contract:nft}"
-            call_abi_file: "https://example.com/artifacts/MyERC721.abi.json"
-            call_fn_name: "safeMint"
-            call_args: ["{randomaddr}"]
-        - type: call
-          name: transfer
-          data:
-            target: "{contract:nft}"
-            call_abi_file: "https://example.com/artifacts/MyERC721.abi.json"
-            call_fn_name: "safeTransferFrom"
-            call_args: ["{randomaddr}", "{randomaddr}", "{random:10000}"]
-
-# ── New: Contract calls (3%) ───────────────────────────────────────────────────
-# Deploy once in init, then 1 call per cycle → 3 tx/slot total.
-- scenario: taskrunner
-  name: "Contract calls (3%)"
-  description: "Deploy a small contract once and call a function each cycle"
-  config:
-    throughput: 3            # cycles/slot → 3 calls/slot
-    max_pending: 12
+    max_pending: 120
     max_wallets: 80
     base_fee: 20
-    tip_fee: 2
-    await_txs: false
-    tasks_config: |
-      init:
-        - type: deploy
-          name: counter
-          data:
-            # Provide your compiled bytecode:
-            contract_file: "https://example.com/artifacts/Counter.bin"
-            # If your constructor needs args, encode them and pass via contract_args
-            # contract_args: "<encoded args>"
-      execution:
-        - type: call
-          name: inc
-          data:
-            target: "{contract:counter}"
-            # Point to the ABI JSON that includes the function below
-            call_abi_file: "https://example.com/artifacts/Counter.abi.json"
-            # either "increment" (no args) or change to "setValue(uint256)" etc.
-            call_fn_name: "increment"
-            call_args: []
+    tip_fee: 3
 
-# ── New: Contract deploys (2%) ─────────────────────────────────────────────────
-# 1 deploy per cycle → 2 tx/slot. Uses {txid} in the name to keep registry entries unique.
-- scenario: taskrunner
-  name: "Fresh contract deploys (2%)"
-  description: "Continuously deploy a tiny contract to exercise CREATE"
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/calltx/README.md
+- scenario: calltx
+  name: "Contract calls (6%)"
   config:
-    throughput: 2            # cycles/slot → 2 deploys/slot
-    max_pending: 8
-    max_wallets: 50
+    seed: mix-call
+    throughput: 6
+    max_pending: 60
+    max_wallets: 40
     base_fee: 20
     tip_fee: 2
-    await_txs: false
-    tasks_config: |
-      execution:
-        - type: deploy
-          name: temp-{txid}
-          data:
-            contract_file: "https://example.com/artifacts/Minimal.bin"
-            # Optional gas_limit override:
-            # gas_limit: 1500000
-            # Optional constructor args:
-            # contract_args: "<encoded args>"
-
-- scenario: blobs
-  name: "Blob tx (8%)"
-  description: "EIP-4844 blob-carrying transactions"
+# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploytx
+- scenario: deploytx
+  name: "Contract deploys (3%)"
   config:
-    seed: baseline-blobs
-    throughput: 8
-    max_pending: 32
-    max_wallets: 50
-    base_fee: 20
-    tip_fee: 2
-
-- scenario: gasburnertx
-  name: "Maintenance ops (2%)"
-  description: "Light operations to keep blocks warm"
-  config:
-    seed: baseline-maint
-    throughput: 2
-    max_pending: 8
+    seed: mix-deploy
+    throughput: 3
+    max_pending: 30
     max_wallets: 20
+    base_fee: 25
+    tip_fee: 3
+    
+# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploy-destruct
+- scenario: deploy-destruct
+  name: "Deploy + selfdestruct (1%)"
+  config:
+    seed: mix-destr
+    throughput: 1
+    max_pending: 20
+    max_wallets: 10
+    base_fee: 25
+    tip_fee: 3
+    gas_limit: 10000000
+    amount: 0
+    random_amount: false
+
+# ~10% maintenance ops
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/gasburnertx/README.md
+- scenario: gasburnertx
+  name: "Gas burner (5%)"
+  config:
+    seed: mix-burn
+    throughput: 5
+    max_pending: 80
+    max_wallets: 40
+    base_fee: 20
+    tip_fee: 2
+
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/storagespam/README.md
+- scenario: storagespam
+  name: "Storage writes (5%)"
+  config:
+    seed: mix-store
+    throughput: 5
+    max_pending: 80
+    max_wallets: 40
+    base_fee: 20
+    tip_fee: 2
+
+# Blob transactions
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/blobs/README.md
+# (EIP-4844)
+- scenario: blobs
+  name: "Blob tx"
+  config:
+    seed: mix-blobs
+    throughput: 10
+    max_pending: 80
+    max_wallets: 40
+    # base_fee/tip_fee apply as usual; blob gas fee follows network base/target.
     base_fee: 20
     tip_fee: 2
