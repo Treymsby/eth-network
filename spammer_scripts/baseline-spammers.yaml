@@ -60,7 +60,7 @@
   name: "Gas burner (5%)"
   config:
     seed: mix-burn
-    throughput: 5
+    throughput: 0.5
     max_pending: 80
     max_wallets: 40
     base_fee: 20
@@ -71,7 +71,7 @@
   name: "Storage writes (5%)"
   config:
     seed: mix-store
-    throughput: 5
+    throughput: 0.5
     max_pending: 80
     max_wallets: 40
     base_fee: 20

@@ -1,13 +1,24 @@
 ethereum
+blockchain
+node
+the great merged
 proof of stake
-Execution Layer
-CL 
+🧱 EL — Execution Layer
+⚖️ CL — Consensus Layer
+- What does it do?
+- Gossip
+- proposer/attester duties
+- validator performance
+👤 VL — Validator Client / Validator Layer
+
 Slot
 epoch
 block
 Layer1
 Layer2
 Transation type
+
+eth vs wei
 
 My metrics
 
