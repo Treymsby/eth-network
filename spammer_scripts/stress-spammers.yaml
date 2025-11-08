@@ -14,7 +14,7 @@
   name: "Deploy + selfdestruct (1%)"
   config:
     seed: mix-destr
-    throughput: 10
+    throughput: 0
     max_pending: 20
     max_wallets: 10
     base_fee: 25
@@ -29,7 +29,7 @@
   name: "Simulate Maintenance of running a Network"
   config:
     seed: maintenance-baseline
-    throughput: 0.5
+    throughput: 0
     max_pending: 80
     max_wallets: 40
     base_fee: 20

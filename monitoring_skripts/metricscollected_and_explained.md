@@ -1,3 +1,11 @@
+# What to measure and report
+- Basefee level & volatility (per block)
+- Tx/blob propagation delay (p2p gossip)
+- Inclusion latency (mempool → block)
+- Client CPU/RAM and DB growth over hours
+- Blob pruning/DA metrics (if available)
+- Stability (timeouts, peer churn, reorgs
+
 ## Transactions & fees
 
 * **Tx success rate (%)**

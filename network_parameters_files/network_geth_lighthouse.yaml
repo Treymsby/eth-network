@@ -91,7 +91,6 @@ additional_services:
   - dora
   - prometheus
   - grafana
-#  - assertoor
 
 ethereum_metrics_exporter_enabled: true
 
@@ -128,7 +127,7 @@ spamoor_params:
   spammers: []
   extra_args:
     - "--startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml"
-    - --startup-delay=30
+    - "--startup-delay=30"
 
 # Keep ports static
 # Configuration for public ports and NAT exit IP addresses
