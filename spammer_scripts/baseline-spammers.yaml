@@ -16,7 +16,7 @@
     random_amount: true   # randomize transfer amounts
     random_target: true   # randomize target addresses
     rebroadcast: 60       # Seconds to wait before rebroadcasting
-    log-txs: true
+    log_txs: true
 
 # https://github.com/ethpandaops/spamoor/blob/master/scenarios/erctx/README.md
 - scenario: erctx
@@ -36,7 +36,7 @@
     random_amount: true
     random_target: true
     rebroadcast: 60
-    log-txs: true
+    log_txs: true
 
 # Blob transactions
 # https://github.com/ethpandaops/spamoor/blob/master/scenarios/blobs-combined/README.md
@@ -58,6 +58,6 @@
     tipfee: 2
     rebroadcast: 30      # Seconds to wait before rebroadcasting (default: 30)
     submit-count: 5      # Number of clients to submit transaction to (default: 3)
-    log-txs: true
+    log_txs: true
 
 - include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/stress-spammers.yaml
