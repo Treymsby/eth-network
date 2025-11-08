@@ -3,7 +3,7 @@
   name: "DEX-like swaps (15%)"
   config:
     seed: mix-swaps
-    throughput: 15
+    throughput: 0
     max_pending: 120
     max_wallets: 80
     base_fee: 20

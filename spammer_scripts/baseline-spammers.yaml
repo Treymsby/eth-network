@@ -60,4 +60,4 @@
     submit-count: 5      # Number of clients to submit transaction to (default: 3)
     log_txs: true
 
-- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/stress-spammers.yaml
+#- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/stress-spammers.yaml
