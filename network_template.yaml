@@ -10,10 +10,7 @@ participants:
     el_min_mem: 0
     el_max_mem: 0
     el_extra_params:
-      - "--cache=1024"
       - "--maxpeers=8"
-      - "--txpool.globalslots=4096"
-      - "--txpool.globalqueue=2048"
 
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
@@ -24,7 +21,7 @@ participants:
     count: 2
 
   - el_type: besu
-    el_image: "besu: hyperledger/besu:v25.11.0"
+    el_image: "hyperledger/besu:25.11.0"
     # Resource management for el containers
     # CPU is milicores
     # RAM is in MB
@@ -34,10 +31,7 @@ participants:
     el_min_mem: 0
     el_max_mem: 0
     el_extra_params:
-      - "--cache=1024"
-      - "--maxpeers=8"
-      - "--txpool.globalslots=4096"
-      - "--txpool.globalqueue=2048"
+      - "--p2p-peer-upper-bound=8"
 
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"

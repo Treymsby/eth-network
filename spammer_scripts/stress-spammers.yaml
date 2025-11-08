@@ -1,0 +1,36 @@
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/uniswap-swaps/README.md
+- scenario: uniswap-swaps
+  name: "DEX-like swaps (15%)"
+  config:
+    seed: mix-swaps
+    throughput: 15
+    max_pending: 120
+    max_wallets: 80
+    base_fee: 20
+    tip_fee: 3
+   
+# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploy-destruct
+- scenario: deploy-destruct
+  name: "Deploy + selfdestruct (1%)"
+  config:
+    seed: mix-destr
+    throughput: 10
+    max_pending: 20
+    max_wallets: 10
+    base_fee: 25
+    tip_fee: 3
+    gas_limit: 10000000
+    amount: 0
+    random_amount: false
+
+# ~10% maintenance ops
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/gasburnertx/README.md
+- scenario: gasburnertx
+  name: "Simulate Maintenance of running a Network"
+  config:
+    seed: maintenance-baseline
+    throughput: 0.5
+    max_pending: 80
+    max_wallets: 40
+    base_fee: 20
+    tip_fee: 2

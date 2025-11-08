@@ -1,92 +1,63 @@
-# Total: 110 tx/slot
-
 # https://github.com/ethpandaops/spamoor/blob/master/scenarios/eoatx/README.md
 - scenario: eoatx
-  name: "EOA transfers (35%)"
+  name: "EOA transfers"
+  description: "Basic ETH transfers with 400 tx/slot throughput"
   config:
-    seed: mix-eoa
-    throughput: 35
-    max_pending: 200
-    max_wallets: 120
-    base_fee: 20     # gwei
-    tip_fee: 2       # gwei
-    random_amount: true
-    random_target: true
-    refill_amount: 1000000000000000000   # 1 ETH
-    refill_balance: 500000000000000000   # 0.5 ETH
-    refill_interval: 600                 # seconds
+    seed: eoatx-baseline
+    refill_amount: 1000000000000000000  # 1 ETH in wei
+    refill_balance: 500000000000000000  # 0.5 ETH threshold
+    refill_interval: 600  # 10 minutes
+    throughput: 400       # transactions per slot
+    max_pending: 800      # max pending transactions
+    max_wallets: 200      # number of wallets to use
+    base_fee: 20          # base fee in gwei
+    tip_fee: 2            # priority fee in gwei
+    amount: 100           # transfer amount in wei as limit for random
+    random_amount: true   # randomize transfer amounts
+    random_target: true   # randomize target addresses
+    rebroadcast: 60       # Seconds to wait before rebroadcasting
+    log-txs: true
 
 # https://github.com/ethpandaops/spamoor/blob/master/scenarios/erctx/README.md
 - scenario: erctx
-  name: "ERC-20 transfers (30%)"
+  name: "ERC-20 transfers"
+  description: "Deploy ERC20 contracts and transfer tokens"
   config:
-    seed: mix-erc20
-    throughput: 30
+    seed: erctx-baseline
+    refill_amount: 2000000000000000000  # 2 ETH
+    refill_balance: 1000000000000000000 # 1 ETH threshold
+    refill-interval: 300
+    throughput: 200       # lower throughput for contract interactions
     max_pending: 200
     max_wallets: 100
-    base_fee: 20
-    tip_fee: 2
-    amount: 50
+    basefee: 20
+    tipfee: 2
+    amount: 50            # token transfer amount
     random_amount: true
-
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/uniswap-swaps/README.md
-- scenario: uniswap-swaps
-  name: "DEX-like swaps (15%)"
-  config:
-    seed: mix-swaps
-    throughput: 15
-    max_pending: 120
-    max_wallets: 80
-    base_fee: 20
-    tip_fee: 3
-   
-# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploy-destruct
-- scenario: deploy-destruct
-  name: "Deploy + selfdestruct (1%)"
-  config:
-    seed: mix-destr
-    throughput: 10
-    max_pending: 20
-    max_wallets: 10
-    base_fee: 25
-    tip_fee: 3
-    gas_limit: 10000000
-    amount: 0
-    random_amount: false
-
-# ~10% maintenance ops
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/gasburnertx/README.md
-- scenario: gasburnertx
-  name: "Gas burner (5%)"
-  config:
-    seed: mix-burn
-    throughput: 0.5
-    max_pending: 80
-    max_wallets: 40
-    base_fee: 20
-    tip_fee: 2
-
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/storagespam/README.md
-- scenario: storagespam
-  name: "Storage writes (5%)"
-  config:
-    seed: mix-store
-    throughput: 0.5
-    max_pending: 80
-    max_wallets: 40
-    base_fee: 20
-    tip_fee: 2
+    random_target: true
+    rebroadcast: 60
+    log-txs: true
 
 # Blob transactions
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/blobs/README.md
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/blobs-combined/README.md
 # (EIP-4844)
 - scenario: blobs
-  name: "Blob tx"
+  name: "Blob transaction"
+  description: "Simple blob transaction scenario" 
   config:
-    seed: mix-blobs
-    throughput: 10
-    max_pending: 80
-    max_wallets: 40
-    # base_fee/tip_fee apply as usual; blob gas fee follows network base/target.
-    base_fee: 20
-    tip_fee: 2
+    seed: blobs-baseline
+    refill_amount: 5000000000000000000  # 5 ETH (blob txs are expensive)
+    refill_balance: 2000000000000000000 # 2 ETH threshold
+    refill-interval: 300
+    throughput: 2        # low throughput for blob transactions
+    sidecars: 2          # number of blob sidecars
+    max_pending: 6       # low pending limit
+    max_wallets: 10      # fewer wallets needed
+    blob_fee: 20         # blob base fee in gwei
+    basefee: 20
+    tipfee: 2
+    rebroadcast: 30      # Seconds to wait before rebroadcasting (default: 30)
+    submit-count: 5      # Number of clients to submit transaction to (default: 3)
+    log-txs: true
+
+

@@ -36,3 +36,12 @@ If you want to reproduce this do follwoing
 Why 12 Node Pairs:
 Idle 5% and Every 12s spike to 60% (Wake Up of node)
 
+## TO make Sure the ports are perstistent ##
+To Start:
+sudo kurtosis engine restart
+sudo kurtosis run --enclave eth-network github.com/ethpandaops/ethereum-package --args-file network_parameters_files/network_geth_lighthouse.yaml 
+
+To Stop
+sudo kurtosis enclave stop eth-network
+sudo kurtosis enclave rm eth-network
+sudo kurtosis engine restart
