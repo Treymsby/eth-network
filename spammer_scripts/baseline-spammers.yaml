@@ -60,4 +60,24 @@
     submit-count: 5      # Number of clients to submit transaction to (default: 3)
     log_txs: true
 
+# Deploy Smart Contract
+# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploytx
+#- scenario: calltx
+#  name: "Deploy Contract and call function"
+#  description: "Deploys a Simple Smart Contract and calls it function repeatedly"
+#  config:
+#    seed: deploytx-baseline
+#    refill_amount: 2000000000000000000  # 2 ETH
+#    refill_balance: 1000000000000000000 # 1 ETH threshold
+#    refill-interval: 300
+#    throughput: 100       # lower throughput for contract interactions
+#    max_pending: 200
+#    max_wallets: 100
+#    amount: 50            # token transfer amount
+#    random_amount: true
+#    random_target: true
+
 #- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/stress-spammers.yaml
+
+#https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/NonFungibleAssetRegistry.sol
+#https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/TimeLockPayment.sol

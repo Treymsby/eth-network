@@ -124,10 +124,14 @@ dora_params:
 
 spamoor_params:
   image: ethpandaops/spamoor:latest
+  min_cpu: 100
+  max_cpu: 100
+  min_mem: 200
+  max_mem: 200
   spammers: []
   extra_args:
-    - "--startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml"
-    - "--startup-delay=30"
+    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml
+    - --startup-delay=30
 
 # Keep ports static
 # Configuration for public ports and NAT exit IP addresses
