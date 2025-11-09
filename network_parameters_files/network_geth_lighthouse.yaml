@@ -20,7 +20,7 @@ participants:
       - "--disable-upnp"
     # Number of Nodes
     # 2
-    count: 1
+    count: 6
     # https://github.com/nethermindeth/nethermind/releases
   - el_type: nethermind
     el_image: "nethermindeth/nethermind:1.35.0"
@@ -39,7 +39,7 @@ participants:
       - "--target-peers=8"
       - "--disable-upnp"
     # Number of Nodes
-    count: 1
+    count: 6
 
 network_params:
   network: "kurtosis"
@@ -110,25 +110,25 @@ blockscout_params:
   frontend_image: "ghcr.io/blockscout/frontend:latest"
 
 prometheus_params:
-  storage_tsdb_retention_time: "2h"
+  storage_tsdb_retention_time: "1d"
   storage_tsdb_retention_size: "512MB"
   # Resource management for prometheus container
   # CPU is milicores
   # RAM is in MB
-  #max_cpu: 250
-  #max_mem: 256
+  # max_cpu: 250
+  # max_mem: 256
   # Prometheus docker image to use
   # Defaults to the latest image
   image: "prom/prometheus:latest"
 
-  grafana_params:
+grafana_params:
   # A list of locators for grafana dashboards to be loaded be the grafana service
   additional_dashboards: []
   # Resource management for grafana container
   # CPU is milicores
   # RAM is in MB
-  #max_cpu: 150
-  #max_mem: 128
+  # max_cpu: 150
+  # max_mem: 128
   # Grafana docker image to use
   # Defaults to the latest image
   image: "grafana/grafana:latest"
@@ -137,16 +137,16 @@ prometheus_params:
 dora_params:
   # Dora docker image to use
   # Defaults to the latest image
-  #max_cpu: 100
-  #max_mem: 256
+  # max_cpu: 100
+  # max_mem: 256
   image: "ethpandaops/dora:latest"
   # A list of optional extra env_vars the dora container should spin up with
   env: {}
 
 spamoor_params:
   image: ethpandaops/spamoor:latest
-  #max_cpu: 100
-  #max_mem: 256
+  # max_cpu: 100
+  # max_mem: 256
   spammers: []
   extra_args:
     - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml

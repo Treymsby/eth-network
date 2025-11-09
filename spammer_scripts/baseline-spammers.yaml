@@ -26,12 +26,12 @@
     seed: erctx-baseline
     refill_amount: 2000000000000000000  # 2 ETH
     refill_balance: 1000000000000000000 # 1 ETH threshold
-    refill-interval: 300
+    refill_interval: 300
     throughput: 200       # lower throughput for contract interactions
     max_pending: 200
     max_wallets: 100
-    basefee: 20
-    tipfee: 2
+    base_fee: 20
+    tip_fee: 2
     amount: 50            # token transfer amount
     random_amount: true
     random_target: true
@@ -48,16 +48,16 @@
     seed: blobs-baseline
     refill_amount: 5000000000000000000  # 5 ETH (blob txs are expensive)
     refill_balance: 2000000000000000000 # 2 ETH threshold
-    refill-interval: 300
+    refill_interval: 300
     throughput: 1        # low throughput for blob transactions
     sidecars: 2          # number of blob sidecars
     max_pending: 6       # low pending limit
     max_wallets: 10      # fewer wallets needed
     blob_fee: 20         # blob base fee in gwei
-    basefee: 20
-    tipfee: 2
+    base_fee: 20
+    tip_fee: 2
     rebroadcast: 30      # Seconds to wait before rebroadcasting (default: 30)
-    submit-count: 5      # Number of clients to submit transaction to (default: 3)
+    submit_count: 5      # Number of clients to submit transaction to (default: 3)
     log_txs: true
 
 # Deploy Smart Contract
