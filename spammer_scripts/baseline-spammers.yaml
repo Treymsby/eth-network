@@ -46,18 +46,18 @@
   description: "Simple blob transaction scenario" 
   config:
     seed: blobs-baseline
+    blob_v1_percent: 100
     refill_amount: 5000000000000000000  # 5 ETH (blob txs are expensive)
     refill_balance: 2000000000000000000 # 2 ETH threshold
     refill_interval: 300
-    throughput: 1        # low throughput for blob transactions
+    throughput: 2        # low throughput for blob transactions
+    submit_count: 3      # Number of clients to submit transaction to (default: 3)
+    rebroadcast: 30      # Seconds to wait before rebroadcasting (default: 30)
     sidecars: 2          # number of blob sidecars
-    max_pending: 6       # low pending limit
-    max_wallets: 10      # fewer wallets needed
     blob_fee: 20         # blob base fee in gwei
     base_fee: 20
     tip_fee: 2
-    rebroadcast: 30      # Seconds to wait before rebroadcasting (default: 30)
-    submit_count: 5      # Number of clients to submit transaction to (default: 3)
+    max_pending: 6       # low pending limit
     log_txs: true
 
 # Deploy Smart Contract
