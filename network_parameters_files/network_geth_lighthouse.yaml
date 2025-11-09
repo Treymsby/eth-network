@@ -4,16 +4,17 @@ participants:
     # Resource management for el containers
     # CPU is milicores 1 core = 1000 milicore
     # RAM is in MB
+    # Min value is igrored on docker!
     # Defaults to 0, which results in no resource limits
-    el_min_cpu: 1000
     el_max_cpu: 1000
-    el_min_mem: 2048
-    el_max_mem: 2048
+    el_max_mem: 1024
     el_extra_params:
       - "--maxpeers=8"
 
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
+    cl_max_cpu: 500
+    cl_max_mem: 512
     cl_extra_params:
       - "--target-peers=8"
       - "--disable-upnp"
@@ -27,10 +28,8 @@ participants:
     # CPU is milicores
     # RAM is in MB
     # Defaults to 0, which results in no resource limits
-    el_min_cpu: 1000
     el_max_cpu: 1000
-    el_min_mem: 2048
-    el_max_mem: 2048
+    el_max_mem: 1024
     el_extra_params:
       - "--Network.MaxActivePeers=8"
 
@@ -85,7 +84,6 @@ network_params:
   gas_limit: 36000000
 
 additional_services:
-#  - broadcaster
   - spamoor
   - blockscout
   - dora
@@ -98,9 +96,6 @@ ethereum_metrics_exporter_enabled: true
 # Default to false
 disable_peer_scoring: false
 
-# Configuration place for the assertoor testing tool - https://github.com/ethpandaops/assertoor
-#assertoor_params:
-#  run_transaction_test: false
 
 # Configuration place for blockscout explorer - https://github.com/blockscout/blockscout
 blockscout_params:
@@ -114,20 +109,44 @@ blockscout_params:
   # Defaults to ghcr.io/blockscout/frontend:latest
   frontend_image: "ghcr.io/blockscout/frontend:latest"
 
+prometheus_params:
+  storage_tsdb_retention_time: "2h"
+  storage_tsdb_retention_size: "512MB"
+  # Resource management for prometheus container
+  # CPU is milicores
+  # RAM is in MB
+  #max_cpu: 250
+  #max_mem: 256
+  # Prometheus docker image to use
+  # Defaults to the latest image
+  image: "prom/prometheus:latest"
+
+  grafana_params:
+  # A list of locators for grafana dashboards to be loaded be the grafana service
+  additional_dashboards: []
+  # Resource management for grafana container
+  # CPU is milicores
+  # RAM is in MB
+  #max_cpu: 150
+  #max_mem: 128
+  # Grafana docker image to use
+  # Defaults to the latest image
+  image: "grafana/grafana:latest"
+
 # Configuration place for dora the explorer - https://github.com/ethpandaops/dora
 dora_params:
   # Dora docker image to use
   # Defaults to the latest image
+  #max_cpu: 100
+  #max_mem: 256
   image: "ethpandaops/dora:latest"
   # A list of optional extra env_vars the dora container should spin up with
   env: {}
 
 spamoor_params:
   image: ethpandaops/spamoor:latest
-  min_cpu: 100
-  max_cpu: 100
-  min_mem: 200
-  max_mem: 200
+  #max_cpu: 100
+  #max_mem: 256
   spammers: []
   extra_args:
     - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml
@@ -136,6 +155,7 @@ spamoor_params:
 # Keep ports static
 # Configuration for public ports and NAT exit IP addresses
 port_publisher:
+  # nat_exit_ip: IP address to expose for other services (optional)
   nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
 
   # Execution Layer public port exposed to your local machine
@@ -166,20 +186,4 @@ port_publisher:
   other:
     enabled: enable
     public_port_start: 36000
-    # nat_exit_ip: IP address to expose for other services (optional)
-    # Only used if global nat_exit_ip is not set
-    # Set to "auto" to automatically detect public IP from ident.me
-    # Defaults to KURTOSIS_IP_ADDR_PLACEHOLDER (container IP)
     nat_exit_ip: KURTOSIS_IP_ADDR_PLACEHOLDER
-
-#https://github.com/ethereum/go-ethereum
-#https://github.com/hyperledger/besu
-
-#Setups
-# GETH - Lighthouse
-# GETH - Prysm
-# BESU - Lighthouse
-# BESU - Prysm
-# Optional: 1,2,4,8,16 nodes and see how it acts
-# GETH - Lighthouse (Max peer = 16 Connection, CL Target Peer = 16 Fully Meshed)
-# Mixed
