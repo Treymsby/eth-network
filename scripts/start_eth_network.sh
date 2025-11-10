@@ -7,7 +7,7 @@ WORKDIR="/home/trey-mosby/Project/eth-network"
 ENCLAVE="eth-network"
 PKG="github.com/Treymsby/ethereum-package"
 # Changes this for every network
-ARGS_FILE="network_parameters_files/network_geth_lighthouse.yaml"
+ARGS_FILE="network_parameters_files/network_params.yaml"
 
 # --- Helpers ---
 info() { printf "\n\033[1;34m==> %s\033[0m\n" "$*"; }

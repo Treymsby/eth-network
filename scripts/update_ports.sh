@@ -13,8 +13,10 @@ SERVICES=(blockscout blockscout-frontend dora spamoor prometheus grafana)
 NODES=(
   "el-1-geth-lighthouse"
   "el-1-nethermind-lighthouse"
-  "el-1-geth-prysm"
-  "el-1-nethermind-prysm"
+  "el-1-besu-lighthouse"
+  "el-01-geth-lighthouse"
+  "el-01-nethermind-lighthouse"
+  "el-01-besu-lighthouse"
 )
 
 # Resolve output paths to one directory above this script

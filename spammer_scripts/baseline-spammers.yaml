@@ -38,99 +38,99 @@
     rebroadcast: 60
     log_txs: true
 
-# Blob transactions
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/blobs-combined/README.md
-# (EIP-4844)
-- scenario: blobs
-  name: "Blob transaction"
-  description: "Simple blob transaction scenario"
-  config:
-    seed: blobs-baseline
+# # Blob transactions
+# # https://github.com/ethpandaops/spamoor/blob/master/scenarios/blobs-combined/README.md
+# # (EIP-4844)
+# - scenario: blobs
+#   name: "Blob transaction"
+#   description: "Simple blob transaction scenario"
+#   config:
+#     seed: blobs-baseline
 
-    # --- wallet auto-refill (wei) ---
-    refill_amount: 5000000000000000000      # 5 ETH top-up
-    refill_balance: 3000000000000000000     # top-up when < 3 ETH
-    refill_interval: 300                    # check every 5 min
+#     # --- wallet auto-refill (wei) ---
+#     refill_amount: 5000000000000000000      # 5 ETH top-up
+#     refill_balance: 3000000000000000000     # top-up when < 3 ETH
+#     refill_interval: 300                    # check every 5 min
 
-    # --- pacing ---
-    throughput: 1                           # tx/sec
-    max_pending: 50                         # small pipeline so we don't stall
+#     # --- pacing ---
+#     throughput: 1                           # tx/sec
+#     max_pending: 50                         # small pipeline so we don't stall
 
-    # --- submission / rebroadcast ---
-    submit_count: 1                         # match your actual number of RPCs
-    rebroadcast: 30
+#     # --- submission / rebroadcast ---
+#     submit_count: 1                         # match your actual number of RPCs
+#     rebroadcast: 30
 
-    # --- blobs per transaction ---
-    sidecars: 2                             # number of blobs per tx (1–6)
+#     # --- blobs per transaction ---
+#     sidecars: 2                             # number of blobs per tx (1–6)
 
-    # --- fees (gwei caps) ---
-    blob_fee: 40                            # = max_fee_per_blob_gas cap
-    base_fee: 25                            # = maxFeePerGas cap
-    tip_fee: 2                              # = maxPriorityFeePerGas
+#     # --- fees (gwei caps) ---
+#     blob_fee: 40                            # = max_fee_per_blob_gas cap
+#     base_fee: 25                            # = maxFeePerGas cap
+#     tip_fee: 2                              # = maxPriorityFeePerGas
 
-    # --- logging ---
-    log_txs: true
+#     # --- logging ---
+#     log_txs: true
 
 
-# Deploy Smart Contract
-# https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploytx
-- scenario: calltx
-  name: "NonFungibleAssetRegistry spammer"
-  description: "Deploys the registry and repeatedly calls create/transfer"
-  config:
-    seed: calltx-registry
-    submit_count: 1
-    throughput: 2
-    max_pending: 50
-    rebroadcast: 30
+# # Deploy Smart Contract
+# # https://github.com/ethpandaops/spamoor/tree/master/scenarios/deploytx
+# - scenario: calltx
+#   name: "NonFungibleAssetRegistry spammer"
+#   description: "Deploys the registry and repeatedly calls create/transfer"
+#   config:
+#     seed: calltx-registry
+#     submit_count: 1
+#     throughput: 2
+#     max_pending: 50
+#     rebroadcast: 30
 
-    contract_source: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/NonFungibleAssetRegistry.sol"
-    contract_name: "SimpleAssetRegistry"
-    deploy:
-      count: 1
-      gas_limit: 4000000
+#     contract_source: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/NonFungibleAssetRegistry.sol"
+#     contract_name: "SimpleAssetRegistry"
+#     deploy:
+#       count: 1
+#       gas_limit: 4000000
 
-    calls:
-      - name: createAsset
-        method: "createAsset(string)"
-        args: ["spam asset ${seq} from ${wallet.address}"]
-        repeat: true
-        throughput: 1
-        max_pending: 30
+#     calls:
+#       - name: createAsset
+#         method: "createAsset(string)"
+#         args: ["spam asset ${seq} from ${wallet.address}"]
+#         repeat: true
+#         throughput: 1
+#         max_pending: 30
 
-      - name: transferAsset
-        method: "transferAsset(uint256,address)"
-        args: ["${last_asset_id}", "${random_wallet}"]
-        repeat: true
-        throughput: 0.25
-        max_pending: 10
+#       - name: transferAsset
+#         method: "transferAsset(uint256,address)"
+#         args: ["${last_asset_id}", "${random_wallet}"]
+#         repeat: true
+#         throughput: 0.25
+#         max_pending: 10
 
-- scenario: calltx
-  name: "TimeLockPayment spammer"
-  description: "Deploys a timelock with funds and repeatedly calls release()"
-  config:
-    seed: calltx-timelock
-    submit_count: 1
-    throughput: 1
-    max_pending: 25
-    rebroadcast: 30
+# - scenario: calltx
+#   name: "TimeLockPayment spammer"
+#   description: "Deploys a timelock with funds and repeatedly calls release()"
+#   config:
+#     seed: calltx-timelock
+#     submit_count: 1
+#     throughput: 1
+#     max_pending: 25
+#     rebroadcast: 30
 
-    contract_source: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/TimeLockPayment.sol"
-    contract_name: "TimeLock"
-    deploy:
-      count: 1
-      value: 10000000000000000     # 0.01 ETH
-      constructor_args:
-        - "${wallet.address}"      # payee
-        - "${now_unix_plus:60}"    # releaseTime = now + 60s
-      gas_limit: 300000
+#     contract_source: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/TimeLockPayment.sol"
+#     contract_name: "TimeLock"
+#     deploy:
+#       count: 1
+#       value: 10000000000000000     # 0.01 ETH
+#       constructor_args:
+#         - "${wallet.address}"      # payee
+#         - "${now_unix_plus:60}"    # releaseTime = now + 60s
+#       gas_limit: 300000
 
-    calls:
-      - name: release_attempt
-        method: "release()"
-        args: []
-        repeat: true
-        throughput: 0.5
-        max_pending: 10
+#     calls:
+#       - name: release_attempt
+#         method: "release()"
+#         args: []
+#         repeat: true
+#         throughput: 0.5
+#         max_pending: 10
 
 #- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/stress-spammers.yaml
