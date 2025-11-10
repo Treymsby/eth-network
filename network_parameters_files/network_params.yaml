@@ -16,7 +16,7 @@ participants:
     cl_max_mem: 512
     cl_extra_params:
       - "--target-peers=8"
-    # Number of Nodes
+    # Number of Nodes 16 el + 16 cl = 16 nodes 
     count: 16
   
   # - el_type: nethermind
