@@ -1,0 +1,6 @@
+{
+  "el-1-geth-lighthouse": "127.0.0.1:33338",
+  "el-1-nethermind-lighthouse": null,
+  "el-1-geth-prysm": null,
+  "el-1-nethermind-prysm": null
+}
