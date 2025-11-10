@@ -2,7 +2,7 @@
   "el-1-geth-lighthouse": null,
   "el-1-nethermind-lighthouse": null,
   "el-1-besu-lighthouse": null,
-  "el-01-geth-lighthouse": "127.0.0.1:33415",
+  "el-01-geth-lighthouse": "127.0.0.1:33584",
   "el-01-nethermind-lighthouse": null,
   "el-01-besu-lighthouse": null
 }

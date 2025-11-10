@@ -131,7 +131,7 @@ spamoor_params:
   spammers: []
   extra_args:
     - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml
-    - --startup-delay=120
+    #- --startup-delay=60
 
 # # Keep ports static / workaround with ports.json
 # # Configuration for public ports and NAT exit IP addresses

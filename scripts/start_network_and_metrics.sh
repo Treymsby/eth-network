@@ -38,9 +38,9 @@ run_cmd "kurtosis engine restart"
 # 3) Run package
 run_cmd "kurtosis run --enclave ${ENCLAVE} ${PKG} --args-file ${ARGS_FILE}"
 
-# 4) Update ports.json
+# 4) Update ports.json and open web UIs
 run_cmd "scripts/update_ports.sh"
-
+run_cmd "python3 scripts/open_web_ui.py 
 # 5) Chmod 777 (its a vm so idk)
 # Recursively give read, write, execute to everyone
 run_cmd "chmod -R 777 ./"
