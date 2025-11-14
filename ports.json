@@ -1,8 +1,8 @@
 {
-  "blockscout": "http://127.0.0.1:33111",
+  "blockscout": "http://127.0.0.1:33180",
   "blockscout-frontend": "http://127.0.0.1:3000",
-  "dora": "http://127.0.0.1:33106",
-  "spamoor": "http://127.0.0.1:33105",
-  "prometheus": "http://127.0.0.1:33107",
-  "grafana": "http://127.0.0.1:33108"
+  "dora": "http://127.0.0.1:33175",
+  "spamoor": "http://127.0.0.1:33174",
+  "prometheus": "http://127.0.0.1:33176",
+  "grafana": "http://127.0.0.1:33177"
 }

@@ -1,50 +1,52 @@
-- scenario: taskrunner
-  name: "LowGas Event-Only Spam"
-  description: "High-TPS, low-gas spam using LowGasSpamContract (events only)"
-  config:
-    seed: lowgas-taskrunner
-    refill_amount: 5000000000000000000      # 5 ETH in wei
-    refill_balance: 1000000000000000000     # 1 ETH in wei
-    refill_interval: 600
-    total_count: 0
-    throughput: 20                          # much higher, txs are cheap
-    max_pending: 100
-    max_wallets: 50
-    rebroadcast: 120
-    base_fee: 20
-    tip_fee: 2
-    tasks_config: |-
-      init:
-        - type: deploy
-          name: lowgas
-          data:
-            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/LowGasSpamContract.bin"
-            gas_limit: 3000000
-            amount: 0
+# LowGasSpamContract - wallet settings
+seed: taskrunner-lowgas                # seed for the wallet
+refill_amount: 5000000000000000000     # refill 5 ETH when
+refill_balance: 1000000000000000000    # balance drops below 1 ETH
+refill_interval: 600                   # check every 10 minutes
 
-      execution:
-        # LowGasSpamContract.spam(uint64 tag)
-        - type: call
-          name: lowgas-spam
-          data:
-            target: "{contract:lowgas}"
-            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/LowGasSpamContract.abi"
-            call_fn_name: "spam"
-            # Use the step id as a tag so you can distinguish txs in logs
-            call_args: ["{stepid}"]
-            gas_limit: 100000
-            amount: 0
+# scenario: taskrunner
+total_count: 0                         # 0 = run indefinitely
+throughput: 50                         # cheap txs, you can crank this up
+max_pending: 100
+max_wallets: 40
+rebroadcast: 1
+base_fee: 20
+tip_fee: 2
+tasks_config: |
+  # TaskRunner tasks for LowGasSpamContract
+  init:
+    - type: deploy
+      name: lowgas
+      data:
+        contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/LowGasSpamContract.bin"
+        gas_limit: 3000000
+        amount: 0
 
-        # OPTIONAL: multiSpam(uint64[])
-        # - type: call
-        #   name: lowgas-multispam
-        #   data:
-        #     target: "{contract:lowgas}"
-        #     call_abi_file: "./build/LowGasSpamContract.abi"
-        #     call_fn_name: "multiSpam"
-        #     # One argument: the uint64[] array. Depending on how you pass it,
-        #     # you might need to encode as a JSON-like string; adjust if your
-        #     # TaskRunner version expects a different format for array args.
-        #     call_args: ["[1,2,3,4]"]
-        #     gas_limit: 200000
-        #     amount: 0
+  execution:
+    # Ultra-low-gas single-event tx: spam(uint64)
+    - type: call
+      name: lowgas-spam
+      data:
+        target: "{contract:lowgas}"
+        call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/LowGasSpamContract.abi"
+        call_fn_name: "spam"
+        call_args: ["1"]            # tag
+        gas_limit: 100000
+        amount: 0
+
+    # OPTIONAL: multiSpam(uint64[]) – uncomment & adjust array encoding
+    # - type: call
+    #   name: lowgas-multispam
+    #   data:
+    #     target: "{contract:lowgas}"
+    #     call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/LowGasSpamContract.abi"
+    #     call_fn_name: "multiSpam"
+    #     # Adjust to the array encoding your Spamoor version expects
+    #     call_args: ["[1,2,3]"]
+    #     gas_limit: 200000
+    #     amount: 0
+tasks_file: ""
+await_txs: false
+timeout: ""
+client_group: ""
+log_txs: false

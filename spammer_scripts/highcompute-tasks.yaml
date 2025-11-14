@@ -1,47 +1,51 @@
-- scenario: taskrunner
-  name: "HighCompute CPU+Memory Spam"
-  description: "Burn CPU and memory with HighComputeContract (nested loops + hashes)"
-  config:
-    seed: highcompute-taskrunner
-    refill_amount: 5000000000000000000      # 5 ETH in wei
-    refill_balance: 1000000000000000000     # 1 ETH in wei
-    refill_interval: 600
-    total_count: 0
-    throughput: 1                           # a bit lower, this is pretty heavy
-    max_pending: 10
-    max_wallets: 20
-    rebroadcast: 120
-    base_fee: 20
-    tip_fee: 2
-    tasks_config: |-
-      init:
-        - type: deploy
-          name: highcompute
-          data:
-            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.bin"
-            gas_limit: 6000000
-            amount: 0
+# HighComputeContract - wallet settings
+seed: taskrunner-highcompute           # seed for the wallet
+refill_amount: 5000000000000000000     # refill 5 ETH when
+refill_balance: 1000000000000000000    # balance drops below 1 ETH
+refill_interval: 600                   # check every 10 minutes
 
-      execution:
-        # HighComputeContract.burnCpuAndMemory(uint256 iterations, uint256 arraySize)
-        - type: call
-          name: burn-cpu-mem
-          data:
-            target: "{contract:highcompute}"
-            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
-            call_fn_name: "burnCpuAndMemory"
-            # iterations, arraySize (tune carefully: cost ~ iterations * arraySize)
-            call_args: ["5", "256"]
-            gas_limit: 25000000
-            amount: 0
+# scenario: taskrunner
+total_count: 0                         # 0 = run indefinitely
+throughput: 2                          # each cycle runs both calls
+max_pending: 2
+max_wallets: 10
+rebroadcast: 60
+base_fee: 20
+tip_fee: 2
+tasks_config: |
+  # TaskRunner tasks for HighComputeContract
+  init:
+    - type: deploy
+      name: highcompute
+      data:
+        contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.bin"
+        gas_limit: 6000000
+        amount: 0
 
-        # HighComputeContract.burnHashOnly(uint256 iterations)
-        - type: call
-          name: burn-hash-only
-          data:
-            target: "{contract:highcompute}"
-            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
-            call_fn_name: "burnHashOnly"
-            call_args: ["5000"]
-            gas_limit: 8000000
-            amount: 0
+  execution:
+    # Heavy CPU + memory: burnCpuAndMemory(iterations, arraySize)
+    - type: call
+      name: burn-cpu-mem
+      data:
+        target: "{contract:highcompute}"
+        call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
+        call_fn_name: "burnCpuAndMemory"
+        call_args: ["5", "256"]     # iterations, arraySize – grows fast!
+        gas_limit: 25000000
+        amount: 0
+
+    # Lighter hash-only baseline: burnHashOnly(iterations)
+    - type: call
+      name: burn-hash-only
+      data:
+        target: "{contract:highcompute}"
+        call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
+        call_fn_name: "burnHashOnly"
+        call_args: ["5000"]
+        gas_limit: 8000000
+        amount: 0
+tasks_file: ""
+await_txs: true
+timeout: ""
+client_group: ""
+log_txs: true
