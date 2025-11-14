@@ -14,35 +14,35 @@
     base_fee: 20                            # gwei
     tip_fee: 2                              # gwei
     tasks_config: |-
-    init:
-      - type: deploy
-        name: highgas
-        data:
-          # Bytecode produced from compiling HighGasContract
-          contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.bin"
-          gas_limit: 6000000
-          amount: 0
+      init:
+        - type: deploy
+          name: highgas
+          data:
+            # Bytecode produced from compiling HighGasContract
+            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.bin"
+            gas_limit: 6000000
+            amount: 0
 
-    execution:
-      # HighGasContract.burnGas(uint256 iterations)
-      - type: call
-        name: burn-gas
-        data:
-          target: "{contract:highgas}"
-          call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
-          call_fn_name: "burnGas"
-          # WARNING: keep iterations small enough to avoid OOG
-          call_args: ["500"]
-          gas_limit: 25000000
-          amount: 0
+      execution:
+        # HighGasContract.burnGas(uint256 iterations)
+        - type: call
+          name: burn-gas
+          data:
+            target: "{contract:highgas}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
+            call_fn_name: "burnGas"
+            # WARNING: keep iterations small enough to avoid OOG
+            call_args: ["500"]
+            gas_limit: 25000000
+            amount: 0
 
-      # HighGasContract.burnStorageOnly(uint256 iterations)
-      - type: call
-        name: burn-storage
-        data:
-          target: "{contract:highgas}"
-          call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
-          call_fn_name: "burnStorageOnly"
-          call_args: ["500"]
-          gas_limit: 25000000
-          amount: 0
+        # HighGasContract.burnStorageOnly(uint256 iterations)
+        - type: call
+          name: burn-storage
+          data:
+            target: "{contract:highgas}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
+            call_fn_name: "burnStorageOnly"
+            call_args: ["500"]
+            gas_limit: 25000000
+            amount: 0
