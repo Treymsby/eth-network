@@ -38,6 +38,6 @@
     rebroadcast: 60
     log_txs: true
 
-#- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highcompute-tasks.yaml
-#- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highgas-task.yaml
-#- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/lowgas-tasks.yaml
+- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highcompute-tasks.yaml
+- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highgas-task.yaml
+- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/lowgas-tasks.yaml
