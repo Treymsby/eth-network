@@ -133,7 +133,9 @@ spamoor_params:
   image: ethpandaops/spamoor:latest
   spammers: []
   extra_args:
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-traffic.yaml
+    - --startup-spammer=/home/trey-mosby/Project/eth-network/spammer_scripts/baseline-traffic.yaml
+
+#    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-traffic.yaml
     - --startup-delay=30
 
 # # Keep ports static / workaround with ports.json

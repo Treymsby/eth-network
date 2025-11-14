@@ -1,36 +1,48 @@
-# highgas-tasks.yaml
+- scenario: taskrunner
+  name: "HighGas Storage/Gas Spam"
+  description: "Stress-test gas usage with SLOAD/SSTORE + events on HighGasContract"
+  config:
+    seed: highgas-taskrunner
+    refill_amount: 5000000000000000000      # 5 ETH in wei
+    refill_balance: 1000000000000000000     # 1 ETH in wei
+    refill_interval: 600                    # seconds
+    total_count: 0                          # 0 = run until stopped (when using throughput)
+    throughput: 2                           # task execution cycles per slot
+    max_pending: 10
+    max_wallets: 20
+    rebroadcast: 120
+    base_fee: 20                            # gwei
+    tip_fee: 2                              # gwei
+    tasks_config: |-
+      init:
+        - type: deploy
+          name: highgas
+          data:
+            # Bytecode produced from compiling HighGasContract
+            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.bin"
+            gas_limit: 6000000
+            amount: 0
 
-# Run once: deploy your HighGasContract and register it as "highgas"
-init:
-  - type: deploy
-    name: highgas
-    data:
-      # Creation bytecode (file or URL). Spamoor will read the file.
-      contract_file: "./contracts/build/HighGasContract.bin"
-      gas_limit: 6000000   # adjust for your chain's block gas limit
-      # amount: 0          # optional ETH in gwei to send with deploy
+      execution:
+        # HighGasContract.burnGas(uint256 iterations)
+        - type: call
+          name: burn-gas
+          data:
+            target: "{contract:highgas}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
+            call_fn_name: "burnGas"
+            # WARNING: keep iterations small enough to avoid OOG
+            call_args: ["500"]
+            gas_limit: 25000000
+            amount: 0
 
-# Run every execution cycle: hammer burnGas (and optionally burnStorageOnly)
-execution:
-  # 1) Call burnGas(uint256 iterations)
-  - type: call
-    name: burn-gas
-    data:
-      target: "{contract:highgas}"
-      call_abi_file: "./contracts/build/HighGasContract.abi"
-      call_fn_name: "burnGas"
-      # Be careful: too high -> tx OOG
-      call_args: ["500"]        # iterations
-      gas_limit: 25000000       # tune for your network
-      amount: 0                 # gwei
-
-  # 2) Optionally also hammer burnStorageOnly(uint256 iterations)
-  - type: call
-    name: burn-storage
-    data:
-      target: "{contract:highgas}"
-      call_abi_file: "./contracts/build/HighGasContract.abi"
-      call_fn_name: "burnStorageOnly"
-      call_args: ["500"]
-      gas_limit: 25000000
-      amount: 0
+        # HighGasContract.burnStorageOnly(uint256 iterations)
+        - type: call
+          name: burn-storage
+          data:
+            target: "{contract:highgas}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
+            call_fn_name: "burnStorageOnly"
+            call_args: ["500"]
+            gas_limit: 25000000
+            amount: 0
