@@ -41,7 +41,3 @@
 - include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highcompute-tasks.yaml
 - include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highgas-task.yaml
 - include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/low-gas-spammer.yaml
-
-Gas-based DoS (block-filling / slow-block attacks)
-State-bloat
-Transaction spam
