@@ -1,8 +1,5 @@
-// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-/// @notice Extremely gas-expensive contract for benchmarking / spam testing.
-///         DO NOT use on mainnet. Intended only for local / test networks.
 contract HighGasContract {
     // State used to force SSTORE and prevent optimizer from pruning work.
     uint256 public sink;
@@ -17,7 +14,7 @@ contract HighGasContract {
     ///         - LOG/emit event
     /// @param iterations Number of loop iterations. Keep it small or tx will OOG.
     function burnGas(uint256 iterations) external {
-        // Tight loop with multiple expensive operations.
+        // loop with multiple expensive operations.
         for (uint256 i = 0; i < iterations; ++i) {
             // 1) Expensive SLOAD
             uint256 current = store[i];
