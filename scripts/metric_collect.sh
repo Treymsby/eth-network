@@ -51,7 +51,7 @@ fi
 set -x
 
 # 1) tx latency
-python monitoring/python/tx_latency.py --count 100 --tps 0.1
+python monitoring/python/tx_latency.py --count 120 --tps 0.1
 
 # Pause and message before proceeding
 set +x
@@ -67,14 +67,14 @@ python monitoring/python/fetch_spamoor_dashboard.py
 # 3) slots list
 python monitoring/python/fetch_slots_list.py
 
-# 4) blocks [0..100]
-python monitoring/python/fetch_blocks.py --start 0 --end 100
+# 4) blocks [10..110]
+python monitoring/python/fetch_blocks.py --start 10 --end 110
 
-# 5) slots [0..100]
-python monitoring/python/fetch_slots.py --start 0 --end 100
+# 5) slots [10..110]
+python monitoring/python/fetch_slots.py --start 10 --end 110
 
-# 6) block txs [1..100] at rps 0.1
-python monitoring/python/fetch_block_txs.py --start 1 --end 100 --rps 0.1
+# 6) block txs [1..110] at rps 0.1
+python monitoring/python/fetch_block_txs.py --start 10 --end 110 --rps 0.1
 
 set +x
 echo ">>> All tasks completed."

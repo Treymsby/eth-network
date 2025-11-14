@@ -1,0 +1,47 @@
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/eoatx/README.md
+- scenario: eoatx
+  name: "EOA transfers"
+  description: "Basic ETH transfers with tx/slot throughput"
+  config:
+    seed: eoatx-baseline
+    refill_amount: 1000000000000000000  # 1 ETH in wei
+    refill_balance: 500000000000000000  # 0.5 ETH threshold
+    refill_interval: 600  # 10 minutes
+    throughput: 200       # transactions per slot
+    max_pending: 800      # max pending transactions
+    max_wallets: 200      # number of wallets to use
+    base_fee: 20          # base fee in gwei
+    tip_fee: 2            # priority fee in gwei
+    amount: 100           # transfer amount in wei as limit for random
+    random_amount: true   # randomize transfer amounts
+    random_target: true   # randomize target addresses
+    rebroadcast: 60       # Seconds to wait before rebroadcasting
+    log_txs: true
+
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/erctx/README.md
+- scenario: erctx
+  name: "ERC-20 transfers"
+  description: "Deploy ERC20 contracts and transfer tokens"
+  config:
+    seed: erctx-baseline
+    refill_amount: 2000000000000000000  # 2 ETH
+    refill_balance: 1000000000000000000 # 1 ETH threshold
+    refill_interval: 300
+    throughput: 100       # lower throughput for contract interactions
+    max_pending: 200
+    max_wallets: 100
+    base_fee: 20
+    tip_fee: 2
+    amount: 50            # token transfer amount
+    random_amount: true
+    random_target: true
+    rebroadcast: 60
+    log_txs: true
+
+- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/high-compute-spammer.yaml
+- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/high-gas-spammer.yaml
+- include: https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/low-gas-spammer.yaml
+
+Gas-based DoS (block-filling / slow-block attacks)
+State-bloat
+Transaction spam

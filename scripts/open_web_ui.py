@@ -8,7 +8,7 @@ with open(path, "r") as f:
 
 urls = []
 for name, url in data.items():
-    if name.lower() in ("blockscout", "blocksout"):  # skip blockscout (typo-safe)
+    if name.lower() in ("blockscout"):
         continue
     parsed = urllib.parse.urlparse(url)
     if not parsed.scheme:

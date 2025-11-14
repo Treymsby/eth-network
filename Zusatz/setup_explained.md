@@ -13,3 +13,5 @@ Why Nethermind (C#/.NET)
 Why vs Geth: very different implementation stack + competitive performance; good EIP-4844/blob support; rich tracing/JSON-RPC; strong metrics out of the box.
 
 Good for: performance + mempool/blob behavior comparisons under realistic load; profiling and instrumentation.
+
+after each network setup and shutdown the pc will be restartet to insure minimum spill over.

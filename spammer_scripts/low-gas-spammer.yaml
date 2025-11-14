@@ -1,0 +1,44 @@
+# lowgas-tasks.yaml
+#
+# For Spamoor's "taskrunner" scenario.
+# 1) Deploy LowGasSpamContract once
+# 2) On every execution cycle, call spam() (and optionally multiSpam()).
+
+init:
+  - type: deploy
+    name: lowgas
+    data:
+      # Compiled bytecode
+      contract_file: "./contracts/build/LowGasSpamContract.bin"
+      # No constructor args, so nothing else needed
+      gas_limit: 3000000
+      amount: 0              # gwei to send on deployment
+
+execution:
+  # Ultra-cheap single-event tx: LowGasSpamContract.spam(uint64)
+  - type: call
+    name: lowgas-spam
+    data:
+      target: "{contract:lowgas}"                 # resolved from the deploy step
+      call_abi_file: "./contracts/build/LowGasSpamContract.abi"
+      call_fn_name: "spam"
+      # uint64 tag argument; keep it simple and constant, or adjust manually if you want
+      call_args: ["1"]
+      gas_limit: 100000                            # very low, adjust if needed
+      amount: 0
+
+  # OPTIONAL: slightly heavier tx calling multiSpam(uint64[])
+  # Uncomment this block if you also want to test "more work per tx"
+  # and update call_args to whatever your TaskRunner version expects for arrays.
+  #
+  # - type: call
+  #   name: lowgas-multispam
+  #   data:
+  #     target: "{contract:lowgas}"
+  #     call_abi_file: "./build/LowGasSpamContract.abi"
+  #     call_fn_name: "multiSpam"
+  #     # Example: three tags; adjust encoding to your TaskRunner's array syntax
+  #     # Some versions expect JSON-like encoding, e.g. ["[1,2,3]"]
+  #     call_args: ["[1,2,3]"]
+  #     gas_limit: 200000
+  #     amount: 0

@@ -1,0 +1,36 @@
+# highgas-tasks.yaml
+
+# Run once: deploy your HighGasContract and register it as "highgas"
+init:
+  - type: deploy
+    name: highgas
+    data:
+      # Creation bytecode (file or URL). Spamoor will read the file.
+      contract_file: "./contracts/build/HighGasContract.bin"
+      gas_limit: 6000000   # adjust for your chain's block gas limit
+      # amount: 0          # optional ETH in gwei to send with deploy
+
+# Run every execution cycle: hammer burnGas (and optionally burnStorageOnly)
+execution:
+  # 1) Call burnGas(uint256 iterations)
+  - type: call
+    name: burn-gas
+    data:
+      target: "{contract:highgas}"
+      call_abi_file: "./contracts/build/HighGasContract.abi"
+      call_fn_name: "burnGas"
+      # Be careful: too high -> tx OOG
+      call_args: ["500"]        # iterations
+      gas_limit: 25000000       # tune for your network
+      amount: 0                 # gwei
+
+  # 2) Optionally also hammer burnStorageOnly(uint256 iterations)
+  - type: call
+    name: burn-storage
+    data:
+      target: "{contract:highgas}"
+      call_abi_file: "./contracts/build/HighGasContract.abi"
+      call_fn_name: "burnStorageOnly"
+      call_args: ["500"]
+      gas_limit: 25000000
+      amount: 0

@@ -1,0 +1,86 @@
+[
+  {
+    "name": "blockscout",
+    "uuid": "2eb80805e8b940c381640019684b6ac2",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:33601"
+  },
+  {
+    "name": "blockscout-frontend",
+    "uuid": "cc88dd09f7704c5ab37cd8826b591fd8",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:3000"
+  },
+  {
+    "name": "dora",
+    "uuid": "aba6512005df4940af427f9b5611b456",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:33596"
+  },
+  {
+    "name": "el-1-geth-lighthouse",
+    "uuid": "ce7b8aa40866422eb37f3320a5f9a83b",
+    "ws": "127.0.0.1:33536",
+    "rpc": "127.0.0.1:33535",
+    "http": null
+  },
+  {
+    "name": "el-2-geth-lighthouse",
+    "uuid": "dd2730945a384612a035983ce63b847d",
+    "ws": "127.0.0.1:33541",
+    "rpc": "127.0.0.1:33540",
+    "http": null
+  },
+  {
+    "name": "el-3-nethermind-lighthouse",
+    "uuid": "1cbc7be059734ecf830edcbd2ab2d0ec",
+    "ws": "127.0.0.1:33551",
+    "rpc": "127.0.0.1:33550",
+    "http": null
+  },
+  {
+    "name": "el-4-nethermind-lighthouse",
+    "uuid": "4867ae01779748269e1fc1deadbbf0c9",
+    "ws": "127.0.0.1:33561",
+    "rpc": "127.0.0.1:33560",
+    "http": null
+  },
+  {
+    "name": "el-5-besu-lighthouse",
+    "uuid": "83b7ff43f001423dbf92d9f20fe39471",
+    "ws": "127.0.0.1:33556",
+    "rpc": "127.0.0.1:33555",
+    "http": null
+  },
+  {
+    "name": "el-6-besu-lighthouse",
+    "uuid": "216ad2fc827f4c7ebfc71d029abea5fb",
+    "ws": "127.0.0.1:33546",
+    "rpc": "127.0.0.1:33545",
+    "http": null
+  },
+  {
+    "name": "grafana",
+    "uuid": "bf27d5ccd8b645cc8cc2e95150a9b876",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:33598"
+  },
+  {
+    "name": "prometheus",
+    "uuid": "2d39cec560e84c2fa647e5cd6188f2d0",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:33597"
+  },
+  {
+    "name": "spamoor",
+    "uuid": "35bc4a4998d54d2194342b293b8a8b27",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:33595"
+  }
+]

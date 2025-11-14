@@ -1,0 +1,39 @@
+# highcompute-tasks.yaml
+#
+# Tasks for Spamoor's "taskrunner" scenario.
+# 1) Deploy HighComputeContract once (init)
+# 2) On every execution cycle, hammer burnCpuAndMemory and burnHashOnly
+
+init:
+  - type: deploy
+    name: highcompute
+    data:
+      # Use the .bin you just compiled
+      contract_file: "./contracts/build/HighComputeContract.bin"
+      # No constructor args, so no contract_args needed
+      gas_limit: 6000000   # tune for your chain's block gas limit
+      amount: 0            # gwei to send on deployment (optional)
+
+execution:
+  # Heavy CPU + memory burn
+  - type: call
+    name: burn-cpu-mem
+    data:
+      target: "{contract:highcompute}"           # use registered name from init
+      call_abi_file: "./contracts/build/HighComputeContract.abi"
+      call_fn_name: "burnCpuAndMemory"
+      # [iterations, arraySize] – CAREFUL: grows fast with iterations*arraySize
+      call_args: ["5", "256"]
+      gas_limit: 25000000                        # adjust to your block gas limit
+      amount: 0                                  # gwei
+
+  # Lighter baseline: hash-only burn
+  - type: call
+    name: burn-hash-only
+    data:
+      target: "{contract:highcompute}"
+      call_abi_file: "./contracts/build/HighComputeContract.abi"
+      call_fn_name: "burnHashOnly"
+      call_args: ["5000"]
+      gas_limit: 8000000
+      amount: 0

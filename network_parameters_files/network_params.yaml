@@ -17,42 +17,45 @@ participants:
     cl_extra_params:
       - "--target-peers=8"
     # Number of Nodes 16 el + 16 cl = 16 nodes 
-    count: 16
+    count: 2
   
-  # - el_type: nethermind
-  #   el_image: "nethermindeth/nethermind:1.35.0"
-  #   # Resource management for el containers
-  #   # CPU is milicores
-  #   # RAM is in MB
-  #   # Defaults to 0, which results in no resource limits
-  #   el_max_cpu: 1000
-  #   el_max_mem: 1024
-  #   el_extra_params:
-  #     - "--Network.MaxActivePeers=8"
-  #   cl_type: lighthouse
-  #   cl_image: "sigp/lighthouse:v8.0.0"
-  #   cl_extra_params:
-  #     - "--target-peers=8"
-  #   # Number of Nodes 16 el + 16 cl = 16 nodes 
-  #   count: 16
+  - el_type: nethermind
+    el_image: "nethermindeth/nethermind:1.35.0"
+    # Resource management for el containers
+    # CPU is milicores
+    # RAM is in MB
+    # Defaults to 0, which results in no resource limits
+    el_max_cpu: 1000
+    el_max_mem: 1024
+    el_extra_params:
+      - "--Network.MaxActivePeers=8"
+    cl_type: lighthouse
+    cl_image: "sigp/lighthouse:v8.0.0"
+    cl_max_cpu: 500
+    cl_max_mem: 512
+    cl_extra_params:
+      - "--target-peers=8"
+    # Number of Nodes 16 el + 16 cl = 16 nodes 
+    count: 2
 
-  # - el_type: besu
-  #   el_image: "hyperledger/besu:v25.11.0"
-  #   # Resource management for el containers
-  #   # CPU is milicores
-  #   # RAM is in MB
-  #   # Defaults to 0, which results in no resource limits
-  #   el_max_cpu: 1000
-  #   el_max_mem: 1024
-  #   el_extra_params:
-  #     - "--max-peers=8"
-  #   cl_type: lighthouse
-  #   cl_image: "sigp/lighthouse:v8.0.0"
-  #   cl_extra_params:
-  #     - "--target-peers=8"
-  #     - "--disable-upnp"
-  #   # Number of Nodes 16 el + 16 cl = 16 nodes
-  #   count: 16
+  - el_type: besu
+    el_image: "hyperledger/besu:25.11.0"
+    # Resource management for el containers
+    # CPU is milicores
+    # RAM is in MB
+    # Defaults to 0, which results in no resource limits
+    #el_max_cpu: 1000
+    #el_max_mem: 1024
+    el_extra_params:
+      - "--max-peers=8"
+    cl_type: lighthouse
+    cl_image: "sigp/lighthouse:v8.0.0"
+    cl_max_cpu: 500
+    cl_max_mem: 512
+    cl_extra_params:
+      - "--target-peers=8"
+    # Number of Nodes 16 el + 16 cl = 16 nodes 
+    count: 2
 
 
 network_params:
@@ -61,6 +64,7 @@ network_params:
   network_id: "42069"
   # Number of seconds per slot
   seconds_per_slot: 12
+  # Epoche 32
   # The address of the staking contract address on the Eth1 chain
   deposit_contract_address: "0x00000000219ab540356cBB839Cbe05303d7705Fa"
   # Withdrawal address
@@ -122,7 +126,6 @@ grafana_params:
   # Defaults to the latest image
   image: "grafana/grafana:latest"
 
-# Configuration place for dora the explorer - https://github.com/ethpandaops/dora
 dora_params:
   image: "ethpandaops/dora:latest"
 
@@ -131,7 +134,7 @@ spamoor_params:
   spammers: []
   extra_args:
     - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-spammers.yaml
-    #- --startup-delay=60
+    - --startup-delay=30
 
 # # Keep ports static / workaround with ports.json
 # # Configuration for public ports and NAT exit IP addresses

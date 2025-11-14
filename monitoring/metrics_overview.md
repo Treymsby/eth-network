@@ -1,24 +1,24 @@
 # Network Usage
 ## Inbound / outbound separately (Mbit/s):
 sum by (instance) (rate(network_node_bytes_total_received[5m])) * 8 / 1e6
+
 sum by (instance) (rate(network_node_bytes_total_transmit[5m])) * 8 / 1e6
-## Receive Delay (Network deplay)
-API DORA recv_delay
+
 
 # Memory Usage
 ## Memory usage over time per node:
 process_resident_memory_bytes
-## Memory usage per code via time in Cores
+## Memory usage per node via time in Mib
 http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-58
 
 
 
 # CPU Usage
-## CPU Usage per code via time in Cores
+## CPU Usage per node via time in vCPU
 http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-57
 
 ## CPU
-irate(process_cpu_seconds_total[1m]) #all nodes
+avg(irate(process_cpu_seconds_total[1m])) # avg vCPU = 1000
 irate(process_cpu_seconds_total{instance=~"$system", job=~".*besu.*|execution.*"}[1m])
 irate(process_cpu_seconds_total{instance=~"$system", job=~".*geth.*|execution.*"}[1m])
 irate(process_cpu_seconds_total{instance=~"$system", job=~".*nethermind.*|execution.*"}[1m])
@@ -35,14 +35,15 @@ API blocksout block: "size"
 
 
 # Gas Metrics
-## Total gas used
+## Total gas used overtime
 API Blocksout Total Gas used: SUM("gas_used" per block)
 ## Gas used per block 
 API Blocksout
-## Gas Used per block per node
+## Gas Used per block per node (explain, time delay, latency low da internes netzwerk)
 eth_exe_block_head_gas_used
 ## Effective gas price (wei) or avg Gas price in wei (over time)
 http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-38
+make avg:
 
 # Transaction Metrics
 ## AVG Transaction time
@@ -63,5 +64,8 @@ tx_latency_log.jsonl via python script
 all "result": "success" tx / total transations
 And tx_latency.py via success / total transations (200)
 
-# Mempool size
+# Mempool size (schau mit welsche node er verbunden ist. Nachschauen wie Pending implementiert ist.)
 totals: pending (spaamoor api) per block
+"totals":
+    "pending": 117,
+
