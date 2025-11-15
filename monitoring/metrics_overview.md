@@ -1,13 +1,13 @@
 # Network Usage
 ## Inbound / outbound separately (Mbit/s):
 sum by (instance) (rate(network_node_bytes_total_received[5m])) * 8 / 1e6
-
 sum by (instance) (rate(network_node_bytes_total_transmit[5m])) * 8 / 1e6
 
 
 # Memory Usage
 ## Memory usage over time per node:
 process_resident_memory_bytes
+system_memory_used
 ## Memory usage per node via time in Mib
 http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-58
 
@@ -16,12 +16,20 @@ http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&fr
 # CPU Usage
 ## CPU Usage per node via time in vCPU
 http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-57
+edit to:
+(rate(process_cpu_seconds_total{client_type="execution"}[1m]))
 
 ## CPU
 avg(irate(process_cpu_seconds_total[1m])) # avg vCPU = 1000
 irate(process_cpu_seconds_total{instance=~"$system", job=~".*besu.*|execution.*"}[1m])
 irate(process_cpu_seconds_total{instance=~"$system", job=~".*geth.*|execution.*"}[1m])
 irate(process_cpu_seconds_total{instance=~"$system", job=~".*nethermind.*|execution.*"}[1m])
+
+### GETH in vCPU if 1 then approx 1 CPU core
+rate(system_cpu_sysload_total{client_type="execution"}[1m])
+
+### Others in vCPU if 1 then approx 1 CPU core
+rate(process_cpu_seconds_total{client_type="execution"}[1m]) * 10
 
 # Block Metrics
 ## Network utilization (%)

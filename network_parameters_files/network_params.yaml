@@ -133,11 +133,8 @@ spamoor_params:
   image: ethpandaops/spamoor:latest
   spammers: []
   extra_args:
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highcompute-tasks.yaml
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/highgas-task.yaml
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/lowgas-tasks.yaml
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline-traffic.yaml
-    - --startup-delay=30
+    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/spammers.yaml
+    - --startup-delay=60
 
 # # Keep ports static / workaround with ports.json
 # # Configuration for public ports and NAT exit IP addresses

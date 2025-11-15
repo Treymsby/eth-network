@@ -45,3 +45,6 @@ To Stop
 sudo kurtosis enclave stop eth-network
 sudo kurtosis enclave rm eth-network
 sudo kurtosis engine restart
+
+To start python venv:
+source .venv/bin/activate

@@ -1,0 +1,44 @@
+- scenario: taskrunner
+  name: "BigSizeBlock Calldata Spam"
+  description: "Maximize block size with huge calldata to BigSizeBlockContract.padBlock()"
+  config:
+    seed: bigsizeblock-taskrunner
+    refill_amount: 5000000000000000000      # 5 ETH in wei
+    refill_balance: 1000000000000000000     # 1 ETH in wei
+    refill_interval: 600
+    total_count: 0                          # 0 = run indefinitely
+    throughput: 10                          # many lightweight txs per slot
+    max_pending: 100
+    max_wallets: 20
+    rebroadcast: 120
+    base_fee: 20
+    tip_fee: 2
+    tasks_config: |-
+      init:
+        - type: deploy
+          name: bigsizeblock
+          data:
+            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/BigSizeBlockContract.bin"
+            gas_limit: 200000
+            amount: 0
+
+      execution:
+        # BigSizeBlockContract.padBlock(bytes calldata padding)
+        #
+        # We use a big, mostly-zero bytes argument so:
+        # - Calldata is large  -> big block size
+        # - Gas per byte is minimal (0x00 is cheapest calldata byte)
+        #
+        # Increase the number of "00" pairs below to grow block size.
+        - type: call
+          name: pad-block
+          data:
+            target: "{contract:bigsizeblock}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/BigSizeBlockContract.abi"
+            call_fn_name: "padBlock"
+            # Single bytes argument: a long zero-filled blob (here: 1024 bytes).
+            # Each "00" = 1 byte; increase count to make txs larger.
+            call_args:
+              - "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            gas_limit: 150000
+            amount: 0

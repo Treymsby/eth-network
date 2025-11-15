@@ -50,6 +50,17 @@ fi
 # Show each command as it runs (plus all program output)
 set -x
 
+# -------------------------------
+
+python scripts/extract_container_setup.py
+# new terminal for 
+python monitoring/python/live_collection/tx_metrics_ws.py --duration 800
+# new terminal for 
+python monitoring/python/live_collection/block_metrics_ws.py --duration 800
+# new terminal for 
+python monitoring/python/live_collection/mempool_metrics_ws.py --duration 800
+
+# -------------------------------
 # 1) tx latency
 python monitoring/python/tx_latency.py --count 120 --tps 0.1
 

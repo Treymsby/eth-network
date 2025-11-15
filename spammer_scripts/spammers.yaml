@@ -1,0 +1,209 @@
+# -------------------------------- Baseline Traffic --------------------------------
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/eoatx/README.md
+- scenario: eoatx
+  name: "EOA transfers"
+  description: "Basic ETH transfers with tx/slot throughput"
+  config:
+    seed: eoatx-baseline
+    refill_amount: 1000000000000000000  # 1 ETH in wei
+    refill_balance: 500000000000000000  # 0.5 ETH threshold
+    refill_interval: 600  # 10 minutes
+    throughput: 200       # transactions per slot
+    max_pending: 800      # max pending transactions
+    max_wallets: 200      # number of wallets to use
+    base_fee: 20          # base fee in gwei
+    tip_fee: 2            # priority fee in gwei
+    amount: 100           # transfer amount in wei as limit for random
+    random_amount: true   # randomize transfer amounts
+    random_target: true   # randomize target addresses
+    rebroadcast: 60       # Seconds to wait before rebroadcasting
+    log_txs: true
+
+# https://github.com/ethpandaops/spamoor/blob/master/scenarios/erctx/README.md
+- scenario: erctx
+  name: "ERC-20 transfers"
+  description: "Deploy ERC20 contracts and transfer tokens"
+  config:
+    seed: erctx-baseline
+    refill_amount: 2000000000000000000  # 2 ETH
+    refill_balance: 1000000000000000000 # 1 ETH threshold
+    refill_interval: 300
+    throughput: 100       # lower throughput for contract interactions
+    max_pending: 200
+    max_wallets: 100
+    base_fee: 20
+    tip_fee: 2
+    amount: 50            # token transfer amount
+    random_amount: true
+    random_target: true
+    rebroadcast: 60
+    log_txs: true
+
+# -------------------------------- Spammers --------------------------------
+- scenario: taskrunner
+  name: "HighCompute CPU+Memory Spam"
+  description: "Burn CPU and memory with HighComputeContract (nested loops + hashes)"
+  config:
+    seed: highcompute-taskrunner
+    refill_amount: 5000000000000000000      # 5 ETH in wei
+    refill_balance: 1000000000000000000     # 1 ETH in wei
+    refill_interval: 600
+    total_count: 0
+    throughput: 1                           # a bit lower, this is pretty heavy
+    max_pending: 10
+    max_wallets: 20
+    rebroadcast: 120
+    base_fee: 20
+    tip_fee: 2
+    tasks_config: |-
+      init:
+        - type: deploy
+          name: highcompute
+          data:
+            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.bin"
+            gas_limit: 6000000
+            amount: 0
+
+      execution:
+        # HighComputeContract.burnCpuAndMemory(uint256 iterations, uint256 arraySize)
+        - type: call
+          name: burn-cpu-mem
+          data:
+            target: "{contract:highcompute}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
+            call_fn_name: "burnCpuAndMemory"
+            # iterations, arraySize (tune carefully: cost ~ iterations * arraySize)
+            call_args: ["100", "512"]
+            gas_limit: 32000000
+            amount: 0
+
+        # HighComputeContract.burnHashOnly(uint256 iterations)
+        - type: call
+          name: burn-hash-only
+          data:
+            target: "{contract:highcompute}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
+            call_fn_name: "burnHashOnly"
+            call_args: ["5000"]
+            gas_limit: 8000000
+            amount: 0
+
+- scenario: taskrunner
+  name: "BigSizeBlock Calldata Spam"
+  description: "Maximize block size with huge calldata to BigSizeBlockContract.padBlock()"
+  config:
+    seed: bigsizeblock-taskrunner
+    refill_amount: 5000000000000000000      # 5 ETH in wei
+    refill_balance: 1000000000000000000     # 1 ETH in wei
+    refill_interval: 600
+    total_count: 0                          # 0 = run indefinitely
+    throughput: 10                          # many lightweight txs per slot
+    max_pending: 100
+    max_wallets: 20
+    rebroadcast: 120
+    base_fee: 20
+    tip_fee: 2
+    tasks_config: |-
+      init:
+        - type: deploy
+          name: bigsizeblock
+          data:
+            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/BigSizeBlockContract.bin"
+            gas_limit: 200000
+            amount: 0
+
+      execution:
+        # BigSizeBlockContract.padBlock(bytes calldata padding)
+        #
+        # We use a big, mostly-zero bytes argument so:
+        # - Calldata is large  -> big block size
+        # - Gas per byte is minimal (0x00 is cheapest calldata byte)
+        #
+        # Increase the number of "00" pairs below to grow block size.
+        - type: call
+          name: pad-block
+          data:
+            target: "{contract:bigsizeblock}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/BigSizeBlockContract.abi"
+            call_fn_name: "padBlock"
+            # Single bytes argument: a long zero-filled blob (here: 1024 bytes).
+            # Each "00" = 1 byte; increase count to make txs larger.
+            call_args:
+              - "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+            gas_limit: 150000
+            amount: 0
+
+- scenario: taskrunner
+  name: "HighGas Storage/Gas Spam"
+  description: "Stress-test gas usage with SLOAD/SSTORE + events on HighGasContract"
+  config:
+    seed: highgas-taskrunner
+    refill_amount: 5000000000000000000      # 5 ETH in wei
+    refill_balance: 1000000000000000000     # 1 ETH in wei
+    refill_interval: 600                    # seconds
+    total_count: 0                          # 0 = run until stopped (when using throughput)
+    throughput: 4                           # task execution cycles per slot
+    max_pending: 10
+    max_wallets: 20
+    rebroadcast: 120
+    base_fee: 20                            # gwei
+    tip_fee: 2                              # gwei
+    tasks_config: |-
+      init:
+        - type: deploy
+          name: highgas
+          data:
+            # Bytecode produced from compiling HighGasContract
+            contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.bin"
+            gas_limit: 6000000
+            amount: 0
+
+      execution:
+        # HighGasContract.burnGas(uint256 iterations)
+        - type: call
+          name: burn-gas
+          data:
+            target: "{contract:highgas}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
+            call_fn_name: "burnGas"
+            # WARNING: keep iterations small enough to avoid OOG
+            call_args: ["500"]
+            gas_limit: 25000000
+            amount: 0
+
+        # HighGasContract.burnStorageOnly(uint256 iterations)
+        - type: call
+          name: burn-storage
+          data:
+            target: "{contract:highgas}"
+            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighGasContract.abi"
+            call_fn_name: "burnStorageOnly"
+            call_args: ["500"]
+            gas_limit: 25000000
+            amount: 0
+
+- scenario: eoatx
+  name: '[State Bloat] Max random EOA transactions per block spammer'
+  description: Sends maximum number of normal EOA transactions to random addresses (10000 tx/block)
+  config:
+    amount: 1
+    base_fee: 20
+    client_group: ""
+    data: ""
+    gas_limit: 21000
+    log_txs: false
+    max_pending: 10000
+    max_wallets: 5000
+    random_amount: false
+    random_target: true
+    rebroadcast: 1
+    refill_amount: 5000000000000000000
+    refill_balance: 1000000000000000000
+    refill_interval: 600
+    seed: eoatx-max-1
+    self_tx_only: false
+    throughput: 10000
+    timeout: ""
+    tip_fee: 2
+    to: ""
+    total_count: 0

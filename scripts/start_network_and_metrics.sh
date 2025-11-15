@@ -62,6 +62,7 @@ run_cmd "kurtosis run --enclave ${ENCLAVE} ${PKG} --args-file ${ARGS_FILE}"
 
 # 4) Update ports.json and open web UIs
 run_cmd "scripts/update_ports.sh"
+
 # 5) Chmod 777 (it's a VM)
 run_cmd "chmod -R 777 ./"
 run_cmd "python3 scripts/open_web_ui.py"

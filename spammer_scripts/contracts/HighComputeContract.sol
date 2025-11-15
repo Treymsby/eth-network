@@ -17,8 +17,8 @@ contract HighComputeContract {
     /// @param iterations  Outer loop count (CPU emphasis).
     /// @param arraySize   Size of the in-memory array (memory emphasis).
     function burnCpuAndMemory(uint256 iterations, uint256 arraySize) external {
-        require(iterations > 0, "iterations must be > 0");
-        require(arraySize > 0, "arraySize must be > 0");
+        require(iterations > 0 && iterations <= 1024, "iterations out of range");
+        require(arraySize > 0 && arraySize <= 4096, "arraySize out of range");
 
         bytes32 h = bytes32(0);
         uint256 acc = sink;
@@ -30,15 +30,17 @@ contract HighComputeContract {
             // Fill the array with hashes depending on i, j, and acc.
             for (uint256 j = 0; j < arraySize; ++j) {
                 // Heavy hashing work
-                h = keccak256(abi.encodePacked(h, acc, i, j, block.timestamp, block.number));
+                h = keccak256(
+                    abi.encodePacked(h, acc, i, j, block.timestamp, block.number)
+                );
                 data[j] = h;
 
                 // Mix into accumulator so the optimizer can't remove this.
                 acc ^= uint256(h);
             }
 
-            // Hash the whole array (forces reading from memory).
-            h = keccak256(abi.encodePacked(h, data.length, acc));
+            // Hash the array contents as well (forces reading from memory).
+            h = keccak256(abi.encodePacked(h, data, acc));
         }
 
         // Persist something to storage so that work is observable from outside.
@@ -50,13 +52,15 @@ contract HighComputeContract {
     /// @notice A lighter helper that only does hashing without the inner array loop.
     ///         Useful as a lower-gas baseline vs burnCpuAndMemory.
     function burnHashOnly(uint256 iterations) external {
-        require(iterations > 0, "iterations must be > 0");
+        require(iterations > 0 && iterations <= 500_000, "iterations out of range");
 
         bytes32 h = bytes32(sink);
         uint256 acc = sink;
 
         for (uint256 i = 0; i < iterations; ++i) {
-            h = keccak256(abi.encodePacked(h, acc, i, block.timestamp, block.prevrandao));
+            h = keccak256(
+                abi.encodePacked(h, acc, i, block.timestamp, block.prevrandao)
+            );
             acc ^= uint256(h);
         }
 
