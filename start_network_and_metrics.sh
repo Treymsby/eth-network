@@ -27,7 +27,7 @@ open_in_new_terminal() {
   local cmd="$1"
   if command -v gnome-terminal >/dev/null 2>&1; then
     gnome-terminal -- bash -lc "$cmd; echo; echo '--- command finished ---'; echo 'You can close this window.'; exec bash"
-  elif command -v x-terminal-emulator >/dev/null 2>&1; then
+  elif command -v x-terminal-emulator >/devnull 2>&1; then
     x-terminal-emulator -e bash -lc "$cmd; echo; echo '--- command finished ---'; read -n 1 -s -r -p 'Press any key to close...'"
   elif command -v konsole >/dev/null 2>&1; then
     konsole -e bash -lc "$cmd; echo; echo '--- command finished ---'; read -n 1 -s -r -p 'Press any key to close...'"
@@ -256,15 +256,4 @@ fi
 
 echo ">>> Archive complete: ${archive_dir}"
 
-info "All done. Attempting to reboot the system..."
-
-# ============================================
-# 5) Restart the computer
-# ============================================
-# No sudo inside; this will only succeed if the script is run as root.
-if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
-  info "Not running as root; please reboot the machine manually."
-else
-  info "Rebooting now..."
-  reboot
-fi
+info "All done."
