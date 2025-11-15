@@ -39,3 +39,24 @@
     rebroadcast: 60
     log_txs: true
 
+amount: 1
+base_fee: 20
+client_group: ""
+data: ""
+gas_limit: 21000
+log_txs: false
+max_pending: 5000
+max_wallets: 100
+random_amount: false
+random_target: true
+rebroadcast: 1
+refill_amount: 5000000000000000000
+refill_balance: 1000000000000000000
+refill_interval: 600
+seed: eoatx-max-1
+self_tx_only: false
+throughput: 10000
+timeout: ""
+tip_fee: 2
+to: ""
+total_count: 0
