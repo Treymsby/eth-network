@@ -121,10 +121,10 @@ def main():
     # 2) Import selected spammer tasks
     import_spammer_tasks(spamoor_base, args.import_name)
 
-    # 3) Wait 384 seconds, then start spammer 103
-    print(f"[+] Sleeping {SLEEP_SECONDS} seconds before starting spammer 103...")
+    # 3) Wait 384 seconds, then start spammer 102
+    print(f"[+] Sleeping {SLEEP_SECONDS} seconds before starting spammer 102...")
     time.sleep(SLEEP_SECONDS)
-    spammer_post("103/start")
+    spammer_post("102/start")
 
     # 4) Wait another 384 seconds, then pause 100, 101, 102
     print(f"[+] Sleeping another {SLEEP_SECONDS} seconds before pausing 100, 101, 102...")

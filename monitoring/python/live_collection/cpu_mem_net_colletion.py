@@ -18,7 +18,7 @@ Totals (all those processes together):
   - Memory Usage %
 
 Output:
-  - one JSON object per line in client_metrics.jsonl
+  - one JSON object per line in client_metrics.json
 
 Requirements:
   - psutil (pip install psutil)
@@ -35,7 +35,7 @@ import psutil
 
 # ========= CONFIG DEFAULTS =========
 SAMPLE_INTERVAL = 10  # default seconds between samples
-OUTPUT_FILE = "data/client_metrics.jsonl"
+OUTPUT_FILE = "data/client_metrics.json"
 
 TARGET_NAMES = {"geth", "nethermind"}
 BESU_KEYWORD = "besu"  # for java-based Besu client (java cmdline contains "besu")

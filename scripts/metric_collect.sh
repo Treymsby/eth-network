@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# run_eth_monitoring.sh
+# metric_collect.sh
 # Runs the monitoring scripts in order and shows all output in the terminal.
 
 set -Eeuo pipefail

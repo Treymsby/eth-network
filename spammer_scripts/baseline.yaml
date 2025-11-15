@@ -8,7 +8,7 @@
     refill_amount: 1000000000000000000  # 1 ETH in wei
     refill_balance: 500000000000000000  # 0.5 ETH threshold
     refill_interval: 600  # 10 minutes
-    throughput: 200       # transactions per slot
+    throughput: 100       # transactions per slot
     max_pending: 800      # max pending transactions
     max_wallets: 200      # number of wallets to use
     base_fee: 20          # base fee in gwei
@@ -28,7 +28,7 @@
     refill_amount: 2000000000000000000  # 2 ETH
     refill_balance: 1000000000000000000 # 1 ETH threshold
     refill_interval: 300
-    throughput: 100       # lower throughput for contract interactions
+    throughput: 50       # lower throughput for contract interactions
     max_pending: 200
     max_wallets: 100
     base_fee: 20

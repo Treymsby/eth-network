@@ -134,7 +134,7 @@ spamoor_params:
   image: ethpandaops/spamoor:latest
   spammers: []
   extra_args:
-    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/spammers.yaml
+    - --startup-spammer=https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/baseline.yaml
     - --startup-delay=30
 
 # # Keep ports static / workaround with ports.json

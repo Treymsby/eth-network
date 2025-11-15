@@ -24,6 +24,7 @@ the output file (JSON Lines format: one JSON object per line):
 
 {
   "timestamp": "<ISO8601 UTC>",
+  "block_number": <int|null>,     # NEW: latest block number seen
   "total_mempool_size": <int>,
   "total_new_pending": <int>,           # last interval
   "total_confirmed": <int>,             # last interval
@@ -53,7 +54,7 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Set, Any, Tuple
+from typing import Dict, Set, Any, Tuple, Optional
 
 import websockets
 
@@ -71,6 +72,8 @@ class NodeMempoolState:
     confirmed_since_last: int = 0
     total_seen_pending: int = 0
     total_confirmed: int = 0
+    last_block_number: Optional[int] = None  # latest block number seen by this node
+
 
     def snapshot_and_reset_interval(self) -> Dict[str, Any]:
         """Return interval metrics and reset per-interval counters."""
@@ -209,6 +212,15 @@ async def monitor_node(
                         # 'result' is a block header object
                         block = result or {}
                         block_hash = block.get("hash")
+                        block_number_hex = block.get("number")
+
+                        # store latest block number for this node
+                        if isinstance(block_number_hex, str):
+                            try:
+                                state.last_block_number = int(block_number_hex, 16)
+                            except (TypeError, ValueError):
+                                pass
+
                         if not block_hash:
                             continue
 
@@ -257,6 +269,16 @@ async def sampler_task(
 
             snapshot_time = ts_to_iso(now)
 
+            # latest block number seen across all nodes (if any)
+            block_number: Optional[int] = None
+            for s in states.values():
+                if s.last_block_number is not None:
+                    if (
+                        block_number is None
+                        or s.last_block_number > block_number
+                    ):
+                        block_number = s.last_block_number
+
             nodes_section: Dict[str, Dict[str, Any]] = {}
             total_mempool_size = 0
             total_new_pending = 0
@@ -274,6 +296,7 @@ async def sampler_task(
 
             snapshot = {
                 "timestamp": snapshot_time,
+                "block_number": block_number,
                 "total_mempool_size": total_mempool_size,
                 "total_new_pending": total_new_pending,
                 "total_confirmed": total_confirmed,
@@ -357,7 +380,7 @@ async def main_async(args) -> None:
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Monitor mempool via Ethereum EL WebSocket endpoints "
-        "described in eth-network-services.json and write JSONL snapshots."
+        "described in eth-network-services.json and write json snapshots."
     )
     parser.add_argument(
         "--ws-file",
@@ -382,8 +405,8 @@ def parse_args():
     )
     parser.add_argument(
         "--output",
-        default="data/mempool_metrics.jsonl",
-        help="Output file for JSONL snapshots (default: data/mempool_metrics.jsonl)",
+        default="data/mempool_metrics.json",
+        help="Output file for json snapshots (default: data/mempool_metrics.json)",
     )
     return parser.parse_args()
 
