@@ -18,7 +18,7 @@
     refill_interval: 600
     seed: eoatx-max-1
     self_tx_only: false
-    throughput: 2000
+    throughput: 1400
     timeout: ""
     tip_fee: 2
     to: ""
