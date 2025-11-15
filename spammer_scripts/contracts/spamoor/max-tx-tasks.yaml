@@ -1,6 +1,6 @@
 - scenario: eoatx
-  name: '[State Bloat] Max random EOA transactions per block spammer'
-  description: Sends maximum number of normal EOA transactions to random addresses (10000 tx/block)
+  name: 'Max TPS Stress Test'
+  description: Sends maximum number of normal EOA transactions to random addresses
   config:
     amount: 1
     base_fee: 20
@@ -8,7 +8,7 @@
     data: ""
     gas_limit: 21000
     log_txs: false
-    max_pending: 1000
+    max_pending: 100
     max_wallets: 5000
     random_amount: false
     random_target: true
@@ -18,7 +18,7 @@
     refill_interval: 600
     seed: eoatx-max-1
     self_tx_only: false
-    throughput: 1000
+    throughput: 700
     timeout: ""
     tip_fee: 2
     to: ""
