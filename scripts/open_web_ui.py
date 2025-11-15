@@ -9,7 +9,7 @@ with open(path, "r") as f:
 urls = []
 for name, url in data.items():
     # only allow spamoor and prometheus
-    if name.lower() not in ("spamoor", "prometheus"):
+    if name.lower() not in ("spamoor", "grafana", "dora"):
         continue
 
     parsed = urllib.parse.urlparse(url)

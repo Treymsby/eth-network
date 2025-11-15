@@ -1,147 +1,147 @@
 [
   {
     "name": "blockscout",
-    "uuid": "c580157fca4643268d2d516c77f817f8",
+    "uuid": "ab56b6545fa14a9d8d6fa2bcef8c797a",
     "ws": null,
     "rpc": null,
-    "http": "http://127.0.0.1:32925"
+    "http": "http://127.0.0.1:32926"
   },
   {
     "name": "blockscout-frontend",
-    "uuid": "052622f7382f4ab491d57f8d85f3b0b6",
+    "uuid": "645340b2cf9244f9a3b3d21229d838d6",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:3000"
   },
   {
     "name": "dora",
-    "uuid": "2f2690bc5f5245a89338c81ddbafd1b5",
+    "uuid": "2621fd3158114219bc49524eb0b80da9",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32920"
   },
   {
     "name": "el-01-besu-lighthouse",
-    "uuid": "b3c602ad684542ab85f82ebbbc496165",
+    "uuid": "23c5dd4d3e414017b30bcf3c686d824d",
     "ws": "127.0.0.1:32770",
     "rpc": "127.0.0.1:32769",
     "http": null
   },
   {
     "name": "el-02-besu-lighthouse",
-    "uuid": "8aa68ca93cea468582c7133ea44681a4",
-    "ws": "127.0.0.1:32780",
-    "rpc": "127.0.0.1:32779",
-    "http": null
-  },
-  {
-    "name": "el-03-besu-lighthouse",
-    "uuid": "b8a9708b3a2347b796ff7e0f9042d1e3",
-    "ws": "127.0.0.1:32835",
-    "rpc": "127.0.0.1:32834",
-    "http": null
-  },
-  {
-    "name": "el-04-besu-lighthouse",
-    "uuid": "d68f8cd9104b4ee2bd00e478f63af6e1",
-    "ws": "127.0.0.1:32825",
-    "rpc": "127.0.0.1:32824",
-    "http": null
-  },
-  {
-    "name": "el-05-besu-lighthouse",
-    "uuid": "5ad25423151f4952bf19eef7d23f3ee5",
-    "ws": "127.0.0.1:32800",
-    "rpc": "127.0.0.1:32799",
-    "http": null
-  },
-  {
-    "name": "el-06-besu-lighthouse",
-    "uuid": "6538ba12442b402ab767a97a68a018b2",
-    "ws": "127.0.0.1:32830",
-    "rpc": "127.0.0.1:32829",
-    "http": null
-  },
-  {
-    "name": "el-07-besu-lighthouse",
-    "uuid": "edcedc7cc6bf46809d5ae3a2199eb63a",
-    "ws": "127.0.0.1:32790",
-    "rpc": "127.0.0.1:32789",
-    "http": null
-  },
-  {
-    "name": "el-08-besu-lighthouse",
-    "uuid": "c92a2347759e4323bd2257fd821f0c23",
+    "uuid": "35bf2887c4ad4054973978b0cb4fda89",
     "ws": "127.0.0.1:32810",
     "rpc": "127.0.0.1:32809",
     "http": null
   },
   {
-    "name": "el-09-besu-lighthouse",
-    "uuid": "625ebef6683d4f689daa61332436174e",
-    "ws": "127.0.0.1:32785",
-    "rpc": "127.0.0.1:32784",
-    "http": null
-  },
-  {
-    "name": "el-10-besu-lighthouse",
-    "uuid": "e62f2daeb1dd44c3a8e42337fa671c17",
-    "ws": "127.0.0.1:32820",
-    "rpc": "127.0.0.1:32819",
-    "http": null
-  },
-  {
-    "name": "el-11-besu-lighthouse",
-    "uuid": "d57bc9c2366b469b911f4aa53304cbd4",
-    "ws": "127.0.0.1:32840",
-    "rpc": "127.0.0.1:32839",
-    "http": null
-  },
-  {
-    "name": "el-12-besu-lighthouse",
-    "uuid": "934dec6a352a4625b7c4a6d127df2e46",
-    "ws": "127.0.0.1:32815",
-    "rpc": "127.0.0.1:32814",
-    "http": null
-  },
-  {
-    "name": "el-13-besu-lighthouse",
-    "uuid": "452eddf65f0945df906318b63c606a2f",
+    "name": "el-03-besu-lighthouse",
+    "uuid": "965e816bf3874211916888f97c2f3aa2",
     "ws": "127.0.0.1:32805",
     "rpc": "127.0.0.1:32804",
     "http": null
   },
   {
-    "name": "el-14-besu-lighthouse",
-    "uuid": "8fdf267ba84d48dcbea6745bd136f425",
-    "ws": "127.0.0.1:32775",
-    "rpc": "127.0.0.1:32774",
+    "name": "el-04-besu-lighthouse",
+    "uuid": "73b5eedfc719446cabf0899a9356f1d2",
+    "ws": "127.0.0.1:32830",
+    "rpc": "127.0.0.1:32829",
     "http": null
   },
   {
-    "name": "el-15-besu-lighthouse",
-    "uuid": "ebddccb67c1e4766aad6c4237fb25a51",
+    "name": "el-05-besu-lighthouse",
+    "uuid": "5933728a06994191842a18396e6bfb1e",
+    "ws": "127.0.0.1:32790",
+    "rpc": "127.0.0.1:32789",
+    "http": null
+  },
+  {
+    "name": "el-06-besu-lighthouse",
+    "uuid": "0751c4d7bda6435e9dc688979a7c7e6a",
+    "ws": "127.0.0.1:32825",
+    "rpc": "127.0.0.1:32824",
+    "http": null
+  },
+  {
+    "name": "el-07-besu-lighthouse",
+    "uuid": "0f606e64eaf7480aafab561ddc67cd96",
+    "ws": "127.0.0.1:32800",
+    "rpc": "127.0.0.1:32799",
+    "http": null
+  },
+  {
+    "name": "el-08-besu-lighthouse",
+    "uuid": "1468655cdaf844d9b3e9ddc3f8e1ce56",
+    "ws": "127.0.0.1:32840",
+    "rpc": "127.0.0.1:32839",
+    "http": null
+  },
+  {
+    "name": "el-09-besu-lighthouse",
+    "uuid": "3219c7e253b44365baec4b20c979ef82",
     "ws": "127.0.0.1:32795",
     "rpc": "127.0.0.1:32794",
     "http": null
   },
   {
+    "name": "el-10-besu-lighthouse",
+    "uuid": "30dbfb19804d497e85f4543c6e15fed7",
+    "ws": "127.0.0.1:32780",
+    "rpc": "127.0.0.1:32779",
+    "http": null
+  },
+  {
+    "name": "el-11-besu-lighthouse",
+    "uuid": "daf16a8775044e43a8ad5774fa7d06f1",
+    "ws": "127.0.0.1:32820",
+    "rpc": "127.0.0.1:32819",
+    "http": null
+  },
+  {
+    "name": "el-12-besu-lighthouse",
+    "uuid": "97dd539f3cb84da09b5c3f56591fad69",
+    "ws": "127.0.0.1:32835",
+    "rpc": "127.0.0.1:32834",
+    "http": null
+  },
+  {
+    "name": "el-13-besu-lighthouse",
+    "uuid": "fc1f8eda8f2c4cf393820446b2f0c40e",
+    "ws": "127.0.0.1:32775",
+    "rpc": "127.0.0.1:32774",
+    "http": null
+  },
+  {
+    "name": "el-14-besu-lighthouse",
+    "uuid": "3c6483a0e86845138b802a12bbbce056",
+    "ws": "127.0.0.1:32785",
+    "rpc": "127.0.0.1:32784",
+    "http": null
+  },
+  {
+    "name": "el-15-besu-lighthouse",
+    "uuid": "87d33aa4cd2a4836ac2d60b192bb035c",
+    "ws": "127.0.0.1:32815",
+    "rpc": "127.0.0.1:32814",
+    "http": null
+  },
+  {
     "name": "grafana",
-    "uuid": "ff73536fbf69427ab34806445b9db68f",
+    "uuid": "0b95fbe9a66943bda4373129fc3cf136",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32922"
   },
   {
     "name": "prometheus",
-    "uuid": "d5f45b325d814e1fbf7f3fc523782600",
+    "uuid": "807ad9e6b23047689431bb56c939b7fc",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32921"
   },
   {
     "name": "spamoor",
-    "uuid": "90d4e4b175044bdabc3e61a8df3f529e",
+    "uuid": "f505a5720c364c5db4431bbc14f3ba97",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32919"

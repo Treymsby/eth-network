@@ -1,5 +1,5 @@
 {
-  "blockscout": "http://127.0.0.1:32925",
+  "blockscout": "http://127.0.0.1:32926",
   "blockscout-frontend": "http://127.0.0.1:3000",
   "dora": "http://127.0.0.1:32920",
   "spamoor": "http://127.0.0.1:32919",
