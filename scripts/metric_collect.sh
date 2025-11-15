@@ -20,7 +20,7 @@ if [[ -d "${data_dir}" ]]; then
   shopt -s dotglob nullglob
   if compgen -G "${data_dir}/*" > /dev/null; then
     echo ">>> Archiving contents of ${data_dir}/ to ${archive_dir}/"
-    mv ${data_dir}/* "${archive_dir}/"
+    mv "${data_dir}"/* "${archive_dir}/"
   else
     echo ">>> ${data_dir}/ is empty; nothing to archive."
   fi
@@ -47,30 +47,61 @@ if ! command -v python >/dev/null 2>&1; then
   exit 1
 fi
 
+# PIDs of background monitoring scripts (so we can clean up)
+monitor_pids=()
+
+cleanup() {
+  # Called on exit (success or error) to stop monitoring scripts if still running
+  if ((${#monitor_pids[@]} > 0)); then
+    echo
+    echo ">>> Cleaning up background monitoring processes..."
+    for pid in "${monitor_pids[@]}"; do
+      if kill -0 "${pid}" 2>/dev/null; then
+        kill "${pid}" 2>/dev/null || true
+      fi
+    done
+    # Wait for them to exit
+    wait || true
+  fi
+}
+trap cleanup EXIT
+
 # Show each command as it runs (plus all program output)
 set -x
 
 # -------------------------------
 
 python scripts/extract_container_setup.py
-# new terminal for 
-python monitoring/python/live_collection/tx_metrics_ws.py --duration 800
-# new terminal for 
-python monitoring/python/live_collection/block_metrics_ws.py --duration 800
-# new terminal for 
-python monitoring/python/live_collection/mempool_metrics_ws.py --duration 800
 
-# -------------------------------
-# 1) tx latency
-python monitoring/python/tx_latency.py --count 120 --tps 0.1
+# Start monitoring scripts in parallel (background)
+python monitoring/python/live_collection/tx_metrics_ws.py --duration 800 &
+monitor_pids+=($!)
 
-# Pause and message before proceeding
+python monitoring/python/live_collection/block_metrics_ws.py --duration 800 &
+monitor_pids+=($!)
+
+python monitoring/python/live_collection/mempool_metrics_ws.py --duration 800 &
+monitor_pids+=($!)
+
+python monitoring/python/live_collection/cpu_mem_net_colletion.py --duration 800 --interval 1 &
+monitor_pids+=($!)
+
 set +x
 echo
-read -rp "Press Enter to continue... "
-echo "Check block current block number = 100"
+echo ">>> Monitoring scripts started in background (PIDs: ${monitor_pids[*]})"
+echo ">>> They will run for up to 800 seconds."
+read -r -t 800 -p "Press Enter to stop monitoring early (auto-continues after 800s)... " || true
 echo
 set -x
+
+# Stop monitoring scripts (if still running) and wait for them
+for pid in "${monitor_pids[@]}"; do
+  if kill -0 "${pid}" 2>/dev/null; then
+    kill "${pid}" 2>/dev/null || true
+  fi
+done
+wait || true
+monitor_pids=()   # so cleanup trap doesn't try again
 
 # 2) spamoor dashboard
 python monitoring/python/fetch_spamoor_dashboard.py
@@ -78,14 +109,11 @@ python monitoring/python/fetch_spamoor_dashboard.py
 # 3) slots list
 python monitoring/python/fetch_slots_list.py
 
-# 4) blocks [10..110]
-python monitoring/python/fetch_blocks.py --start 10 --end 110
+# 4) blocks [1..64]
+python monitoring/python/fetch_blocks.py --start 1 --end 64
 
-# 5) slots [10..110]
-python monitoring/python/fetch_slots.py --start 10 --end 110
-
-# 6) block txs [1..110] at rps 0.1
-python monitoring/python/fetch_block_txs.py --start 10 --end 110 --rps 0.1
+# 5) slots [1..64]
+python monitoring/python/fetch_slots.py --start 1 --end 64
 
 set +x
 echo ">>> All tasks completed."

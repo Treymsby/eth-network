@@ -10,7 +10,7 @@ ARGS_FILE="network_parameters_files/network_params.yaml"
 
 # --- Configurable dstat params ---
 DSTAT_INTERVAL="${DSTAT_INTERVAL:-1}"        # seconds between samples
-DSTAT_DURATION="${DSTAT_DURATION:-1000}"     # total seconds to run
+DSTAT_DURATION="${DSTAT_DURATION:-800}"     # total seconds to run
 DSTAT_OUTPUT="${DSTAT_OUTPUT:-data/system_usage.csv}"
 
 # --- Helpers ---

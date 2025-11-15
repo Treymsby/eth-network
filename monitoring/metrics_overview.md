@@ -1,35 +1,36 @@
 # Network Usage
 ## Inbound / outbound separately (Mbit/s):
-sum by (instance) (rate(network_node_bytes_total_received[5m])) * 8 / 1e6
-sum by (instance) (rate(network_node_bytes_total_transmit[5m])) * 8 / 1e6
+(rate(network_node_bytes_total_transmit{client_type="beacon" }[5m])) * 8 / 1e6
+
+(rate(network_node_bytes_total_received{client_type="beacon" }[5m])) * 8 / 1e6
+
+premade:
+
+
+---------------------------------
 
 
 # Memory Usage
 ## Memory usage over time per node:
-process_resident_memory_bytes
-system_memory_used
-## Memory usage per node via time in Mib
-http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-58
+from /home/trey-mosby/Project/eth-network/monitoring/python/live_collection/cpu_mem_net_colletion.py
 
 
 
 # CPU Usage
-## CPU Usage per node via time in vCPU
-http://127.0.0.1:33263/d/2BrpaEr7k/ethereum-metrics-exporter-overview?orgId=1&from=now-30m&to=now&timezone=browser&var-filter=&refresh=1m&viewPanel=panel-57
-edit to:
-(rate(process_cpu_seconds_total{client_type="execution"}[1m]))
+from /home/trey-mosby/Project/eth-network/monitoring/python/live_collection/cpu_mem_net_colletion.py
 
-## CPU
-avg(irate(process_cpu_seconds_total[1m])) # avg vCPU = 1000
-irate(process_cpu_seconds_total{instance=~"$system", job=~".*besu.*|execution.*"}[1m])
-irate(process_cpu_seconds_total{instance=~"$system", job=~".*geth.*|execution.*"}[1m])
-irate(process_cpu_seconds_total{instance=~"$system", job=~".*nethermind.*|execution.*"}[1m])
 
-### GETH in vCPU if 1 then approx 1 CPU core
+-------------------------------------
+### GETH in vCPU if 1 then approx 1 CPU core (CPU cores used)
 rate(system_cpu_sysload_total{client_type="execution"}[1m])
 
-### Others in vCPU if 1 then approx 1 CPU core
-rate(process_cpu_seconds_total{client_type="execution"}[1m]) * 10
+### Others in vCPU if 1 then approx 1 CPU core (CPU cores used)
+rate(process_cpu_seconds_total{client_type="execution"}[1m]) * 75
+
+premade:
+/explore?schemaVersion=1&panes=%7B%22qy8%22:%7B%22datasource%22:%22PBFA97CFB590B2093%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22rate%28system_cpu_sysload_total%7Bclient_type%3D%5C%22execution%5C%22%7D%5B1m%5D%29%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22PBFA97CFB590B2093%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D,%7B%22refId%22:%22B%22,%22expr%22:%22rate%28process_cpu_seconds_total%7Bclient_type%3D%5C%22execution%5C%22%7D%5B1m%5D%29%20%2A%2075%22,%22range%22:true,%22instant%22:true,%22datasource%22:%7B%22type%22:%22prometheus%22,%22uid%22:%22PBFA97CFB590B2093%22%7D,%22editorMode%22:%22code%22,%22legendFormat%22:%22__auto%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D,%22compact%22:false%7D%7D&orgId=1
+--------------------------------------
+
 
 # Block Metrics
 ## Network utilization (%)

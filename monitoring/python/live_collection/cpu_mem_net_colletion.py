@@ -5,16 +5,16 @@ Collect metrics every SAMPLE_INTERVAL seconds for:
   - java processes whose cmdline contains "besu"
 
 Per process:
+  - node_name (derived from flags like p2p-host / ExternalIp / datadir)
   - CPU Usage (seconds total since start)
   - CPU Usage % (over last interval)
-  - Memory Usage (bytes, RSS)
+  - Memory Usage (kB, RSS)
   - Memory Usage %
-  - Network Usage (Inbound / Outbound, kB/s from nethogs)
 
 Totals (all those processes together):
   - CPU Usage (seconds)
   - CPU Usage %
-  - Memory Usage (bytes)
+  - Memory Usage (kB)
   - Memory Usage %
 
 Output:
@@ -22,24 +22,49 @@ Output:
 
 Requirements:
   - psutil (pip install psutil)
-  - nethogs (sudo apt install nethogs)
   - run this script as root (sudo python3 metrics.py)
+  - optional: --duration SECONDS (how long the script should run)
 """
 
+import argparse
 import datetime as dt
 import json
-import socket
-import subprocess
+import time
 
 import psutil
 
-# ========= CONFIG =========
-SAMPLE_INTERVAL = 10  # seconds
-OUTPUT_FILE = "client_metrics.jsonl"
+# ========= CONFIG DEFAULTS =========
+SAMPLE_INTERVAL = 10  # default seconds between samples
+OUTPUT_FILE = "data/client_metrics.jsonl"
 
 TARGET_NAMES = {"geth", "nethermind"}
 BESU_KEYWORD = "besu"  # for java-based Besu client (java cmdline contains "besu")
-# ==========================
+# ===================================
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Collect metrics for geth / nethermind / besu processes."
+    )
+    parser.add_argument(
+        "--duration",
+        type=int,
+        default=None,
+        help="Total duration to run in seconds (default: run indefinitely)",
+    )
+    parser.add_argument(
+        "--interval",
+        type=int,
+        default=SAMPLE_INTERVAL,
+        help=f"Sampling interval in seconds (default: {SAMPLE_INTERVAL})",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        default=OUTPUT_FILE,
+        help=f"Output file (default: {OUTPUT_FILE})",
+    )
+    return parser.parse_args()
 
 
 def find_target_processes():
@@ -66,117 +91,101 @@ def find_target_processes():
     return targets
 
 
-def parse_nethogs_output(output: str):
+def _get_flag_value(cmdline, prefixes):
     """
-    Parse `nethogs -t` output and return a dict:
-        { pid: { "outbound_kb_per_s": float, "inbound_kb_per_s": float }, ... }
-
-    nethogs columns (trace mode) are effectively:
-        <process/command-with-/pid/uid>  <sent>  <recv>
-
-    where <sent>, <recv> are in kB/s by default.
+    Helper: given a cmdline list and a list of possible prefixes, return the
+    value after the prefix (either in the same arg --flag=VALUE or next arg).
     """
-    usage = {}
-
-    for raw_line in output.splitlines():
-        line = raw_line.strip()
-        if not line:
-            continue
-
-        # Skip non-data lines
-        if (line.startswith("Refreshing:")
-                or line.startswith("Adding local address")
-                or line.startswith("Ethernet link detected")
-                or line.startswith("Waiting for first packet")
-                or line.startswith("Unknown connection")):
-            continue
-
-        parts = line.split()
-        if len(parts) < 3:
-            continue
-
-        # Last two columns are sent and recv (kB/s)
-        try:
-            sent = float(parts[-2])  # outbound kB/s
-            recv = float(parts[-1])  # inbound kB/s
-        except ValueError:
-            continue
-
-        # Everything before that is "process field"
-        proc_field = " ".join(parts[:-2])
-
-        # Ignore generic "unknown" entries
-        if proc_field.startswith("unknown"):
-            continue
-
-        # Extract PID from something like "/usr/bin/geth/1234/1000"
-        # or "sshd: user@pts/0/8130/1000"
-        path_parts = proc_field.split("/")
-        pid = None
-        uid = None
-
-        for part in reversed(path_parts):
-            if part.isdigit():
-                if uid is None:
-                    uid = part  # last numeric is usually UID
-                elif pid is None:
-                    pid = int(part)  # second last numeric is usually PID
-                    break
-
-        if pid is None:
-            continue
-
-        usage[pid] = {
-            "outbound_kb_per_s": sent,
-            "inbound_kb_per_s": recv,
-        }
-
-    return usage
+    for i, arg in enumerate(cmdline):
+        for prefix in prefixes:
+            if arg.startswith(prefix):
+                # form --flag=value or --flag=extip:IP
+                if "=" in arg:
+                    value = arg.split("=", 1)[1]
+                    # handle "--nat=extip:IP"
+                    if value.startswith("extip:"):
+                        return value.split("extip:", 1)[1]
+                    return value
+                # form --flag value
+                if i + 1 < len(cmdline):
+                    return cmdline[i + 1]
+    return None
 
 
-def collect_network_usage():
+def extract_node_name(proc: psutil.Process) -> str:
     """
-    Run nethogs in trace mode for SAMPLE_INTERVAL seconds and
-    return per-PID network usage map.
+    Derive a stable-ish node name for this process based on cmdline flags.
 
-    Uses:
-        nethogs -t -d SAMPLE_INTERVAL -c 1
+    For geth:
+      geth-<ip from --nat=extip:IP or --p2p-host>
+
+    For besu (java):
+      besu-<ip from --p2p-host>
+      or besu-<basename of --data-path>
+
+    For nethermind:
+      nethermind-<ip from --Network.ExternalIp>
+      or nethermind-<basename of --datadir>
+
+    Falls back to "<name>-<pid>".
     """
-    cmd = ["nethogs", "-t", "-d", str(SAMPLE_INTERVAL), "-c", "1"]
-
     try:
-        result = subprocess.run(
+        name = (proc.name() or "").lower()
+        cmd = proc.cmdline()
+    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+        return f"unknown-{proc.pid}"
+
+    # normalize a "client name" for java/besu
+    client = name
+    cmd_str_lower = " ".join(cmd).lower()
+    if name == "java" and BESU_KEYWORD in cmd_str_lower:
+        client = "besu"
+
+    ip = None
+    if client == "geth":
+        # Prefer explicit nat extip, then p2p-host
+        ip = _get_flag_value(
             cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            timeout=SAMPLE_INTERVAL + 15,
+            ["--nat=extip:", "--nat=", "--p2p-host=", "--p2p.host="],
         )
-    except FileNotFoundError:
-        print("nethogs not found. Install it with: sudo apt install nethogs")
-        return {}
-    except Exception as e:
-        print(f"Error running nethogs: {e}")
-        return {}
+    elif client == "besu":
+        ip = _get_flag_value(cmd, ["--p2p-host=", "--p2p-host"])
+    elif client == "nethermind":
+        ip = _get_flag_value(cmd, ["--Network.ExternalIp=", "--Network.ExternalIp"])
 
-    if result.returncode != 0 and result.stderr:
-        print(f"nethogs exited with code {result.returncode}: {result.stderr.strip()}")
+    if ip:
+        return f"{client}-{ip}"
 
-    return parse_nethogs_output(result.stdout)
+    # No IP; try datadir/data-path
+    path = None
+    if client == "geth":
+        path = _get_flag_value(cmd, ["--datadir=", "--datadir"])
+    elif client == "besu":
+        path = _get_flag_value(cmd, ["--data-path=", "--data-path"])
+    elif client == "nethermind":
+        path = _get_flag_value(cmd, ["--datadir=", "--datadir"])
+
+    if path:
+        base = path.rstrip("/").split("/")[-1]
+        return f"{client}-{base}"
+
+    # Absolute fallback
+    return f"{client}-{proc.pid}"
 
 
-def collect_process_metrics(proc: psutil.Process, net_map):
+def collect_process_metrics(proc: psutil.Process, prev_cpu_info, sample_time_monotonic):
     """
-    Collect metrics for a single process and attach per-PID network usage.
+    Collect metrics for a single process and compute CPU % over the last interval.
+
+    Returns dict with:
+      node_name, cpu_usage_seconds, cpu_usage_percent,
+      memory_usage_kb, memory_usage_percent
     """
     try:
         with proc.oneshot():
             pid = proc.pid
-            name = proc.name()
-            cmdline = proc.cmdline()
 
-            # CPU
-            cpu_percent = proc.cpu_percent(interval=None)  # % since last call
+            # CPU times
             cpu_times = proc.cpu_times()
             cpu_time_total = cpu_times.user + cpu_times.system
 
@@ -186,78 +195,115 @@ def collect_process_metrics(proc: psutil.Process, net_map):
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
         return None
 
-    net_usage = net_map.get(pid, {
-        "inbound_kb_per_s": None,
-        "outbound_kb_per_s": None,
-    })
+    # Compute CPU % using deltas vs previous sample
+    prev = prev_cpu_info.get(pid)
+    if prev is not None:
+        dt_wall = sample_time_monotonic - prev["timestamp"]
+        d_cpu = cpu_time_total - prev["cpu_time"]
+        if dt_wall > 0 and d_cpu >= 0:
+            cpu_percent = (d_cpu / dt_wall) * 100.0
+        else:
+            cpu_percent = 0.0
+    else:
+        # First time we see this PID, can't compute interval % yet
+        cpu_percent = 0.0
+
+    # Update prev_cpu_info for next iteration
+    prev_cpu_info[pid] = {
+        "cpu_time": cpu_time_total,
+        "timestamp": sample_time_monotonic,
+    }
+
+    node_name = extract_node_name(proc)
+
+    # ---- Human-friendly rounding ----
+    cpu_time_total = round(cpu_time_total, 3)
+    cpu_percent = round(cpu_percent, 1)
+    mem_kb = int(mem_info.rss / 1024)
+    mem_percent = round(mem_percent, 2)
 
     return {
-        "pid": pid,
-        "name": name,
-        "cmdline": cmdline,
+        "node_name": node_name,
         "cpu_usage_seconds": cpu_time_total,
         "cpu_usage_percent": cpu_percent,
-        "memory_usage_bytes": mem_info.rss,      # resident set size
+        "memory_usage_kb": mem_kb,
         "memory_usage_percent": mem_percent,
-        "network_usage": net_usage,
     }
 
 
-def warm_up_cpu_percent():
-    """
-    Initial cpu_percent() calls to establish a baseline.
-    """
-    for proc in find_target_processes():
-        try:
-            proc.cpu_percent(interval=None)
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            continue
-
-
-def main():
-    hostname = socket.gethostname()
-    warm_up_cpu_percent()
+def main(duration, base_interval, output_file):
+    start_time = time.monotonic()
+    prev_cpu_info = {}  # pid -> {"cpu_time": float, "timestamp": float}
 
     while True:
-        # 1) Network usage over the last SAMPLE_INTERVAL seconds
-        net_map = collect_network_usage()
+        loop_start = time.monotonic()
 
-        # 2) Timestamp at the moment we log
-        timestamp = dt.datetime.utcnow().isoformat() + "Z"
+        # If duration is set, check remaining time & adjust interval
+        if duration is not None:
+            elapsed = loop_start - start_time
+            remaining = duration - elapsed
+            if remaining <= 0:
+                break
+            interval = min(base_interval, max(1, int(remaining)))
+        else:
+            interval = base_interval
 
-        # 3) Per-process CPU & memory, plus attach network usage
+        # Timestamp (UTC, Z suffix)
+        timestamp = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
+
+        # Per-process metrics
         processes_data = []
         for proc in find_target_processes():
-            data = collect_process_metrics(proc, net_map)
+            data = collect_process_metrics(proc, prev_cpu_info, loop_start)
             if data is not None:
                 processes_data.append(data)
 
-        # 4) Totals across all tracked processes
-        total_cpu_seconds = sum(p["cpu_usage_seconds"] for p in processes_data)
-        total_cpu_percent = sum(p["cpu_usage_percent"] for p in processes_data)
-        total_mem_bytes = sum(p["memory_usage_bytes"] for p in processes_data)
-        total_mem_percent = sum(p["memory_usage_percent"] for p in processes_data)
+        # Totals (in kB and rounded)
+        total_cpu_seconds = round(
+            sum(p["cpu_usage_seconds"] for p in processes_data), 3
+        )
+        total_cpu_percent = round(
+            sum(p["cpu_usage_percent"] for p in processes_data), 1
+        )
+        total_mem_kb = int(sum(p["memory_usage_kb"] for p in processes_data))
+        total_mem_percent = round(
+            sum(p["memory_usage_percent"] for p in processes_data), 2
+        )
 
         record = {
             "timestamp": timestamp,
-            "hostname": hostname,
-            "interval_seconds": SAMPLE_INTERVAL,
+            "interval_seconds": interval,
             "processes": processes_data,
             "totals": {
                 "cpu_usage_seconds": total_cpu_seconds,
                 "cpu_usage_percent": total_cpu_percent,
-                "memory_usage_bytes": total_mem_bytes,
+                "memory_usage_kb": total_mem_kb,
                 "memory_usage_percent": total_mem_percent,
             },
         }
 
         try:
-            with open(OUTPUT_FILE, "a", encoding="utf-8") as f:
+            with open(output_file, "a", encoding="utf-8") as f:
                 f.write(json.dumps(record))
                 f.write("\n")
         except OSError as e:
-            print(f"Error writing to {OUTPUT_FILE}: {e}")
+            print(f"Error writing to {output_file}: {e}")
+
+        # Check duration again after work is done
+        if duration is not None and (time.monotonic() - start_time) >= duration:
+            break
+
+        # Sleep until next interval (best-effort)
+        elapsed_this_loop = time.monotonic() - loop_start
+        sleep_time = interval - elapsed_this_loop
+        if sleep_time > 0:
+            try:
+                time.sleep(sleep_time)
+            except KeyboardInterrupt:
+                print("Interrupted by user, exiting...")
+                break
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    main(duration=args.duration, base_interval=args.interval, output_file=args.output)

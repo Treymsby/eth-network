@@ -1,0 +1,1 @@
+[{"inputs":[{"internalType":"bytes","name":"padding","type":"bytes"}],"name":"padBlock","outputs":[],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"bytes","name":"padding","type":"bytes"}],"name":"padBlockPayable","outputs":[],"stateMutability":"payable","type":"function"}]
