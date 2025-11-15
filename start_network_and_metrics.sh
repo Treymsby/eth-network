@@ -226,7 +226,7 @@ info "Take Screenshots from Spamoor!"
 info "If you still need to collect data from Grafana, do that now."
 read -r -p "Press Enter AFTER you have collected the data from Grafana to stop the Ethereum network (or Ctrl+C to keep it running): " _
 
-run_cmd "scripts/stop_eth_network.sh"
+#run_cmd "scripts/stop_eth_network.sh"
 
 # ============================================
 # 4) Archive data at the end
