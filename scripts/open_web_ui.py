@@ -8,8 +8,10 @@ with open(path, "r") as f:
 
 urls = []
 for name, url in data.items():
-    if name.lower() in ("blockscout"):
+    # only allow spamoor and prometheus
+    if name.lower() not in ("spamoor", "prometheus"):
         continue
+
     parsed = urllib.parse.urlparse(url)
     if not parsed.scheme:
         url = "http://" + url  # default if scheme missing
