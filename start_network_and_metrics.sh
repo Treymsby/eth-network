@@ -41,6 +41,25 @@ open_in_new_terminal() {
 
 trap 'echo -e "\nAborted by user."; exit 130' INT
 
+# --- Choose import type (shown at the very beginning) ---
+IMPORT_OPTIONS=("bigblock" "highcompute" "highgas" "max-tx")
+
+info "Available import options for: python scripts/import_spamoor_spammers.py --import <option>"
+echo "  - bigblock"
+echo "  - highcompute"
+echo "  - highgas"
+echo "  - max-tx"
+
+info "Select which import profile to use:"
+select IMPORT_TYPE in "${IMPORT_OPTIONS[@]}"; do
+  if [[ -n "${IMPORT_TYPE:-}" ]]; then
+    info "Selected import type: ${IMPORT_TYPE}"
+    break
+  else
+    echo "Invalid selection. Please choose a number from the list."
+  fi
+done
+
 # --- Begin ---
 info "Switching to working directory: $WORKDIR"
 cd "$WORKDIR"
@@ -65,18 +84,23 @@ run_cmd "scripts/update_ports.sh"
 
 # 5) Chmod 777 (it's a VM)
 run_cmd "chmod -R 777 ./"
+run_cmd "python3 scripts/extract_container_setup.py"
+
+# 5.5) Import spamoor spammers with chosen profile
+run_cmd "python3 scripts/import_spamoor_spammers.py --import ${IMPORT_TYPE}"
+
 run_cmd "python3 scripts/open_web_ui.py"
 
-# Sleep 120sec
-read -t 120s -p "Press Enter to contine (wait until slot 10) (auto in 120s): " || true
-# 4.5) Start dstat in a new terminal for ${DSTAT_DURATION}s
-mkdir -p "$(dirname "$DSTAT_OUTPUT")"
-if command -v dstat >/dev/null 2>&1; then
-  info "Starting dstat for ${DSTAT_DURATION}s -> ${DSTAT_OUTPUT}"
-  open_in_new_terminal "dstat -cdngym --output '$DSTAT_OUTPUT' $DSTAT_INTERVAL $DSTAT_DURATION"
-else
-  info "dstat not found. Install it outside this script, e.g.: sudo apt-get update && sudo apt-get install -y dstat"
-fi
+# # Sleep 120sec
+# read -t 120s -p "Press Enter to contine (wait until slot 10) (auto in 120s): " || true
+# # 4.5) Start dstat in a new terminal for ${DSTAT_DURATION}s
+# mkdir -p "$(dirname "$DSTAT_OUTPUT")"
+# if command -v dstat >/dev/null 2>&1; then
+#   info "Starting dstat for ${DSTAT_DURATION}s -> ${DSTAT_OUTPUT}"
+#   open_in_new_terminal "dstat -cdngym --output '$DSTAT_OUTPUT' $DSTAT_INTERVAL $DSTAT_DURATION"
+# else
+#   info "dstat not found. Install it outside this script, e.g.: sudo apt-get update && sudo apt-get install -y dstat"
+# fi
 
 # 5) Chmod 777 (it's a VM)
 run_cmd "chmod -R 777 ./"

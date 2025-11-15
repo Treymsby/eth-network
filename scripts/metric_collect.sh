@@ -70,9 +70,6 @@ trap cleanup EXIT
 set -x
 
 # -------------------------------
-
-python scripts/extract_container_setup.py
-
 # Start monitoring scripts in parallel (background)
 python monitoring/python/live_collection/tx_metrics_ws.py --duration 800 &
 monitor_pids+=($!)
