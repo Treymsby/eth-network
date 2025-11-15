@@ -6,18 +6,8 @@ from pathlib import Path
 
 import requests
 
-"""
-python spamoor_script.py --import bigblock
-python spamoor_script.py --import highcompute
-python spamoor_script.py --import highgas
-python spamoor_script.py --import max-tx
-"""
-PORTS_DEFAULT_PATH = "ports.json"
 
-SPAMMER_CTRL_BASE = "http://127.0.0.1:32829/api/spammer"
-SLEEP_SECONDS = 384
-
-IMPORT_URLS = {
+TASK_URLS = {
     "bigblock": "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/spamoor/bigblock-tasks.yaml",
     "highcompute": "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/spamoor/highcompute-tasks.yaml",
     "highgas": "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/spamoor/highgas-task.yaml",
@@ -25,114 +15,130 @@ IMPORT_URLS = {
 }
 
 
-def load_ports(ports_path: str) -> dict:
-    path = Path(ports_path)
-    if not path.is_file():
-        raise FileNotFoundError(f"ports.json not found at: {path.resolve()}")
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
+def load_spamoor_url(ports_file: Path) -> str:
+    """Read ports.json and return the spamoor base URL."""
+    if not ports_file.is_file():
+        raise FileNotFoundError(f"ports file not found: {ports_file}")
 
+    with ports_file.open("r", encoding="utf-8") as f:
+        ports = json.load(f)
 
-def get_spamoor_url(ports: dict) -> str:
+    # key is "spamoor" in your example
     try:
-        base = ports["spamoor"]
+        base_url = ports["spamoor"]
     except KeyError:
-        raise KeyError("Key 'spamoor' not found in ports.json")
+        raise KeyError('"spamoor" key not found in ports.json')
 
-    # Ensure no trailing slash
-    return base.rstrip("/")
+    # strip trailing slash if any
+    return base_url.rstrip("/")
 
 
-def import_spammer_tasks(spamoor_base: str, import_name: str) -> None:
-    if import_name not in IMPORT_URLS:
-        raise ValueError(f"Unknown import '{import_name}'. "
-                         f"Expected one of: {', '.join(IMPORT_URLS)}")
-
-    import_url = IMPORT_URLS[import_name]
-    endpoint = f"{spamoor_base}/api/spammers/import"
-    payload = {"input": import_url}
-
-    print(f"[+] Importing '{import_name}' tasks via {endpoint}")
-    print(f"    input: {import_url}")
-
-    resp = requests.post(
-        endpoint,
-        json=payload,
-        headers={
-            "accept": "application/json",
-            "Content-Type": "application/json",
-        },
-        timeout=30,
-    )
-
-    if not resp.ok:
-        raise RuntimeError(
-            f"Import request failed ({resp.status_code}): {resp.text}"
-        )
-
-    print(f"[+] Import successful: {resp.status_code}")
+def post_json(url: str, payload: dict):
+    """Helper to POST JSON and print status."""
+    print(f"[POST] {url}  payload={payload}")
     try:
-        print("    Response:", resp.json())
-    except Exception:
-        print("    Response (raw):", resp.text)
+        resp = requests.post(url, json=payload, headers={"accept": "application/json"})
+    except requests.RequestException as e:
+        print(f"  ERROR: request failed: {e}")
+        return None
+
+    print(f"  -> status {resp.status_code}")
+    if resp.content:
+        try:
+            print(f"  response JSON: {resp.json()}")
+        except ValueError:
+            print(f"  response text: {resp.text[:500]}")
+    return resp
 
 
-def spammer_post(path: str) -> None:
-    """Helper to POST to the spammer control API."""
-    url = f"{SPAMMER_CTRL_BASE}/{path.lstrip('/')}"
-    print(f"[+] POST {url}")
-    resp = requests.post(url, timeout=30)
-    if not resp.ok:
-        raise RuntimeError(
-            f"Request to {url} failed ({resp.status_code}): {resp.text}"
-        )
+def simple_post(url: str):
+    """Helper to POST with no body."""
+    print(f"[POST] {url}")
     try:
-        print("    Response:", resp.json())
-    except Exception:
-        print("    Response (raw):", resp.text)
+        resp = requests.post(url, headers={"accept": "application/json"})
+    except requests.RequestException as e:
+        print(f"  ERROR: request failed: {e}")
+        return None
+
+    print(f"  -> status {resp.status_code}")
+    if resp.content:
+        try:
+            print(f"  response JSON: {resp.json()}")
+        except ValueError:
+            print(f"  response text: {resp.text[:500]}")
+    return resp
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Import spamoor tasks and control spammers."
+        description="Control spamoor via its HTTP API using ports.json"
     )
     parser.add_argument(
-        "--ports",
-        default=PORTS_DEFAULT_PATH,
+        "--ports-file",
+        default="ports.json",
         help="Path to ports.json (default: ports.json)",
     )
     parser.add_argument(
         "--import",
-        dest="import_name",
-        choices=list(IMPORT_URLS.keys()),
-        required=True,
-        help="Which task set to import "
-             "(bigblock | highcompute | highgas | max-tx)",
+        dest="imports",
+        nargs="+",
+        choices=TASK_URLS.keys(),
+        metavar="TASK",
+        help=(
+            "Which spamoor task(s) to import. "
+            "Choices: bigblock, highcompute, highgas, max-tx. "
+            "You can specify more than one."
+        ),
+    )
+    parser.add_argument(
+        "--no-timers",
+        action="store_true",
+        help="If set, only perform imports and skip the 384s start/pause sequence.",
+    )
+    parser.add_argument(
+        "--delay",
+        type=int,
+        default=384,
+        help="Delay (in seconds) between actions, default: 384",
     )
 
     args = parser.parse_args()
 
-    # 1) Load ports.json and get spamoor URL
-    print(f"[+] Loading ports from: {args.ports}")
-    ports = load_ports(args.ports)
-    spamoor_base = get_spamoor_url(ports)
-    print(f"[+] spamoor base URL: {spamoor_base}")
+    ports_file = Path(args.ports_file)
+    base_url = load_spamoor_url(ports_file)
+    print(f"Using spamoor base URL: {base_url}")
 
-    # 2) Import selected spammer tasks
-    import_spammer_tasks(spamoor_base, args.import_name)
+    # 1) Run imports (if any)
+    if args.imports:
+        for task_name in args.imports:
+            task_url = TASK_URLS[task_name]
+            print(f"\n=== Importing task '{task_name}' ===")
+            import_url = f"{base_url}/api/spammers/import"
+            payload = {"input": task_url}
+            post_json(import_url, payload)
+    else:
+        print("No --import TASK specified; skipping import step.")
 
-    # 3) Wait 384 seconds, then start spammer 102
-    print(f"[+] Sleeping {SLEEP_SECONDS} seconds before starting spammer 102...")
-    time.sleep(SLEEP_SECONDS)
-    spammer_post("102/start")
+    if args.no_timers:
+        print("\n--no-timers specified, skipping start/pause sequence.")
+        return
 
-    # 4) Wait another 384 seconds, then pause 100, 101, 102
-    print(f"[+] Sleeping another {SLEEP_SECONDS} seconds before pausing 100, 101, 102...")
-    time.sleep(SLEEP_SECONDS)
+    # 2) After delay, start spammer 102
+    print(f"\nWaiting {args.delay} seconds before starting spammer 102...")
+    time.sleep(args.delay)
+
+    start_url = f"{base_url}/api/spammer/102/start"
+    print("\n=== Starting spammer 102 ===")
+    simple_post(start_url)
+
+    # 3) After another delay, pause spammers 100, 101, 102
+    print(f"\nWaiting another {args.delay} seconds before pausing 100, 101, 102...")
+    time.sleep(args.delay)
+
+    print("\n=== Pausing spammers 100, 101, 102 ===")
     for spammer_id in (100, 101, 102):
-        spammer_post(f"{spammer_id}/pause")
-
-    print("[+] Done.")
+        pause_url = f"{base_url}/api/spammer/{spammer_id}/pause"
+        simple_post(pause_url)
 
 
 if __name__ == "__main__":

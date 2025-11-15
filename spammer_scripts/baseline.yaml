@@ -28,7 +28,7 @@
     refill_amount: 2000000000000000000  # 2 ETH
     refill_balance: 1000000000000000000 # 1 ETH threshold
     refill_interval: 300
-    throughput: 50       # lower throughput for contract interactions
+    throughput: 50     
     max_pending: 200
     max_wallets: 100
     base_fee: 20
