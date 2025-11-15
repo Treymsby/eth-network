@@ -1,149 +1,149 @@
 [
   {
     "name": "blockscout",
-    "uuid": "d5a05e5dcfd043ff82d5e47f5ca90f92",
+    "uuid": "bd54cd826b824c97ba4684f797b943d9",
     "ws": null,
     "rpc": null,
-    "http": "http://127.0.0.1:32926"
+    "http": "http://127.0.0.1:32925"
   },
   {
     "name": "blockscout-frontend",
-    "uuid": "39c4a7a8b3ab4722a9763f0ef3ae5b5b",
+    "uuid": "3963c4164dc248b89eec20f1d2a62c29",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:3000"
   },
   {
     "name": "dora",
-    "uuid": "5d744836ec67450abaa946ff279d0f89",
+    "uuid": "27c66c6f38bc48608830172064933c04",
     "ws": null,
     "rpc": null,
-    "http": "http://127.0.0.1:32921"
+    "http": "http://127.0.0.1:32920"
   },
   {
     "name": "el-01-besu-lighthouse",
-    "uuid": "76059d1b4dff4a5fb359e18b69ff8cfe",
+    "uuid": "80cf14fefd134ba9b5932301b839c45f",
     "ws": "127.0.0.1:32770",
     "rpc": "127.0.0.1:32769",
     "http": null
   },
   {
     "name": "el-02-besu-lighthouse",
-    "uuid": "26a39a10fdbd4dc0a841071d454464c1",
-    "ws": "127.0.0.1:32810",
-    "rpc": "127.0.0.1:32809",
+    "uuid": "fbe37e8a3e974f289258f77c0a463eee",
+    "ws": "127.0.0.1:32780",
+    "rpc": "127.0.0.1:32779",
     "http": null
   },
   {
     "name": "el-03-besu-lighthouse",
-    "uuid": "e8f71458fd63403cbafb5e2dbe18e4f4",
+    "uuid": "0ba425a05f5b4f9a808b7203df4cf118",
     "ws": "127.0.0.1:32775",
     "rpc": "127.0.0.1:32774",
     "http": null
   },
   {
     "name": "el-04-besu-lighthouse",
-    "uuid": "1aae71383f944f8ebb0dfd6720da3839",
-    "ws": "127.0.0.1:32830",
-    "rpc": "127.0.0.1:32829",
+    "uuid": "51b3a3ae97074c46b140016c492eac0e",
+    "ws": "127.0.0.1:32840",
+    "rpc": "127.0.0.1:32839",
     "http": null
   },
   {
     "name": "el-05-besu-lighthouse",
-    "uuid": "6e66776c611c4d839009ba2fbb090b16",
+    "uuid": "88fc88fa6899478e92baa8ae2423a5dc",
     "ws": "127.0.0.1:32785",
     "rpc": "127.0.0.1:32784",
     "http": null
   },
   {
     "name": "el-06-besu-lighthouse",
-    "uuid": "c7f6c0e05cc647abace70af3974469f5",
-    "ws": "127.0.0.1:32840",
-    "rpc": "127.0.0.1:32839",
-    "http": null
-  },
-  {
-    "name": "el-07-besu-lighthouse",
-    "uuid": "945b8c6506174588be07273dd85226f3",
-    "ws": "127.0.0.1:32835",
-    "rpc": "127.0.0.1:32834",
-    "http": null
-  },
-  {
-    "name": "el-08-besu-lighthouse",
-    "uuid": "4f22e5037b7d4658b2edb876d61fad97",
+    "uuid": "88c7c051deae4f8d9d930fc630dac024",
     "ws": "127.0.0.1:32800",
     "rpc": "127.0.0.1:32799",
     "http": null
   },
   {
+    "name": "el-07-besu-lighthouse",
+    "uuid": "9e986b0eff1546e6ab62541df60b8758",
+    "ws": "127.0.0.1:32815",
+    "rpc": "127.0.0.1:32814",
+    "http": null
+  },
+  {
+    "name": "el-08-besu-lighthouse",
+    "uuid": "21ce1c5d1103452e9b7c579659038bde",
+    "ws": "127.0.0.1:32810",
+    "rpc": "127.0.0.1:32809",
+    "http": null
+  },
+  {
     "name": "el-09-besu-lighthouse",
-    "uuid": "c706cdb88aaf4cdd90fa5e72ad6f6ee2",
-    "ws": "127.0.0.1:32790",
-    "rpc": "127.0.0.1:32789",
+    "uuid": "eb037aefac414715b994de171db3b991",
+    "ws": "127.0.0.1:32830",
+    "rpc": "127.0.0.1:32829",
     "http": null
   },
   {
     "name": "el-10-besu-lighthouse",
-    "uuid": "d1ff61f61b8e4632a5f54d45700fea8e",
+    "uuid": "19ba0ed38bc147a5b587482d5b0ac151",
     "ws": "127.0.0.1:32805",
     "rpc": "127.0.0.1:32804",
     "http": null
   },
   {
     "name": "el-11-besu-lighthouse",
-    "uuid": "23814413a0954bf8947424a67de9e121",
-    "ws": "127.0.0.1:32820",
-    "rpc": "127.0.0.1:32819",
-    "http": null
-  },
-  {
-    "name": "el-12-besu-lighthouse",
-    "uuid": "2151296fda9140deb52a3fae0566cc89",
-    "ws": "127.0.0.1:32780",
-    "rpc": "127.0.0.1:32779",
-    "http": null
-  },
-  {
-    "name": "el-13-besu-lighthouse",
-    "uuid": "08d0e40bd47d40bd88983c8a632b0db1",
-    "ws": "127.0.0.1:32825",
-    "rpc": "127.0.0.1:32824",
-    "http": null
-  },
-  {
-    "name": "el-14-besu-lighthouse",
-    "uuid": "d1470504aac24d629122c9dffc7d2bbb",
+    "uuid": "85cc8b980e4a4186a08e9765b1bfd75b",
     "ws": "127.0.0.1:32795",
     "rpc": "127.0.0.1:32794",
     "http": null
   },
   {
+    "name": "el-12-besu-lighthouse",
+    "uuid": "52a1b4eca4984b1d82e74626dc2128c2",
+    "ws": "127.0.0.1:32825",
+    "rpc": "127.0.0.1:32824",
+    "http": null
+  },
+  {
+    "name": "el-13-besu-lighthouse",
+    "uuid": "b19bfb7cf70b4ac6a579b36e0d35d18a",
+    "ws": "127.0.0.1:32820",
+    "rpc": "127.0.0.1:32819",
+    "http": null
+  },
+  {
+    "name": "el-14-besu-lighthouse",
+    "uuid": "f4494bf71ca241fe8d66a1055593787f",
+    "ws": "127.0.0.1:32835",
+    "rpc": "127.0.0.1:32834",
+    "http": null
+  },
+  {
     "name": "el-15-besu-lighthouse",
-    "uuid": "fab83a7b3b434ed2b9820a06e5a2c37e",
-    "ws": "127.0.0.1:32815",
-    "rpc": "127.0.0.1:32814",
+    "uuid": "55d239788b29453aa566ad8896126f1c",
+    "ws": "127.0.0.1:32790",
+    "rpc": "127.0.0.1:32789",
     "http": null
   },
   {
     "name": "grafana",
-    "uuid": "f4a2967513c04028abdb9a13276e3f01",
-    "ws": null,
-    "rpc": null,
-    "http": "http://127.0.0.1:32923"
-  },
-  {
-    "name": "prometheus",
-    "uuid": "ea4b1bab262a4e51a84fa77ed72bdc49",
+    "uuid": "e280ef81a37a4f1c9d21db8ffc39aabd",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32922"
   },
   {
-    "name": "spamoor",
-    "uuid": "27c635df676c4ee7bf977ee9049fac5c",
+    "name": "prometheus",
+    "uuid": "5d722fc37239417a9aea18a072013c6d",
     "ws": null,
     "rpc": null,
-    "http": "http://127.0.0.1:32920"
+    "http": "http://127.0.0.1:32921"
+  },
+  {
+    "name": "spamoor",
+    "uuid": "bbe7feade40a4348a847d2f2c6dac68b",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:32919"
   }
 ]
