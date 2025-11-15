@@ -125,8 +125,6 @@ run_cmd "python3 scripts/extract_container_setup.py"
 info "Starting import_spamoor_spammers.py in a separate terminal..."
 open_in_new_terminal "cd '$WORKDIR' && python3 scripts/import_spamoor_spammers.py --import '${IMPORT_TYPE}'"
 
-run_cmd "python3 scripts/open_web_ui.py"
-
 # ============================================
 # 2) Metric collection (inline metric_collect.sh)
 # ============================================
@@ -221,6 +219,7 @@ type deactivate >/dev/null 2>&1 && deactivate || true
 # ============================================
 # 3) Optional Grafana data collection + stop network
 # ============================================
+run_cmd "python3 scripts/open_web_ui.py"
 echo
 info "Take Screenshots from Spamoor!"
 info "If you still need to collect data from Grafana, do that now."
