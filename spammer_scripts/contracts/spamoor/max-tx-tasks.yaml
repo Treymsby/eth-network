@@ -8,7 +8,7 @@
     data: ""
     gas_limit: 21000
     log_txs: false
-    max_pending: 500
+    max_pending: 100
     max_wallets: 1000
     random_amount: false
     random_target: true
@@ -18,7 +18,7 @@
     refill_interval: 600
     seed: eoatx-max-1
     self_tx_only: false
-    throughput: 1200
+    throughput: 1500
     timeout: ""
     tip_fee: 2
     to: ""
