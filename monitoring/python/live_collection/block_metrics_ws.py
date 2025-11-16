@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Monitor Ethereum blocks via a single WebSocket endpoint from eth-network-services.json and
+Monitor Ethereum blocks via WebSocket endpoints from eth-network-services.json and
 record per-block metrics to a JSON file *incrementally*.
+
+This version connects to exactly one node at a time.
+If the connection to that node fails or the monitor task stops,
+it automatically fails over to the next node in the list.
 
 JSON layout (one object per block inside a single top-level JSON array):
 
@@ -409,10 +413,79 @@ async def monitor_node(
         print(f"[{name}] ERROR: {e}")
 
 
+async def monitor_with_failover(
+    endpoints: List[Tuple[str, str]],
+    writer: JsonBlockWriter,
+    duration: int,
+) -> None:
+    """
+    Run monitor_node on exactly one endpoint at a time.
+
+    If the current monitor task exits (connection error, unexpected stop,
+    etc.), automatically switch to the next endpoint in `endpoints`.
+
+    This loop continues until `duration` seconds have elapsed.
+    """
+    if not endpoints:
+        print("No endpoints provided to monitor_with_failover()")
+        return
+
+    loop = asyncio.get_running_loop()
+    end_time = loop.time() + duration
+
+    idx = 0
+    current_task: Optional[asyncio.Task] = None
+    current_name: Optional[str] = None
+
+    print(
+        f"Starting failover monitoring over {len(endpoints)} endpoints "
+        f"for ~{duration} seconds"
+    )
+
+    try:
+        while True:
+            now = loop.time()
+            remaining = end_time - now
+            if remaining <= 0:
+                print("Monitoring duration elapsed, stopping failover loop.")
+                break
+
+            # If no task is running or the current one finished, start/rotate
+            if current_task is None or current_task.done():
+                if current_task is not None:
+                    # Consume exception so it doesn't get reported as "never retrieved"
+                    try:
+                        _ = current_task.exception()
+                    except asyncio.CancelledError:
+                        pass
+                    except Exception as e:
+                        print(
+                            f"[failover] Previous monitor task for {current_name} "
+                            f"ended with error: {e}"
+                        )
+
+                name, addr = endpoints[idx]
+                idx = (idx + 1) % len(endpoints)
+                current_name = name
+                print(f"[failover] Switching to endpoint {name} ({addr})")
+                current_task = asyncio.create_task(
+                    monitor_node(name, addr, writer)
+                )
+
+            # Sleep a bit, but not past the overall end_time
+            await asyncio.sleep(min(1.0, max(0.1, remaining)))
+    finally:
+        if current_task and not current_task.done():
+            print(f"[failover] Cancelling monitor task for {current_name}")
+            current_task.cancel()
+            await asyncio.gather(current_task, return_exceptions=True)
+
+
 async def main_async(args: argparse.Namespace, writer: JsonBlockWriter) -> None:
     """
-    Load eth-network-services.json, pick one EL node (name starts with 'el-')
-    that has a non-null/non-empty 'ws' field, and monitor it.
+    Load eth-network-services.json, collect all EL nodes (name starts with 'el-')
+    that have a non-null/non-empty 'ws' field, and monitor them with
+    single-connection failover.
     """
     services_path = Path(args.ws_file)
     if not services_path.is_file():
@@ -448,27 +521,17 @@ async def main_async(args: argparse.Namespace, writer: JsonBlockWriter) -> None:
             "(looked for entries with name starting with 'el-' and non-empty 'ws')."
         )
 
-    # For now we just pick the first EL node
-    chosen_name, chosen_addr = endpoints[0]
-
     print("Discovered EL endpoints:")
     for n, a in endpoints:
         print(f"  - {n}: {a}")
-    print(f"Using endpoint: {chosen_name} -> {chosen_addr}")
 
-    task = asyncio.create_task(monitor_node(chosen_name, chosen_addr, writer))
-
-    try:
-        # Let the monitor run for the requested duration
-        await asyncio.sleep(args.duration)
-    finally:
-        task.cancel()
-        await asyncio.gather(task, return_exceptions=True)
+    # Run a single monitor at a time, with automatic failover
+    await monitor_with_failover(endpoints, writer, args.duration)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Monitor Ethereum blocks from a single WebSocket endpoint "
+        description="Monitor Ethereum blocks from WebSocket endpoints "
         "defined in eth-network-services.json and record per-block metrics."
     )
     parser.add_argument(

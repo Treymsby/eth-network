@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Monitor multiple Ethereum WebSocket endpoints from ws.json and
+Monitor Ethereum WebSocket endpoints from ws.json and
 record transaction latency + gas/fee + type details.
+
+This version connects to **one** node at a time. If the connection
+to that node fails or the monitor task stops, it automatically
+fails over to the next node in the ws.json list.
 
 The script streams results directly to a JSON file instead of
 keeping everything in memory. Transactions are written in batches
@@ -200,7 +204,8 @@ async def monitor_node(
     heads_sub_id = None
 
     try:
-        async with websockets.connect(ws_url) as ws:
+        # Disable max_size limit so large messages don't trigger 1009
+        async with websockets.connect(ws_url, max_size=None) as ws:
             # Subscribe to pending txs
             pending_req = {
                 "jsonrpc": "2.0",
@@ -453,8 +458,81 @@ async def monitor_node(
     except asyncio.CancelledError:
         print(f"[{name}] Monitor task cancelled")
         raise
+    except websockets.exceptions.ConnectionClosedError as e:
+        print(f"[{name}] Connection closed: code={e.code} reason={e.reason}")
     except Exception as e:
         print(f"[{name}] ERROR: {e}")
+
+
+async def monitor_with_failover(
+    endpoints: Dict[str, str],
+    queue: "asyncio.Queue",
+    global_counter: Dict[str, int],
+    duration: int,
+) -> None:
+    """
+    Run monitor_node on exactly one endpoint at a time.
+
+    If the current monitor task exits (connection error, unexpected stop,
+    etc.), automatically switch to the next endpoint in `endpoints`.
+
+    This loop continues until `duration` seconds have elapsed.
+    """
+    if not endpoints:
+        print("No endpoints provided to monitor_with_failover()")
+        return
+
+    endpoint_items: List[Tuple[str, str]] = list(endpoints.items())
+    idx = 0
+
+    loop = asyncio.get_running_loop()
+    end_time = loop.time() + duration
+
+    current_task: Optional[asyncio.Task] = None
+    current_name: Optional[str] = None
+
+    print(
+        f"Starting failover monitoring over {len(endpoint_items)} endpoints "
+        f"for ~{duration} seconds"
+    )
+
+    try:
+        while True:
+            now = loop.time()
+            remaining = end_time - now
+            if remaining <= 0:
+                print("Monitoring duration elapsed, stopping failover loop.")
+                break
+
+            # If no task is running or the current one finished, start/rotate
+            if current_task is None or current_task.done():
+                if current_task is not None:
+                    # Consume exception so it doesn't get reported as "never retrieved"
+                    try:
+                        _ = current_task.exception()
+                    except asyncio.CancelledError:
+                        pass
+                    except Exception as e:
+                        print(
+                            f"[failover] Previous monitor task for {current_name} "
+                            f"ended with error: {e}"
+                        )
+
+                name, addr = endpoint_items[idx]
+                idx = (idx + 1) % len(endpoint_items)
+                current_name = name
+                print(f"[failover] Switching to endpoint {name} ({addr})")
+                current_task = asyncio.create_task(
+                    monitor_node(name, addr, queue, global_counter)
+                )
+
+            # Sleep a bit, but not past the overall end_time
+            await asyncio.sleep(min(1.0, max(0.1, remaining)))
+    finally:
+        if current_task and not current_task.done():
+            print(f"[failover] Cancelling monitor task for {current_name}")
+            current_task.cancel()
+            await asyncio.gather(current_task, return_exceptions=True)
 
 
 async def main_async(args: argparse.Namespace) -> int:
@@ -503,25 +581,13 @@ async def main_async(args: argparse.Namespace) -> int:
         json_writer(out_path, queue, flush_every=100)
     )
 
-    # Start monitor tasks
-    tasks = [
-        asyncio.create_task(monitor_node(name, addr, queue, global_counter))
-        for name, addr in endpoints.items()
-    ]
+    # Run a single monitor at a time, with automatic failover
+    await monitor_with_failover(endpoints, queue, global_counter, args.duration)
 
-    try:
-        # Let the monitors run for the requested duration
-        await asyncio.sleep(args.duration)
-    finally:
-        # Cancel all monitor tasks
-        for t in tasks:
-            t.cancel()
-        await asyncio.gather(*tasks, return_exceptions=True)
-
-        # Signal writer that no more records will arrive
-        await queue.put(None)
-        # Wait for writer to finish closing the file
-        total_written = await writer_task
+    # Signal writer that no more records will arrive
+    await queue.put(None)
+    # Wait for writer to finish closing the file
+    total_written = await writer_task
 
     return total_written
 

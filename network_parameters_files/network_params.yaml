@@ -8,41 +8,31 @@ participants:
     # Defaults to 0, which results in no resource limits
     el_max_cpu: 1000
     el_max_mem: 1024
-    el_extra_params:
-      - "--maxpeers=8"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
     cl_max_cpu: 500
     cl_max_mem: 512
-    cl_extra_params:
-      - "--target-peers=8"
-    count: 0
+    count: 15
   
   - el_type: nethermind
     el_image: "nethermindeth/nethermind:1.35.0"
     el_max_cpu: 1000
     el_max_mem: 1024
     el_extra_params:
-      - "--Network.MaxActivePeers=8"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
     cl_max_cpu: 500
     cl_max_mem: 512
-    cl_extra_params:
-      - "--target-peers=8"
     count: 0
 
   - el_type: besu
     el_image: "hyperledger/besu:25.11.0"
     el_extra_params:
-      - "--max-peers=8"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
     cl_max_cpu: 500
     cl_max_mem: 512
-    cl_extra_params:
-      - "--target-peers=8"
-    count: 15
+    count: 0
 
 
 network_params:

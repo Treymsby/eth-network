@@ -8,7 +8,7 @@
     refill_interval: 600
     total_count: 0
     throughput: 1                           # a bit lower, this is pretty heavy
-    max_pending: 10
+    max_pending: 2
     max_wallets: 20
     rebroadcast: 120
     base_fee: 20
