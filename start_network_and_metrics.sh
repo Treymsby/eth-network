@@ -220,6 +220,7 @@ type deactivate >/dev/null 2>&1 && deactivate || true
 # 3) Optional Grafana data collection + stop network
 # ============================================
 run_cmd "python3 scripts/open_web_ui.py"
+run_cmd "kurtosis service stop eth-network spamoor"
 echo
 info "Take Screenshots from Spamoor!"
 info "If you still need to collect data from Grafana, do that now."
