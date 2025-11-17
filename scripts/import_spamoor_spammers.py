@@ -135,10 +135,10 @@ def main():
     print(f"\nWaiting another {args.delay} seconds before pausing 100, 101, 102...")
     time.sleep(args.delay)
 
-    print("\n=== Pausing spammers 100, 101, 102 ===")
-    for spammer_id in (100, 101, 102):
-        pause_url = f"{base_url}/api/spammer/{spammer_id}/pause"
-        simple_post(pause_url)
+    # print("\n=== Pausing spammers 100, 101, 102 ===")
+    # for spammer_id in (100, 101, 102):
+    #     pause_url = f"{base_url}/api/spammer/{spammer_id}/pause"
+    #     simple_post(pause_url)
 
 
 if __name__ == "__main__":

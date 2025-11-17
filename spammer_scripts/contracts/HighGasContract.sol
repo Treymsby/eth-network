@@ -41,18 +41,4 @@ contract HighGasContract {
             emit DidWork(i, h, newValue);
         }
     }
-
-    /// @notice Variant that focuses more on storage churn (lots of SSTORE).
-    ///         This can be even nastier for state growth.
-    function burnStorageOnly(uint256 iterations) external {
-        for (uint256 i = 0; i < iterations; ++i) {
-            // Each write to a *new* slot or zero->non-zero costs a lot of gas.
-            uint256 newValue = uint256(
-                keccak256(abi.encodePacked(i, sink, blockhash(block.number - 1)))
-            );
-
-            store[i + sink] = newValue;
-            sink += newValue; // keep changing sink so the index and values evolve
-        }
-    }
 }

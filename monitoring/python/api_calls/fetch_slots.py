@@ -8,11 +8,6 @@ Fetch slots from Dora and save to one JSON file.
 - Calls {dora_url}/api/v1/slot/<slot> for slots in the range.
 - Writes one combined JSON file at the end.
 
-Usage examples:
-  python3 fetch_slots.py --start 0 --end 200 --only-data -o dora_slots.json
-  python3 fetch_slots.py --ports-file /path/to/ports.json
-  # To bypass ports.json and hardcode a URL:
-  python3 fetch_slots.py --base-url http://127.0.0.1:35002/api/v1/slot
 """
 
 import argparse

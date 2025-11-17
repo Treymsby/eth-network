@@ -8,15 +8,6 @@ Fetch blocks from Blockscout (URL read from ports.json) and save to one JSON fil
 - Calls {blockscout_url}/api/v2/blocks/<block_number> for the given range.
 - By default writes to /data/blockscout_blocks.json (creates /data if needed).
 
-Examples:
-  python3 fetch_blocks.py --start 0 --end 200 -o data/blockscout_0_200.json
-
-  python3 fetch_blocks.py --start 0 --end 200
-  python3 fetch_blocks.py --ports-file /path/to/ports.json
-  # To bypass ports.json and hardcode a URL up to /blocks:
-  python3 fetch_blocks.py --base-url http://127.0.0.1:35009/api/v2/blocks
-  # To choose a different output file:
-  python3 fetch_blocks.py -o /some/path/custom.json
 """
 
 import argparse

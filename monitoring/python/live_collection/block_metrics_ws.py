@@ -224,7 +224,8 @@ async def monitor_node(
     heads_sub_id = None
 
     try:
-        async with websockets.connect(ws_url) as ws:
+        # Disable max_size limit so large messages don't trigger 1009
+        async with websockets.connect(ws_url, max_size=None) as ws:
             # Subscribe to new heads
             heads_req = {
                 "jsonrpc": "2.0",
@@ -409,6 +410,8 @@ async def monitor_node(
     except asyncio.CancelledError:
         print(f"[{name}] Monitor task cancelled")
         raise
+    except websockets.exceptions.ConnectionClosedError as e:
+        print(f"[{name}] Connection closed: code={e.code} reason={e.reason}")
     except Exception as e:
         print(f"[{name}] ERROR: {e}")
 

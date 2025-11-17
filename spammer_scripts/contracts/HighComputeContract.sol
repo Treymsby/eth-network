@@ -49,8 +49,6 @@ contract HighComputeContract {
         emit ComputeWork(h, iterations, arraySize, sink);
     }
 
-    /// @notice A lighter helper that only does hashing without the inner array loop.
-    ///         Useful as a lower-gas baseline vs burnCpuAndMemory.
     function burnHashOnly(uint256 iterations) external {
         require(iterations > 0 && iterations <= 500_000, "iterations out of range");
 
