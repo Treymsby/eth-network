@@ -31,12 +31,7 @@ JSON layout (one object per block inside a single top-level JSON array):
       "success_rate_percent": float
     },
     "fees": {
-      "total_wei": int,                  # existing: total tx fees (wei)
-      "transaction_fee_wei": int,        # NEW: alias of total_wei
-      "base_fee_per_gas_wei": int,       # NEW: block baseFeePerGas (wei)
-      "burnt_fees_wei": int,             # NEW: gas_used * base_fee_per_gas_wei
-      "burnt_fees_percentage": float,    # NEW: burnt_fees_wei / transaction_fee_wei * 100
-      "priority_fee_wei": int            # NEW: transaction_fee_wei - burnt_fees_wei
+      "total_wei": int
     }
   }
 }
@@ -154,8 +149,6 @@ def build_block_record(agg: Dict[str, Any]) -> Dict[str, Any]:
       - total_transactions
       - success_count
       - fee_total_wei
-      - base_fee_per_gas        # NEW
-      - burnt_fees_wei          # NEW
     """
     gas_used = agg["gas_used"]
     gas_limit = agg["gas_limit"]
@@ -163,13 +156,6 @@ def build_block_record(agg: Dict[str, Any]) -> Dict[str, Any]:
     success_count = agg.get("success_count", 0)
     fee_total_wei = agg["fee_total_wei"]
 
-    # NEW: base fee & burnt fees
-    base_fee_per_gas = agg.get("base_fee_per_gas", 0) or 0
-    burnt_fees_wei = agg.get("burnt_fees_wei")
-    if burnt_fees_wei is None:
-        burnt_fees_wei = gas_used * base_fee_per_gas
-
-    # Percentages
     gas_used_percentage = (gas_used / gas_limit * 100.0) if gas_limit > 0 else 0.0
     if total_tx > 0:
         success_rate = success_count / total_tx * 100.0
@@ -177,15 +163,6 @@ def build_block_record(agg: Dict[str, Any]) -> Dict[str, Any]:
         success_rate = 0.0
 
     failed_count = max(total_tx - success_count, 0)
-
-    # NEW: transaction-fee-related metrics
-    transaction_fee_wei = fee_total_wei
-    if transaction_fee_wei > 0:
-        burnt_fees_percentage = burnt_fees_wei / transaction_fee_wei * 100.0
-    else:
-        burnt_fees_percentage = 0.0
-
-    priority_fee_wei = max(transaction_fee_wei - burnt_fees_wei, 0)
 
     return {
         "block_number": agg["block_number"],
@@ -208,11 +185,6 @@ def build_block_record(agg: Dict[str, Any]) -> Dict[str, Any]:
             },
             "fees": {
                 "total_wei": fee_total_wei,
-                "transaction_fee_wei": transaction_fee_wei,      # NEW
-                "base_fee_per_gas_wei": base_fee_per_gas,        # NEW
-                "burnt_fees_wei": burnt_fees_wei,                # NEW
-                "burnt_fees_percentage": burnt_fees_percentage,  # NEW
-                "priority_fee_wei": priority_fee_wei,            # NEW
             },
         },
     }
@@ -308,12 +280,6 @@ async def monitor_node(
                             gas_used = hex_to_int(block.get("gasUsed")) or 0
                             gas_limit = hex_to_int(block.get("gasLimit")) or 0
 
-                            # NEW: base fee and burnt fees at block level
-                            base_fee_per_gas = hex_to_int(
-                                block.get("baseFeePerGas")
-                            ) or 0
-                            burnt_fees_wei = gas_used * base_fee_per_gas
-
                             txs = block.get("transactions", []) or []
                             total_tx = len(txs)
 
@@ -329,9 +295,6 @@ async def monitor_node(
                                 "pending_receipts": total_tx,
                                 "success_count": 0,
                                 "fee_total_wei": 0,
-                                # NEW: for fees breakdown
-                                "base_fee_per_gas": base_fee_per_gas,
-                                "burnt_fees_wei": burnt_fees_wei,
                             }
                             blocks_in_progress[block_hash] = agg
 

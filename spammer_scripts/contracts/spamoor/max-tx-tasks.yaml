@@ -3,7 +3,7 @@
   description: Sends maximum number of normal EOA transactions to random addresses
   config:
     amount: 1
-    base_fee: 2000
+    base_fee: 20
     client_group: ""
     data: ""
     gas_limit: 21000
@@ -18,9 +18,9 @@
     refill_interval: 600
     seed: eoatx-max-1
     self_tx_only: false
-    throughput: 2000 # 21000 Gas * 2800 = 60M gas + Mempool test + high tip + basefee
+    throughput: 4000 # 21000 Gas * 2800 = 60M gas + Mempool test 
     timeout: ""
-    tip_fee: 2000
+    tip_fee: 2
     to: ""
     total_count: 0
     

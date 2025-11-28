@@ -205,7 +205,7 @@ python monitoring/python/api_calls/fetch_spamoor_dashboard.py
 #python monitoring/python/api_calls/fetch_slots_list.py
 
 # 4) blocks [1..64]
-python monitoring/python/api_calls/fetch_blocks.py --start 1 --end 64
+#python monitoring/python/api_calls/fetch_blocks.py --start 1 --end 64
 
 # 5) slots [1..64]
 #python monitoring/python/api_calls/fetch_slots.py --start 1 --end 64

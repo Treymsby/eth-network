@@ -7,20 +7,22 @@ participants:
     # Min value is igrored on docker!
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 0
-  
+    count: 12
+    supernode: true
+
   - el_type: nethermind
     el_image: "nethermindeth/nethermind:1.35.0"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
     count: 0
+    supernode: true
 
   - el_type: besu
     el_image: "hyperledger/besu:25.11.0"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 12
-
+    count: 0
+    supernode: true
 
 network_params:
   network: "kurtosis"
@@ -69,6 +71,7 @@ additional_services:
   - spamoor
   - prometheus
   - grafana
+  - dora
   - blockscout
 
 ethereum_metrics_exporter_enabled: true
