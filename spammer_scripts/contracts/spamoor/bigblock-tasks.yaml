@@ -7,7 +7,7 @@
     refill_balance: 1000000000000000000     # 1 ETH in wei
     refill_interval: 600
     total_count: 0                          # 0 = run indefinitely
-    throughput: 175                          # many lightweight txs per slot
+    throughput: 130                          # many lightweight txs per slot
     max_pending: 200
     max_wallets: 20
     rebroadcast: 120

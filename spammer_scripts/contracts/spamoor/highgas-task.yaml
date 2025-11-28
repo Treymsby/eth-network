@@ -7,7 +7,7 @@
     refill_balance: 1000000000000000000     # 1 ETH in wei
     refill_interval: 600                    # seconds
     total_count: 0                          # 0 = run until stopped (when using throughput)
-    throughput: 20                           # task execution cycles per slot
+    throughput: 15                           # task execution cycles per slot
     max_pending: 20
     max_wallets: 20
     rebroadcast: 120

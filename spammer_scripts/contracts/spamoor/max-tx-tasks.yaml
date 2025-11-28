@@ -18,7 +18,7 @@
     refill_interval: 600
     seed: eoatx-max-1
     self_tx_only: false
-    throughput: 2800 # 21000 Gas * 2800 = 60M gas + Mempool test + high tip + basefee
+    throughput: 2000 # 21000 Gas * 2800 = 60M gas + Mempool test + high tip + basefee
     timeout: ""
     tip_fee: 2000
     to: ""
