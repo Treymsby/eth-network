@@ -1,8 +1,0 @@
-Effective Gas fee metric is broke on some nodes....
-
-Therefore I will calc Effective Gas Price like:
-effective_gas_price = base_fee_per_gas + priority_fee
-
-https://eips.ethereum.org/EIPS/eip-1559
-
-Prometheus CPU data is poop... i will use cpu data collected from python script

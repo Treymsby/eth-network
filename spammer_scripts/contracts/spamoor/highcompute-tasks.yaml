@@ -30,18 +30,7 @@
             target: "{contract:highcompute}"
             call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
             call_fn_name: "burnCpuAndMemory"
-            # iterations, arraySize (tune carefully: cost ~ iterations * arraySize)
-            call_args: ["100", "512"]
-            gas_limit: 32000000
-            amount: 0
-
-        # HighComputeContract.burnHashOnly(uint256 iterations)
-        - type: call
-          name: burn-hash-only
-          data:
-            target: "{contract:highcompute}"
-            call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
-            call_fn_name: "burnHashOnly"
-            call_args: ["5000"]
-            gas_limit: 8000000
+            # One Big Computational Tx approx 59 Million Gas.
+            call_args: ["128", "128"]
+            gas_limit: 60000000
             amount: 0

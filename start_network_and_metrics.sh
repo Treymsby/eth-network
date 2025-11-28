@@ -175,8 +175,8 @@ monitor_pids+=($!)
 python monitoring/python/live_collection/block_metrics_ws.py --duration 800 &
 monitor_pids+=($!)
 
-python monitoring/python/live_collection/mempool_metrics_ws.py --duration 800 &
-monitor_pids+=($!)
+# python monitoring/python/live_collection/mempool_metrics_ws.py --duration 800 &
+# monitor_pids+=($!)
 
 python monitoring/python/live_collection/cpu_mem_net_colletion.py --duration 800 --interval 1 &
 monitor_pids+=($!)
@@ -202,13 +202,13 @@ monitor_pids=()   # so cleanup trap doesn't try again
 python monitoring/python/api_calls/fetch_spamoor_dashboard.py
 
 # 3) slots list
-python monitoring/python/api_calls/fetch_slots_list.py
+#python monitoring/python/api_calls/fetch_slots_list.py
 
 # 4) blocks [1..64]
 python monitoring/python/api_calls/fetch_blocks.py --start 1 --end 64
 
 # 5) slots [1..64]
-python monitoring/python/api_calls/fetch_slots.py --start 1 --end 64
+#python monitoring/python/api_calls/fetch_slots.py --start 1 --end 64
 
 set +x
 echo ">>> All monitoring & fetch tasks completed."
@@ -223,7 +223,7 @@ run_cmd "python3 scripts/open_web_ui.py"
 sleep 60s
 run_cmd "kurtosis service stop eth-network spamoor"
 echo
-info "Take Screenshots from Spamoor!"
+#info "Take Screenshots from Spamoor!"
 info "If you still need to collect data from Grafana, do that now."
 #read -r -p "Press Enter AFTER you have collected the data from Grafana to stop the Ethereum network (or Ctrl+C to keep it running): " _
 

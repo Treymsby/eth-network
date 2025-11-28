@@ -93,13 +93,21 @@ def main():
     parser.add_argument(
         "--no-timers",
         action="store_true",
-        help="If set, only perform imports and skip the 384s start/pause sequence.",
+        help="If set, only perform imports and skip the start/pause sequence.",
     )
+    # NEW: separate start delay (first timer)
+    parser.add_argument(
+        "--start-delay",
+        type=int,
+        default=360,
+        help="Delay (in seconds) before starting spammer 102, default: 360",
+    )
+    # Existing delay now effectively the second timer
     parser.add_argument(
         "--delay",
         type=int,
         default=384,
-        help="Delay (in seconds) between actions, default: 384",
+        help="Delay (in seconds) between start and pause actions, default: 384",
     )
 
     args = parser.parse_args()
@@ -123,16 +131,18 @@ def main():
         print("\n--no-timers specified, skipping start/pause sequence.")
         return
 
-    # 2) After delay, start spammer 102
-    print(f"\nWaiting {args.delay} seconds before starting spammer 102...")
-    time.sleep(args.delay)
+    # 2) After first delay (360s by default), start spammer 102
+    print(f"\nWaiting {args.start_delay} seconds before starting spammer 102...")
+    time.sleep(args.start_delay)
 
     start_url = f"{base_url}/api/spammer/102/start"
     print("\n=== Starting spammer 102 ===")
     simple_post(start_url)
 
-    # 3) After another delay, pause spammers 100, 101, 102
-    print(f"\nWaiting another {args.delay} seconds before pausing 100, 101, 102...")
+    # 3) After another delay (384s by default), pause spammers 100, 101, 102
+    print(
+        f"\nWaiting another {args.delay} seconds before pausing 100, 101, 102..."
+    )
     time.sleep(args.delay)
 
     # print("\n=== Pausing spammers 100, 101, 102 ===")

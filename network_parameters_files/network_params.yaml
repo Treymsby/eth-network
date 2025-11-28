@@ -5,31 +5,21 @@ participants:
     # CPU is milicores 1 core = 1000 milicore
     # RAM is in MB
     # Min value is igrored on docker!
-    el_max_cpu: 1000
-    el_max_mem: 1024
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    cl_max_cpu: 500
-    cl_max_mem: 512
-    count: 1
+    count: 0
   
   - el_type: nethermind
     el_image: "nethermindeth/nethermind:1.35.0"
-    el_max_cpu: 1000
-    el_max_mem: 1024
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    cl_max_cpu: 500
-    cl_max_mem: 512
-    count: 1
+    count: 0
 
   - el_type: besu
     el_image: "hyperledger/besu:25.11.0"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    cl_max_cpu: 500
-    cl_max_mem: 512
-    count: 1
+    count: 12
 
 
 network_params:
@@ -48,7 +38,7 @@ network_params:
   # The number of pre-registered validators for genesis. If 0 or not specified then the value will be calculated from the participants
   preregistered_validator_count: 0
   # Gas limit for the genesis block based on mainnet: https://eips.ethereum.org/EIPS/eip-7935
-  genesis_gaslimit: 36000000
+  genesis_gaslimit: 60000000
   # prefunded_accounts: '{"0x25941dC771bB64514Fc8abBce970307Fb9d477e9": {"balance": "10ETH"}, "0x4107be99052d895e3ee461C685b042Aa975ab5c0": {"balance": "1ETH"}}'
   prefunded_accounts:
     '{"0x1111111111111111111111111111111111111111":{"balance":"100000ETH"},
@@ -73,11 +63,10 @@ network_params:
     "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef":{"balance":"100000ETH"}}'
 
   # runtime target gas limit for EL clients
-  gas_limit: 36000000
+  gas_limit: 60000000
 
 additional_services:
   - spamoor
-  - dora
   - prometheus
   - grafana
   - blockscout
@@ -88,17 +77,12 @@ ethereum_metrics_exporter_enabled: true
 disable_peer_scoring: false
 
 prometheus_params:
-  storage_tsdb_retention_time: "1d"
-  storage_tsdb_retention_size: "512MB"
   image: "prom/prometheus:latest"
 
 grafana_params:
   additional_dashboards:
     - github.com/Treymsby/eth-network/monitoring/grafana
   image: "grafana/grafana:latest"
-
-dora_params:
-  image: "ethpandaops/dora:latest"
 
 spamoor_params:
   image: ethpandaops/spamoor:latest

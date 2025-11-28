@@ -41,7 +41,7 @@ run_cmd "kurtosis run --enclave ${ENCLAVE} ${PKG} --args-file ${ARGS_FILE}"
 
 # 4) Update ports.json
 run_cmd "scripts/update_ports.sh"
-
+run_cmd "python3 scripts/extract_container_setup.py"
 # 5) Chmod 777 (its a vm so idk)
 # Recursively give read, write, execute to everyone
 run_cmd "chmod -R 777 ./"
