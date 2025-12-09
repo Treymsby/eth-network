@@ -99,14 +99,14 @@ def main():
     parser.add_argument(
         "--start-delay",
         type=int,
-        default=360,
+        default=384,
         help="Delay (in seconds) before starting spammer 102, default: 360",
     )
     # Existing delay now effectively the second timer
     parser.add_argument(
         "--delay",
         type=int,
-        default=384,
+        default=400,
         help="Delay (in seconds) between start and pause actions, default: 384",
     )
 
@@ -145,10 +145,10 @@ def main():
     )
     time.sleep(args.delay)
 
-    # print("\n=== Pausing spammers 100, 101, 102 ===")
-    # for spammer_id in (100, 101, 102):
-    #     pause_url = f"{base_url}/api/spammer/{spammer_id}/pause"
-    #     simple_post(pause_url)
+    print("\n=== Pausing spammers 100, 101, 102 ===")
+    for spammer_id in (100, 101, 102):
+        pause_url = f"{base_url}/api/spammer/{spammer_id}/pause"
+        simple_post(pause_url)
 
 
 if __name__ == "__main__":

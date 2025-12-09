@@ -27,7 +27,7 @@ open_in_new_terminal() {
   local cmd="$1"
   if command -v gnome-terminal >/dev/null 2>&1; then
     gnome-terminal -- bash -lc "$cmd; echo; echo '--- command finished ---'; echo 'You can close this window.'; exec bash"
-  elif command -v x-terminal-emulator >/devnull 2>&1; then
+  elif command -v x-terminal-emulator >/dev/null 2>&1; then
     x-terminal-emulator -e bash -lc "$cmd; echo; echo '--- command finished ---'; read -n 1 -s -r -p 'Press any key to close...'"
   elif command -v konsole >/dev/null 2>&1; then
     konsole -e bash -lc "$cmd; echo; echo '--- command finished ---'; read -n 1 -s -r -p 'Press any key to close...'"
@@ -158,8 +158,10 @@ cleanup() {
         kill "${pid}" 2>/dev/null || true
       fi
     done
-    # Wait for them to exit
-    wait || true
+    # Wait only for our monitoring scripts
+    for pid in "${monitor_pids[@]}"; do
+      wait "${pid}" 2>/dev/null || true
+    done
   fi
 }
 trap cleanup EXIT
@@ -169,10 +171,10 @@ set -x
 
 # -------------------------------
 # Start monitoring scripts in parallel (background)
-python monitoring/python/live_collection/tx_metrics_ws.py --duration 800 &
+python monitoring/python/live_collection/tx_metrics_ws.py --duration 950 &
 monitor_pids+=($!)
 
-python monitoring/python/live_collection/block_metrics_ws.py --duration 800 &
+python monitoring/python/live_collection/block_metrics_ws.py --duration 900 &
 monitor_pids+=($!)
 
 # python monitoring/python/live_collection/mempool_metrics_ws.py --duration 800 &
@@ -184,18 +186,16 @@ monitor_pids+=($!)
 set +x
 echo
 echo ">>> Monitoring scripts started in background (PIDs: ${monitor_pids[*]})"
-echo ">>> They will run for up to 800 seconds."
-read -r -t 800 -p "Press Enter to stop monitoring early (auto-continues after 800s)... " || true
-echo
-set -x
+echo ">>> They will run for up to 800 seconds (or until they exit on their own)."
 
-# Stop monitoring scripts (if still running) and wait for them
-for pid in "${monitor_pids[@]}"; do
-  if kill -0 "${pid}" 2>/dev/null; then
-    kill "${pid}" 2>/dev/null || true
-  fi
-done
-wait || true
+# Wait for monitoring scripts to finish on their own
+set -x
+if ((${#monitor_pids[@]} > 0)); then
+  for pid in "${monitor_pids[@]}"; do
+    wait "${pid}" || true
+  done
+fi
+set +x
 monitor_pids=()   # so cleanup trap doesn't try again
 
 # 2) spamoor dashboard

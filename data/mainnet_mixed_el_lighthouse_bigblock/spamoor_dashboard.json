@@ -1,0 +1,2003 @@
+{
+  "range": {
+    "start": "2025-11-29T00:18:28.672040405Z",
+    "end": "2025-11-29T00:33:28.517984958Z"
+  },
+  "spammers": [
+    {
+      "id": 102,
+      "name": "BigSizeBlock Calldata Spam",
+      "pending": 0,
+      "confirmed": 3754,
+      "submitted": 3754,
+      "gasUsed": 1290448615,
+      "updated": "2025-11-29T00:33:28Z",
+      "status": 0
+    },
+    {
+      "id": 101,
+      "name": "ERC-20 transfers",
+      "pending": 0,
+      "confirmed": 2730,
+      "submitted": 2730,
+      "gasUsed": 166266856,
+      "updated": "2025-11-29T00:33:28Z",
+      "status": 0
+    },
+    {
+      "id": 100,
+      "name": "EOA transfers",
+      "pending": 0,
+      "confirmed": 5557,
+      "submitted": 5557,
+      "gasUsed": 116697000,
+      "updated": "2025-11-29T00:33:28Z",
+      "status": 0
+    }
+  ],
+  "totals": {
+    "pending": 0,
+    "confirmed": 12041,
+    "submitted": 12041,
+    "gasUsed": 1573412471
+  },
+  "others": {
+    "gasUsed": 11448475
+  },
+  "data": [
+    {
+      "ts": "2025-11-29T00:18:28.672040405Z",
+      "startBlock": 1,
+      "endBlock": 1,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:18:40.68552841Z",
+      "startBlock": 2,
+      "endBlock": 2,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:18:52.697809129Z",
+      "startBlock": 3,
+      "endBlock": 3,
+      "blocks": 1,
+      "totalGas": 65515,
+      "othersGas": 65515,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:19:04.713021875Z",
+      "startBlock": 4,
+      "endBlock": 4,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:19:16.726079999Z",
+      "startBlock": 5,
+      "endBlock": 5,
+      "blocks": 1,
+      "totalGas": 1762440,
+      "othersGas": 1762440,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:19:28.740117933Z",
+      "startBlock": 6,
+      "endBlock": 6,
+      "blocks": 1,
+      "totalGas": 1762440,
+      "othersGas": 1762440,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:19:40.756509512Z",
+      "startBlock": 7,
+      "endBlock": 7,
+      "blocks": 1,
+      "totalGas": 7105652,
+      "othersGas": 7105652,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:19:52.778698009Z",
+      "startBlock": 8,
+      "endBlock": 8,
+      "blocks": 1,
+      "totalGas": 2250075,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1533000,
+          "confirmed": 73,
+          "pending": 28,
+          "submitted": 101
+        },
+        "101": {
+          "gas": 717075,
+          "confirmed": 1,
+          "pending": 1,
+          "submitted": 1
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:20:04.813737994Z",
+      "startBlock": 9,
+      "endBlock": 9,
+      "blocks": 1,
+      "totalGas": 3742090,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1848000,
+          "confirmed": 88,
+          "pending": 40,
+          "submitted": 201
+        },
+        "101": {
+          "gas": 1894090,
+          "confirmed": 31,
+          "pending": 20,
+          "submitted": 52
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:20:16.846767283Z",
+      "startBlock": 10,
+      "endBlock": 10,
+      "blocks": 1,
+      "totalGas": 5851490,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2394000,
+          "confirmed": 114,
+          "pending": 26,
+          "submitted": 301
+        },
+        "101": {
+          "gas": 3457490,
+          "confirmed": 57,
+          "pending": 13,
+          "submitted": 102
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:20:28.886798644Z",
+      "startBlock": 11,
+      "endBlock": 11,
+      "blocks": 1,
+      "totalGas": 4414340,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 41,
+          "submitted": 402
+        },
+        "101": {
+          "gas": 2608340,
+          "confirmed": 43,
+          "pending": 20,
+          "submitted": 152
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:20:40.918888091Z",
+      "startBlock": 12,
+      "endBlock": 12,
+      "blocks": 1,
+      "totalGas": 5851550,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2394000,
+          "confirmed": 114,
+          "pending": 27,
+          "submitted": 502
+        },
+        "101": {
+          "gas": 3457550,
+          "confirmed": 57,
+          "pending": 13,
+          "submitted": 202
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:20:52.957735752Z",
+      "startBlock": 13,
+      "endBlock": 13,
+      "blocks": 1,
+      "totalGas": 5132920,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 27,
+          "submitted": 602
+        },
+        "101": {
+          "gas": 3032920,
+          "confirmed": 50,
+          "pending": 13,
+          "submitted": 252
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:21:04.983059688Z",
+      "startBlock": 14,
+      "endBlock": 14,
+      "blocks": 1,
+      "totalGas": 4414330,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 41,
+          "submitted": 702
+        },
+        "101": {
+          "gas": 2608330,
+          "confirmed": 43,
+          "pending": 20,
+          "submitted": 302
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:21:17.021231616Z",
+      "startBlock": 15,
+      "endBlock": 15,
+      "blocks": 1,
+      "totalGas": 5132920,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 42,
+          "submitted": 803
+        },
+        "101": {
+          "gas": 3032920,
+          "confirmed": 50,
+          "pending": 21,
+          "submitted": 353
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:21:29.05380709Z",
+      "startBlock": 16,
+      "endBlock": 16,
+      "blocks": 1,
+      "totalGas": 5851560,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2394000,
+          "confirmed": 114,
+          "pending": 28,
+          "submitted": 903
+        },
+        "101": {
+          "gas": 3457560,
+          "confirmed": 57,
+          "pending": 14,
+          "submitted": 403
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:21:41.087292348Z",
+      "startBlock": 17,
+      "endBlock": 17,
+      "blocks": 1,
+      "totalGas": 4414310,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 42,
+          "submitted": 1003
+        },
+        "101": {
+          "gas": 2608310,
+          "confirmed": 43,
+          "pending": 21,
+          "submitted": 453
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:21:53.124820151Z",
+      "startBlock": 18,
+      "endBlock": 18,
+      "blocks": 1,
+      "totalGas": 5132930,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 43,
+          "submitted": 1104
+        },
+        "101": {
+          "gas": 3032930,
+          "confirmed": 50,
+          "pending": 21,
+          "submitted": 503
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:22:02.212446575Z",
+      "startBlock": 19,
+      "endBlock": 19,
+      "blocks": 1,
+      "totalGas": 5851510,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2394000,
+          "confirmed": 114,
+          "pending": 4,
+          "submitted": 1179
+        },
+        "101": {
+          "gas": 3457510,
+          "confirmed": 57,
+          "pending": 2,
+          "submitted": 541
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:22:14.263368222Z",
+      "startBlock": 20,
+      "endBlock": 20,
+      "blocks": 1,
+      "totalGas": 4414220,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 19,
+          "submitted": 1280
+        },
+        "101": {
+          "gas": 2608220,
+          "confirmed": 43,
+          "pending": 9,
+          "submitted": 591
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:22:26.293481323Z",
+      "startBlock": 21,
+      "endBlock": 21,
+      "blocks": 1,
+      "totalGas": 5748850,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2352000,
+          "confirmed": 112,
+          "pending": 7,
+          "submitted": 1380
+        },
+        "101": {
+          "gas": 3396850,
+          "confirmed": 56,
+          "pending": 3,
+          "submitted": 641
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:22:38.323327288Z",
+      "startBlock": 22,
+      "endBlock": 22,
+      "blocks": 1,
+      "totalGas": 4516970,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1848000,
+          "confirmed": 88,
+          "pending": 19,
+          "submitted": 1480
+        },
+        "101": {
+          "gas": 2668970,
+          "confirmed": 44,
+          "pending": 9,
+          "submitted": 691
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:22:50.35452941Z",
+      "startBlock": 23,
+      "endBlock": 23,
+      "blocks": 1,
+      "totalGas": 5851480,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2394000,
+          "confirmed": 114,
+          "pending": 5,
+          "submitted": 1580
+        },
+        "101": {
+          "gas": 3457480,
+          "confirmed": 57,
+          "pending": 2,
+          "submitted": 741
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:23:02.384784637Z",
+      "startBlock": 24,
+      "endBlock": 24,
+      "blocks": 1,
+      "totalGas": 5132900,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 6,
+          "submitted": 1681
+        },
+        "101": {
+          "gas": 3032900,
+          "confirmed": 50,
+          "pending": 3,
+          "submitted": 792
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:23:14.414207893Z",
+      "startBlock": 25,
+      "endBlock": 25,
+      "blocks": 1,
+      "totalGas": 5132930,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 6,
+          "submitted": 1781
+        },
+        "101": {
+          "gas": 3032930,
+          "confirmed": 50,
+          "pending": 3,
+          "submitted": 842
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:23:26.438797328Z",
+      "startBlock": 26,
+      "endBlock": 26,
+      "blocks": 1,
+      "totalGas": 4414280,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 20,
+          "submitted": 1881
+        },
+        "101": {
+          "gas": 2608280,
+          "confirmed": 43,
+          "pending": 10,
+          "submitted": 892
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:23:38.469147827Z",
+      "startBlock": 27,
+      "endBlock": 27,
+      "blocks": 1,
+      "totalGas": 5769780,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2373000,
+          "confirmed": 113,
+          "pending": 7,
+          "submitted": 1981
+        },
+        "101": {
+          "gas": 3396780,
+          "confirmed": 56,
+          "pending": 4,
+          "submitted": 942
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:23:50.497821439Z",
+      "startBlock": 28,
+      "endBlock": 28,
+      "blocks": 1,
+      "totalGas": 5132900,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 8,
+          "submitted": 2082
+        },
+        "101": {
+          "gas": 3032900,
+          "confirmed": 50,
+          "pending": 4,
+          "submitted": 992
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:24:02.5203523Z",
+      "startBlock": 29,
+      "endBlock": 29,
+      "blocks": 1,
+      "totalGas": 5214610,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2121000,
+          "confirmed": 101,
+          "pending": 7,
+          "submitted": 2182
+        },
+        "101": {
+          "gas": 3093610,
+          "confirmed": 51,
+          "pending": 3,
+          "submitted": 1042
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:24:14.54650454Z",
+      "startBlock": 30,
+      "endBlock": 30,
+      "blocks": 1,
+      "totalGas": 5885358,
+      "othersGas": 752428,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 7,
+          "submitted": 2282
+        },
+        "101": {
+          "gas": 3032930,
+          "confirmed": 50,
+          "pending": 3,
+          "submitted": 1092
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 0
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:24:26.573260161Z",
+      "startBlock": 31,
+      "endBlock": 31,
+      "blocks": 1,
+      "totalGas": 5262555,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2100000,
+          "confirmed": 100,
+          "pending": 7,
+          "submitted": 2382
+        },
+        "101": {
+          "gas": 3032870,
+          "confirmed": 50,
+          "pending": 3,
+          "submitted": 1142
+        },
+        "102": {
+          "gas": 129685,
+          "confirmed": 1,
+          "pending": 0,
+          "submitted": 1
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:24:41.852601699Z",
+      "startBlock": 32,
+      "endBlock": 32,
+      "blocks": 1,
+      "totalGas": 39482940,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 49,
+          "submitted": 2510
+        },
+        "101": {
+          "gas": 2608320,
+          "confirmed": 43,
+          "pending": 24,
+          "submitted": 1206
+        },
+        "102": {
+          "gas": 35068620,
+          "confirmed": 102,
+          "pending": 64,
+          "submitted": 167
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:24:54.326076662Z",
+      "startBlock": 33,
+      "endBlock": 33,
+      "blocks": 1,
+      "totalGas": 44989990,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1974000,
+          "confirmed": 94,
+          "pending": 59,
+          "submitted": 2614
+        },
+        "101": {
+          "gas": 2790220,
+          "confirmed": 46,
+          "pending": 30,
+          "submitted": 1258
+        },
+        "102": {
+          "gas": 40225770,
+          "confirmed": 117,
+          "pending": 82,
+          "submitted": 302
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:25:03.749531525Z",
+      "startBlock": 34,
+      "endBlock": 34,
+      "blocks": 1,
+      "totalGas": 44990980,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 903000,
+          "confirmed": 43,
+          "pending": 94,
+          "submitted": 2692
+        },
+        "101": {
+          "gas": 2486970,
+          "confirmed": 41,
+          "pending": 28,
+          "submitted": 1297
+        },
+        "102": {
+          "gas": 41601010,
+          "confirmed": 121,
+          "pending": 63,
+          "submitted": 404
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:25:16.05701639Z",
+      "startBlock": 35,
+      "endBlock": 35,
+      "blocks": 1,
+      "totalGas": 44991890,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 3675000,
+          "confirmed": 175,
+          "pending": 22,
+          "submitted": 2795
+        },
+        "101": {
+          "gas": 4185410,
+          "confirmed": 69,
+          "pending": 10,
+          "submitted": 1348
+        },
+        "102": {
+          "gas": 37131480,
+          "confirmed": 108,
+          "pending": 89,
+          "submitted": 537
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:25:28.380454922Z",
+      "startBlock": 36,
+      "endBlock": 36,
+      "blocks": 1,
+      "totalGas": 44999750,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1134000,
+          "confirmed": 54,
+          "pending": 70,
+          "submitted": 2897
+        },
+        "101": {
+          "gas": 1577120,
+          "confirmed": 26,
+          "pending": 36,
+          "submitted": 1400
+        },
+        "102": {
+          "gas": 42288630,
+          "confirmed": 123,
+          "pending": 79,
+          "submitted": 651
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:25:40.688445648Z",
+      "startBlock": 37,
+      "endBlock": 37,
+      "blocks": 1,
+      "totalGas": 44979010,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2226000,
+          "confirmed": 106,
+          "pending": 67,
+          "submitted": 3000
+        },
+        "101": {
+          "gas": 3214860,
+          "confirmed": 53,
+          "pending": 34,
+          "submitted": 1451
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 774
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:25:52.998390197Z",
+      "startBlock": 38,
+      "endBlock": 38,
+      "blocks": 1,
+      "totalGas": 44990050,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1974000,
+          "confirmed": 94,
+          "pending": 76,
+          "submitted": 3102
+        },
+        "101": {
+          "gas": 2790280,
+          "confirmed": 46,
+          "pending": 39,
+          "submitted": 1502
+        },
+        "102": {
+          "gas": 40225770,
+          "confirmed": 117,
+          "pending": 85,
+          "submitted": 889
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:26:05.321863804Z",
+      "startBlock": 39,
+      "endBlock": 39,
+      "blocks": 1,
+      "totalGas": 44979040,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2226000,
+          "confirmed": 106,
+          "pending": 72,
+          "submitted": 3205
+        },
+        "101": {
+          "gas": 3214890,
+          "confirmed": 53,
+          "pending": 38,
+          "submitted": 1554
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 1006
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:26:17.633231735Z",
+      "startBlock": 40,
+      "endBlock": 40,
+      "blocks": 1,
+      "totalGas": 44993890,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 76,
+          "submitted": 3308
+        },
+        "101": {
+          "gas": 3032930,
+          "confirmed": 50,
+          "pending": 39,
+          "submitted": 1605
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 86,
+          "submitted": 1121
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:26:29.945856025Z",
+      "startBlock": 41,
+      "endBlock": 41,
+      "blocks": 1,
+      "totalGas": 45000000,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2247000,
+          "confirmed": 107,
+          "pending": 71,
+          "submitted": 3410
+        },
+        "101": {
+          "gas": 3214850,
+          "confirmed": 53,
+          "pending": 37,
+          "submitted": 1656
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 1237
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:26:42.46631434Z",
+      "startBlock": 42,
+      "endBlock": 42,
+      "blocks": 1,
+      "totalGas": 44993860,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 77,
+          "submitted": 3515
+        },
+        "101": {
+          "gas": 3032900,
+          "confirmed": 50,
+          "pending": 40,
+          "submitted": 1708
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 86,
+          "submitted": 1351
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:26:51.823780496Z",
+      "startBlock": 43,
+      "endBlock": 43,
+      "blocks": 1,
+      "totalGas": 44979090,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2226000,
+          "confirmed": 106,
+          "pending": 49,
+          "submitted": 3593
+        },
+        "101": {
+          "gas": 3214940,
+          "confirmed": 53,
+          "pending": 26,
+          "submitted": 1748
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 72,
+          "submitted": 1453
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:27:04.137796322Z",
+      "startBlock": 44,
+      "endBlock": 44,
+      "blocks": 1,
+      "totalGas": 44983890,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 65,
+          "submitted": 3695
+        },
+        "101": {
+          "gas": 2608310,
+          "confirmed": 43,
+          "pending": 34,
+          "submitted": 1799
+        },
+        "102": {
+          "gas": 40569580,
+          "confirmed": 118,
+          "pending": 84,
+          "submitted": 1583
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:27:16.456874585Z",
+      "startBlock": 45,
+      "endBlock": 45,
+      "blocks": 1,
+      "totalGas": 44990060,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1974000,
+          "confirmed": 94,
+          "pending": 74,
+          "submitted": 3798
+        },
+        "101": {
+          "gas": 2790290,
+          "confirmed": 46,
+          "pending": 39,
+          "submitted": 1850
+        },
+        "102": {
+          "gas": 40225770,
+          "confirmed": 117,
+          "pending": 85,
+          "submitted": 1701
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:27:28.71933289Z",
+      "startBlock": 46,
+      "endBlock": 46,
+      "blocks": 1,
+      "totalGas": 44992870,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2604000,
+          "confirmed": 124,
+          "pending": 52,
+          "submitted": 3900
+        },
+        "101": {
+          "gas": 3882150,
+          "confirmed": 64,
+          "pending": 26,
+          "submitted": 1901
+        },
+        "102": {
+          "gas": 38506720,
+          "confirmed": 112,
+          "pending": 90,
+          "submitted": 1818
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:27:41.031663796Z",
+      "startBlock": 47,
+      "endBlock": 47,
+      "blocks": 1,
+      "totalGas": 44980050,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1701000,
+          "confirmed": 81,
+          "pending": 74,
+          "submitted": 4003
+        },
+        "101": {
+          "gas": 2365660,
+          "confirmed": 39,
+          "pending": 39,
+          "submitted": 1953
+        },
+        "102": {
+          "gas": 40913390,
+          "confirmed": 119,
+          "pending": 83,
+          "submitted": 1930
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:27:53.356296148Z",
+      "startBlock": 48,
+      "endBlock": 48,
+      "blocks": 1,
+      "totalGas": 44979040,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2226000,
+          "confirmed": 106,
+          "pending": 70,
+          "submitted": 4105
+        },
+        "101": {
+          "gas": 3214890,
+          "confirmed": 53,
+          "pending": 37,
+          "submitted": 2004
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 2049
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:28:05.665424148Z",
+      "startBlock": 49,
+      "endBlock": 49,
+      "blocks": 1,
+      "totalGas": 44993810,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 74,
+          "submitted": 4208
+        },
+        "101": {
+          "gas": 3032850,
+          "confirmed": 50,
+          "pending": 38,
+          "submitted": 2055
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 86,
+          "submitted": 2164
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:28:17.926765498Z",
+      "startBlock": 50,
+      "endBlock": 50,
+      "blocks": 1,
+      "totalGas": 44993860,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 77,
+          "submitted": 4310
+        },
+        "101": {
+          "gas": 3032900,
+          "confirmed": 50,
+          "pending": 39,
+          "submitted": 2106
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 86,
+          "submitted": 2280
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:28:30.424174972Z",
+      "startBlock": 51,
+      "endBlock": 51,
+      "blocks": 1,
+      "totalGas": 45000000,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2247000,
+          "confirmed": 107,
+          "pending": 74,
+          "submitted": 4414
+        },
+        "101": {
+          "gas": 3214850,
+          "confirmed": 53,
+          "pending": 38,
+          "submitted": 2158
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 2396
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:28:39.755644673Z",
+      "startBlock": 52,
+      "endBlock": 52,
+      "blocks": 1,
+      "totalGas": 44993860,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 53,
+          "submitted": 4492
+        },
+        "101": {
+          "gas": 3032900,
+          "confirmed": 50,
+          "pending": 27,
+          "submitted": 2197
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 72,
+          "submitted": 2497
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:28:52.065671709Z",
+      "startBlock": 53,
+      "endBlock": 53,
+      "blocks": 1,
+      "totalGas": 44968040,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2478000,
+          "confirmed": 118,
+          "pending": 38,
+          "submitted": 4595
+        },
+        "101": {
+          "gas": 3639510,
+          "confirmed": 60,
+          "pending": 19,
+          "submitted": 2249
+        },
+        "102": {
+          "gas": 38850530,
+          "confirmed": 113,
+          "pending": 89,
+          "submitted": 2627
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:29:04.387935276Z",
+      "startBlock": 54,
+      "endBlock": 54,
+      "blocks": 1,
+      "totalGas": 44991060,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1449000,
+          "confirmed": 69,
+          "pending": 71,
+          "submitted": 4697
+        },
+        "101": {
+          "gas": 1941050,
+          "confirmed": 32,
+          "pending": 38,
+          "submitted": 2300
+        },
+        "102": {
+          "gas": 41601010,
+          "confirmed": 121,
+          "pending": 81,
+          "submitted": 2740
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:29:16.698173397Z",
+      "startBlock": 55,
+      "endBlock": 55,
+      "blocks": 1,
+      "totalGas": 44979010,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2226000,
+          "confirmed": 106,
+          "pending": 68,
+          "submitted": 4800
+        },
+        "101": {
+          "gas": 3214860,
+          "confirmed": 53,
+          "pending": 36,
+          "submitted": 2351
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 2859
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:29:29.006960859Z",
+      "startBlock": 56,
+      "endBlock": 56,
+      "blocks": 1,
+      "totalGas": 44993870,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 72,
+          "submitted": 4903
+        },
+        "101": {
+          "gas": 3032910,
+          "confirmed": 50,
+          "pending": 37,
+          "submitted": 2402
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 86,
+          "submitted": 2976
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:29:41.324311255Z",
+      "startBlock": 57,
+      "endBlock": 57,
+      "blocks": 1,
+      "totalGas": 44957020,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2730000,
+          "confirmed": 130,
+          "pending": 44,
+          "submitted": 5005
+        },
+        "101": {
+          "gas": 4064110,
+          "confirmed": 67,
+          "pending": 22,
+          "submitted": 2454
+        },
+        "102": {
+          "gas": 38162910,
+          "confirmed": 111,
+          "pending": 91,
+          "submitted": 3092
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:29:53.639606211Z",
+      "startBlock": 58,
+      "endBlock": 58,
+      "blocks": 1,
+      "totalGas": 44994851,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1554000,
+          "confirmed": 74,
+          "pending": 73,
+          "submitted": 5108
+        },
+        "101": {
+          "gas": 2183651,
+          "confirmed": 36,
+          "pending": 37,
+          "submitted": 2505
+        },
+        "102": {
+          "gas": 41257200,
+          "confirmed": 120,
+          "pending": 82,
+          "submitted": 3203
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:30:05.947424898Z",
+      "startBlock": 59,
+      "endBlock": 59,
+      "blocks": 1,
+      "totalGas": 44999990,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2247000,
+          "confirmed": 107,
+          "pending": 68,
+          "submitted": 5210
+        },
+        "101": {
+          "gas": 3214840,
+          "confirmed": 53,
+          "pending": 35,
+          "submitted": 2556
+        },
+        "102": {
+          "gas": 39538150,
+          "confirmed": 115,
+          "pending": 87,
+          "submitted": 3323
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:30:15.283879972Z",
+      "startBlock": 60,
+      "endBlock": 60,
+      "blocks": 1,
+      "totalGas": 44993900,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 47,
+          "submitted": 5288
+        },
+        "101": {
+          "gas": 3032940,
+          "confirmed": 50,
+          "pending": 24,
+          "submitted": 2595
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 72,
+          "submitted": 3424
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:30:27.668024381Z",
+      "startBlock": 61,
+      "endBlock": 61,
+      "blocks": 1,
+      "totalGas": 44983910,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1806000,
+          "confirmed": 86,
+          "pending": 64,
+          "submitted": 5391
+        },
+        "101": {
+          "gas": 2608330,
+          "confirmed": 43,
+          "pending": 33,
+          "submitted": 2647
+        },
+        "102": {
+          "gas": 40569580,
+          "confirmed": 118,
+          "pending": 84,
+          "submitted": 3554
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:30:39.979300199Z",
+      "startBlock": 62,
+      "endBlock": 62,
+      "blocks": 1,
+      "totalGas": 44990080,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 1974000,
+          "confirmed": 94,
+          "pending": 73,
+          "submitted": 5494
+        },
+        "101": {
+          "gas": 2790310,
+          "confirmed": 46,
+          "pending": 38,
+          "submitted": 2698
+        },
+        "102": {
+          "gas": 40225770,
+          "confirmed": 117,
+          "pending": 85,
+          "submitted": 3672
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:30:52.28644205Z",
+      "startBlock": 63,
+      "endBlock": 63,
+      "blocks": 1,
+      "totalGas": 44993900,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 2079000,
+          "confirmed": 99,
+          "pending": 37,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 3032940,
+          "confirmed": 50,
+          "pending": 20,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 39881960,
+          "confirmed": 116,
+          "pending": 51,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:31:04.427810192Z",
+      "startBlock": 64,
+      "endBlock": 64,
+      "blocks": 1,
+      "totalGas": 19524480,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 777000,
+          "confirmed": 37,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 1213170,
+          "confirmed": 20,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 17534310,
+          "confirmed": 51,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:31:16.435226425Z",
+      "startBlock": 65,
+      "endBlock": 65,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:31:28.442912305Z",
+      "startBlock": 66,
+      "endBlock": 66,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:31:40.449789357Z",
+      "startBlock": 67,
+      "endBlock": 67,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:31:52.458119421Z",
+      "startBlock": 68,
+      "endBlock": 68,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:32:04.466279387Z",
+      "startBlock": 69,
+      "endBlock": 69,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:32:16.474721078Z",
+      "startBlock": 70,
+      "endBlock": 70,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:32:28.481338417Z",
+      "startBlock": 71,
+      "endBlock": 71,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:32:40.48989398Z",
+      "startBlock": 72,
+      "endBlock": 72,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:32:52.49635678Z",
+      "startBlock": 73,
+      "endBlock": 73,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:33:04.504370297Z",
+      "startBlock": 74,
+      "endBlock": 74,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:33:16.512021201Z",
+      "startBlock": 75,
+      "endBlock": 75,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    },
+    {
+      "ts": "2025-11-29T00:33:28.517984958Z",
+      "startBlock": 76,
+      "endBlock": 76,
+      "blocks": 1,
+      "totalGas": 0,
+      "othersGas": 0,
+      "spammers": {
+        "100": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 5557
+        },
+        "101": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 2730
+        },
+        "102": {
+          "gas": 0,
+          "confirmed": 0,
+          "pending": 0,
+          "submitted": 3754
+        }
+      }
+    }
+  ]
+}

@@ -7,14 +7,14 @@ participants:
     # Min value is igrored on docker!
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 12
+    count: 0
     supernode: true
 
   - el_type: nethermind
     el_image: "nethermindeth/nethermind:1.35.0"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 0
+    count: 12
     supernode: true
 
   - el_type: besu
@@ -40,7 +40,7 @@ network_params:
   # The number of pre-registered validators for genesis. If 0 or not specified then the value will be calculated from the participants
   preregistered_validator_count: 0
   # Gas limit for the genesis block based on mainnet: https://eips.ethereum.org/EIPS/eip-7935
-  genesis_gaslimit: 60000000
+  genesis_gaslimit: 45000000
   # prefunded_accounts: '{"0x25941dC771bB64514Fc8abBce970307Fb9d477e9": {"balance": "10ETH"}, "0x4107be99052d895e3ee461C685b042Aa975ab5c0": {"balance": "1ETH"}}'
   prefunded_accounts:
     '{"0x1111111111111111111111111111111111111111":{"balance":"100000ETH"},
@@ -65,14 +65,13 @@ network_params:
     "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef":{"balance":"100000ETH"}}'
 
   # runtime target gas limit for EL clients
-  gas_limit: 60000000
+  gas_limit: 45000000
 
 additional_services:
   - spamoor
   - prometheus
   - grafana
-  - dora
-  - blockscout
+
 
 ethereum_metrics_exporter_enabled: true
 

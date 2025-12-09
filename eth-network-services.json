@@ -1,128 +1,107 @@
 [
   {
-    "name": "blockscout",
-    "uuid": "279efaa04b1e405cb7c0aed4a2aa8fc4",
-    "ws": null,
-    "rpc": null,
-    "http": "http://127.0.0.1:32896"
-  },
-  {
-    "name": "blockscout-frontend",
-    "uuid": "8999c16ee21943308725245e430e5824",
-    "ws": null,
-    "rpc": null,
-    "http": "http://127.0.0.1:3000"
-  },
-  {
-    "name": "dora",
-    "uuid": "f17d0c0c913140f68da769c743c83c2e",
-    "ws": null,
-    "rpc": null,
-    "http": "http://127.0.0.1:32893"
-  },
-  {
-    "name": "el-01-geth-lighthouse",
-    "uuid": "563025c997c1426c9fe33c05b6e9563f",
-    "ws": "127.0.0.1:32771",
-    "rpc": "127.0.0.1:32770",
+    "name": "el-01-nethermind-lighthouse",
+    "uuid": "30dea334b2124abfa92d46d2625d7dd4",
+    "ws": "127.0.0.1:32770",
+    "rpc": "127.0.0.1:32769",
     "http": null
   },
   {
-    "name": "el-02-geth-lighthouse",
-    "uuid": "11291fd0b095457786fc0d536f0409b7",
-    "ws": "127.0.0.1:32801",
-    "rpc": "127.0.0.1:32800",
+    "name": "el-02-nethermind-lighthouse",
+    "uuid": "e2a31f1cc68f4f91a3d676757c40207b",
+    "ws": "127.0.0.1:32790",
+    "rpc": "127.0.0.1:32789",
     "http": null
   },
   {
-    "name": "el-03-geth-lighthouse",
-    "uuid": "5ed9aaab38cc46f6857ef8480a9995a3",
-    "ws": "127.0.0.1:32816",
-    "rpc": "127.0.0.1:32815",
+    "name": "el-03-nethermind-lighthouse",
+    "uuid": "0d62dc53e70a4f1c9944d352405c458d",
+    "ws": "127.0.0.1:32775",
+    "rpc": "127.0.0.1:32774",
     "http": null
   },
   {
-    "name": "el-04-geth-lighthouse",
-    "uuid": "82b7a08bf4cd44318518068755384ec6",
-    "ws": "127.0.0.1:32826",
-    "rpc": "127.0.0.1:32825",
+    "name": "el-04-nethermind-lighthouse",
+    "uuid": "df3f0e928f864482af8cffb6335206da",
+    "ws": "127.0.0.1:32800",
+    "rpc": "127.0.0.1:32799",
     "http": null
   },
   {
-    "name": "el-05-geth-lighthouse",
-    "uuid": "c79386c87f69462cab51d2db2ed064a0",
-    "ws": "127.0.0.1:32806",
-    "rpc": "127.0.0.1:32805",
+    "name": "el-05-nethermind-lighthouse",
+    "uuid": "832b87dcf47f48098e40b536a3828a26",
+    "ws": "127.0.0.1:32805",
+    "rpc": "127.0.0.1:32804",
     "http": null
   },
   {
-    "name": "el-06-geth-lighthouse",
-    "uuid": "34730814c71843c9a79ad11b16f97305",
-    "ws": "127.0.0.1:32781",
-    "rpc": "127.0.0.1:32780",
+    "name": "el-06-nethermind-lighthouse",
+    "uuid": "ca26b52f59da4b5eb709d6fcb0ed4817",
+    "ws": "127.0.0.1:32785",
+    "rpc": "127.0.0.1:32784",
     "http": null
   },
   {
-    "name": "el-07-geth-lighthouse",
-    "uuid": "4f8659d0a0f84696a299e6b3e63fb807",
-    "ws": "127.0.0.1:32796",
-    "rpc": "127.0.0.1:32795",
+    "name": "el-07-nethermind-lighthouse",
+    "uuid": "ea4ea44c4a5840db9cc4004e1014ad70",
+    "ws": "127.0.0.1:32780",
+    "rpc": "127.0.0.1:32779",
     "http": null
   },
   {
-    "name": "el-08-geth-lighthouse",
-    "uuid": "d0eee7c34c134a6998cc527f44bb29b3",
-    "ws": "127.0.0.1:32791",
-    "rpc": "127.0.0.1:32790",
+    "name": "el-08-nethermind-lighthouse",
+    "uuid": "2683d12766174b99811ad81aa518f11d",
+    "ws": "127.0.0.1:32825",
+    "rpc": "127.0.0.1:32824",
     "http": null
   },
   {
-    "name": "el-09-geth-lighthouse",
-    "uuid": "27c81c9186794eecb7c54d091d6c0289",
-    "ws": "127.0.0.1:32786",
-    "rpc": "127.0.0.1:32785",
+    "name": "el-09-nethermind-lighthouse",
+    "uuid": "f5f0cf9482d2431c8eb6e378b5f96ae9",
+    "ws": "127.0.0.1:32795",
+    "rpc": "127.0.0.1:32794",
     "http": null
   },
   {
-    "name": "el-10-geth-lighthouse",
-    "uuid": "ae4bcd5862f740058374757ffa05b8fc",
-    "ws": "127.0.0.1:32776",
-    "rpc": "127.0.0.1:32775",
+    "name": "el-10-nethermind-lighthouse",
+    "uuid": "a5a2dc1d7168424a9a8117262fbc6fe1",
+    "ws": "127.0.0.1:32810",
+    "rpc": "127.0.0.1:32809",
     "http": null
   },
   {
-    "name": "el-11-geth-lighthouse",
-    "uuid": "1f8a82f63398437b83c19ce760d15940",
-    "ws": "127.0.0.1:32811",
-    "rpc": "127.0.0.1:32810",
+    "name": "el-11-nethermind-lighthouse",
+    "uuid": "76f286a0d84d4133a9cf049111be2e3c",
+    "ws": "127.0.0.1:32815",
+    "rpc": "127.0.0.1:32814",
     "http": null
   },
   {
-    "name": "el-12-geth-lighthouse",
-    "uuid": "d994a0f5277744d9a89956f0b07b2841",
-    "ws": "127.0.0.1:32821",
-    "rpc": "127.0.0.1:32820",
+    "name": "el-12-nethermind-lighthouse",
+    "uuid": "df4bbd8d12264638aebbd682cb01d366",
+    "ws": "127.0.0.1:32820",
+    "rpc": "127.0.0.1:32819",
     "http": null
   },
   {
     "name": "grafana",
-    "uuid": "73fafad51bba41b68baf3171aa4493f3",
-    "ws": null,
-    "rpc": null,
-    "http": "http://127.0.0.1:32892"
-  },
-  {
-    "name": "prometheus",
-    "uuid": "0d7cfc02eb824499a39a9052e75d6178",
+    "uuid": "e16a6c6e69db4ea881afcc6e7eaa3d20",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32891"
   },
   {
-    "name": "spamoor",
-    "uuid": "90aa98de664f486ea63fbfd2a3615ca5",
+    "name": "prometheus",
+    "uuid": "22466b89fe374d0bb1d2401465817075",
     "ws": null,
     "rpc": null,
     "http": "http://127.0.0.1:32890"
+  },
+  {
+    "name": "spamoor",
+    "uuid": "b68a94ad981e43138454c71bc281dda4",
+    "ws": null,
+    "rpc": null,
+    "http": "http://127.0.0.1:32889"
   }
 ]
