@@ -247,14 +247,27 @@ def plot_latency_boxplot(block_latencies_ms, output_dir):
 
     data_scaled = [[lat * factor for lat in lat_list] for lat_list in data_ms]
 
-    plt.figure(figsize=(max(12, len(blocks) * 0.3), 6))
+    fig, ax = plt.subplots(figsize=(max(12, len(blocks) * 0.3), 6))
     positions = list(range(1, len(blocks) + 1))
-    plt.boxplot(data_scaled, positions=positions, showmeans=False)
-    plt.xticks(positions, blocks, rotation=90)
-    plt.xlabel("Block number")
-    plt.ylabel(f"Confirmation latency ({unit})")
-    plt.title("Transaction confirmation latency per block")
-    plt.tight_layout()
+
+    ax.boxplot(data_scaled, positions=positions, showmeans=False)
+    ax.set_xticks(positions)
+    ax.set_xticklabels(blocks, rotation=90)
+    ax.set_xlabel("Block number")
+    ax.set_ylabel(f"Confirmation latency ({unit})")
+    ax.set_title("Transaction confirmation latency per block")
+
+    # Add explanation for the dots (outliers)
+    fig.text(
+        0.5,
+        0.02,
+        "Note: circles are statistical outliers (beyond 1.5×IQR from the box).",
+        ha="center",
+        fontsize=8,
+    )
+
+    # leave room at the bottom for the note
+    plt.tight_layout(rect=(0, 0.05, 1, 1))
 
     out_path = os.path.join(output_dir, "latency_boxplot.png")
     plt.savefig(out_path)

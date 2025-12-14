@@ -4,6 +4,7 @@ import json
 import os
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 
 # Spammer IDs we care about
 SPAMMER_IDS = ["100", "101", "102"]
@@ -207,17 +208,82 @@ def plot_stacked_gas(blocks, gas_by_spammer, total_gas, id_to_name, output_dir: 
         )
 
     plt.xlabel("Block")
-    plt.ylabel("Gas used")
+    plt.ylabel("Gas used (Millions)")
     plt.title(
         f"Gas usage per block (stacked by type, blocks {MIN_BLOCK}-{MAX_BLOCK})"
     )
     plt.grid(True, axis="y", linestyle="--", alpha=0.3)
     plt.legend()
+
+    # === NEW: format Y-axis in millions (e.g. '45 Million') ===
+    ax = plt.gca()
+
+    def millions(x, pos):
+        # x is the raw gas value (e.g. 45_000_000)
+        return f"{x / 1_000_000:g} Million"
+
+    ax.yaxis.set_major_formatter(FuncFormatter(millions))
+    # ==========================================================
+
     plt.tight_layout()
 
     filename = "gas_stacked_per_block.png"
     plt.savefig(os.path.join(output_dir, filename))
     plt.close()
+
+
+def plot_all_metrics_combined(blocks, metrics, id_to_name, output_dir: str):
+    """
+    Single figure with three line charts (subplots):
+      - Submitted
+      - Pending
+      - Confirmed
+
+    In each subplot:
+      - Each spammer type is a separate line.
+      - Spammer types share the same color across all three charts.
+    """
+    metric_order = ["submitted", "pending", "confirmed"]
+
+    fig, axes = plt.subplots(
+        nrows=3, ncols=1, figsize=(12, 10), sharex=True, sharey=False
+    )
+
+    # Use a colormap so each spammer id has a consistent color
+    cmap = plt.cm.get_cmap("tab10", len(SPAMMER_IDS))
+    colors = {sid: cmap(i) for i, sid in enumerate(SPAMMER_IDS)}
+
+    for sid in SPAMMER_IDS:
+        label = id_to_name.get(sid, sid)
+        for metric_name, ax in zip(metric_order, axes):
+            series = metrics.get(metric_name, {}).get(sid, [])
+            if not series:
+                continue
+
+            # Only label lines once (in the first subplot) to avoid repeated legend entries
+            if metric_name == metric_order[0]:
+                ax.plot(blocks, series, label=label, color=colors[sid])
+            else:
+                ax.plot(blocks, series, color=colors[sid])
+
+    # Per-subplot formatting
+    for metric_name, ax in zip(metric_order, axes):
+        ax.set_ylabel(f"{metric_name.capitalize()} txs")
+        ax.grid(True, linestyle="--", alpha=0.3)
+
+    axes[-1].set_xlabel("Block")
+    axes[0].legend(loc="upper left")
+
+    fig.suptitle(
+        f"Submitted / Pending / Confirmed per spammer type "
+        f"(blocks {MIN_BLOCK}-{MAX_BLOCK})",
+        y=0.98,
+    )
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+
+    filename = "combined_per_spammer_submitted_pending_confirmed.png"
+    fig.savefig(os.path.join(output_dir, filename))
+    plt.close(fig)
 
 
 def main():
@@ -250,6 +316,9 @@ def main():
 
     # Stacked gas usage chart
     plot_stacked_gas(blocks, gas_by_spammer, total_gas, id_to_name, args.output)
+
+    # NEW: combined chart with submitted/pending/confirmed in one figure
+    plot_all_metrics_combined(blocks, metrics, id_to_name, args.output)
 
 
 if __name__ == "__main__":

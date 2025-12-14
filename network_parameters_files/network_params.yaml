@@ -1,27 +1,22 @@
 participants:
   - el_type: geth
     el_image: "ethereum/client-go:v1.16.7"
-    # Resource management for el containers
-    # CPU is milicores 1 core = 1000 milicore
-    # RAM is in MB
-    # Min value is igrored on docker!
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 0
+    count: X #<---- Set Value
     supernode: true
 
   - el_type: nethermind
     el_image: "nethermindeth/nethermind:1.35.0"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 12
-    supernode: true
+    count: X #<---- Set Value
 
   - el_type: besu
     el_image: "hyperledger/besu:25.11.0"
     cl_type: lighthouse
     cl_image: "sigp/lighthouse:v8.0.0"
-    count: 0
+    count: X #<---- Set Value
     supernode: true
 
 network_params:
@@ -37,9 +32,9 @@ network_params:
   withdrawal_address: "0x8943545177806ED17B9F23F0a21ee5948eCaa776"
   # The number of validator keys that each CL validator node should get
   num_validator_keys_per_node: 128
-  # The number of pre-registered validators for genesis. If 0 or not specified then the value will be calculated from the participants
+  # The number of pre-registered validators for genesis.
   preregistered_validator_count: 0
-  # Gas limit for the genesis block based on mainnet: https://eips.ethereum.org/EIPS/eip-7935
+  # Gas limit for the genesis block
   genesis_gaslimit: 45000000
   # prefunded_accounts: '{"0x25941dC771bB64514Fc8abBce970307Fb9d477e9": {"balance": "10ETH"}, "0x4107be99052d895e3ee461C685b042Aa975ab5c0": {"balance": "1ETH"}}'
   prefunded_accounts:
@@ -71,6 +66,7 @@ additional_services:
   - spamoor
   - prometheus
   - grafana
+  - dora
 
 
 ethereum_metrics_exporter_enabled: true

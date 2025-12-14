@@ -1,49 +1,7 @@
 #!/usr/bin/env python3
 """
 Monitor Ethereum blocks via WebSocket endpoints from eth-network-services.json and
-record per-block metrics to a JSON file *incrementally*.
-
-This version connects to exactly one node at a time.
-If the connection to that node fails or the monitor task stops,
-it automatically fails over to the next node in the list.
-
-JSON layout (one object per block inside a single top-level JSON array):
-
-{
-  "block_number": int,
-  "hash": str,
-  "timestamp": ISO-8601 UTC string,
-
-  "block": {
-    "size_kb": float | null,
-    "gas": {
-      "used": int,
-      "limit": int,
-      "used_percentage": float
-    }
-  },
-
-  "transactions": {
-    "count": int,
-    "success": {
-      "successful": int,
-      "failed": int,
-      "success_rate_percent": float
-    },
-    "fees": {
-      "total_wei": int,                  # existing: total tx fees (wei)
-      "transaction_fee_wei": int,        # NEW: alias of total_wei
-      "base_fee_per_gas_wei": int,       # NEW: block baseFeePerGas (wei)
-      "burnt_fees_wei": int,             # NEW: gas_used * base_fee_per_gas_wei
-      "burnt_fees_percentage": float,    # NEW: burnt_fees_wei / transaction_fee_wei * 100
-      "priority_fee_wei": int            # NEW: transaction_fee_wei - burnt_fees_wei
-    }
-  }
-}
-
-Data is *streamed* to disk via JsonBlockWriter, which flushes buffered
-records whenever the accumulated transactions in the buffer reach
---flush-tx-count (default: 100).
+record per-block metrics to a JSON file incrementally.
 """
 
 import argparse
@@ -57,12 +15,10 @@ import websockets
 
 
 def ts_to_iso(ts: int | float) -> str:
-    """Convert a Unix timestamp (seconds) to an ISO 8601 string in UTC."""
     return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat()
 
 
 def hex_to_int(value: Any) -> Optional[int]:
-    """Convert a hex string like '0xabc' to int, or return None."""
     if value is None:
         return None
     if isinstance(value, int):
@@ -79,10 +35,6 @@ def hex_to_int(value: Any) -> Optional[int]:
 class JsonBlockWriter:
     """
     Stream block records to a JSON file as a single top-level array.
-
-    - Buffer records in memory.
-    - Flush to disk when the buffered records cover at least `flush_tx_count`
-      transactions (sum of record["transactions"]["count"]).
     """
 
     def __init__(self, path: Path, flush_tx_count: int = 100) -> None:
@@ -95,17 +47,14 @@ class JsonBlockWriter:
         self.total_blocks: int = 0
         self.total_txs: int = 0
 
-        # Ensure output directory exists
         if path.parent:
             path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Open file and start JSON array
         self._fh = path.open("w", encoding="utf-8")
         self._fh.write("[\n")
         self._first = True
 
     def add_record(self, record: Dict[str, Any]) -> None:
-        """Add a single block record and flush if needed."""
         tx_count = int(record.get("transactions", {}).get("count", 0))
 
         self.buffer.append(record)
@@ -118,7 +67,6 @@ class JsonBlockWriter:
             self.flush()
 
     def flush(self) -> None:
-        """Write buffered records to disk."""
         if not self.buffer:
             return
 
@@ -133,7 +81,6 @@ class JsonBlockWriter:
         self._fh.flush()
 
     def close(self) -> None:
-        """Flush any remaining records and close the JSON array/file."""
         if self.buffer:
             self.flush()
         self._fh.write("\n]\n")
@@ -141,44 +88,21 @@ class JsonBlockWriter:
 
 
 def build_block_record(agg: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Convert a per-block aggregation dict into the final JSON record layout.
-
-    Expected keys in `agg`:
-      - block_hash
-      - block_number
-      - block_time_iso
-      - block_size_kb
-      - gas_used
-      - gas_limit
-      - total_transactions
-      - success_count
-      - fee_total_wei
-      - base_fee_per_gas        # NEW
-      - burnt_fees_wei          # NEW
-    """
     gas_used = agg["gas_used"]
     gas_limit = agg["gas_limit"]
     total_tx = agg["total_transactions"]
     success_count = agg.get("success_count", 0)
     fee_total_wei = agg["fee_total_wei"]
 
-    # NEW: base fee & burnt fees
     base_fee_per_gas = agg.get("base_fee_per_gas", 0) or 0
     burnt_fees_wei = agg.get("burnt_fees_wei")
     if burnt_fees_wei is None:
         burnt_fees_wei = gas_used * base_fee_per_gas
 
-    # Percentages
     gas_used_percentage = (gas_used / gas_limit * 100.0) if gas_limit > 0 else 0.0
-    if total_tx > 0:
-        success_rate = success_count / total_tx * 100.0
-    else:
-        success_rate = 0.0
-
+    success_rate = (success_count / total_tx * 100.0) if total_tx > 0 else 0.0
     failed_count = max(total_tx - success_count, 0)
 
-    # NEW: transaction-fee-related metrics
     transaction_fee_wei = fee_total_wei
     if transaction_fee_wei > 0:
         burnt_fees_percentage = burnt_fees_wei / transaction_fee_wei * 100.0
@@ -208,11 +132,11 @@ def build_block_record(agg: Dict[str, Any]) -> Dict[str, Any]:
             },
             "fees": {
                 "total_wei": fee_total_wei,
-                "transaction_fee_wei": transaction_fee_wei,      # NEW
-                "base_fee_per_gas_wei": base_fee_per_gas,        # NEW
-                "burnt_fees_wei": burnt_fees_wei,                # NEW
-                "burnt_fees_percentage": burnt_fees_percentage,  # NEW
-                "priority_fee_wei": priority_fee_wei,            # NEW
+                "transaction_fee_wei": transaction_fee_wei,
+                "base_fee_per_gas_wei": base_fee_per_gas,
+                "burnt_fees_wei": burnt_fees_wei,
+                "burnt_fees_percentage": burnt_fees_percentage,
+                "priority_fee_wei": priority_fee_wei,
             },
         },
     }
@@ -223,24 +147,12 @@ async def monitor_node(
     ws_address: str,
     writer: JsonBlockWriter,
 ) -> None:
-    """
-    Connect to a single WebSocket endpoint and record per-block metrics.
-
-    - name: logical name of the node, used only for logs
-    - ws_address: "host:port" from eth-network-services.json
-    - writer: JsonBlockWriter instance for streaming results to disk
-    """
     ws_url = f"ws://{ws_address}"
     print(f"[{name}] Connecting to {ws_url}")
 
-    # JSON-RPC outstanding requests: id -> (kind, metadata)
-    # kind is "block" or "receipt"
     outstanding: Dict[int, Tuple[str, Dict[str, Any]]] = {}
-
-    # Per-block aggregation, keyed by block_hash
     blocks_in_progress: Dict[str, Dict[str, Any]] = {}
 
-    # IDs: 1 reserved for newHeads subscription. Others start at 100.
     next_request_id = 100
 
     def get_request_id() -> int:
@@ -252,9 +164,7 @@ async def monitor_node(
     heads_sub_id = None
 
     try:
-        # Disable max_size limit so large messages don't trigger 1009
         async with websockets.connect(ws_url, max_size=None) as ws:
-            # Subscribe to new heads
             heads_req = {
                 "jsonrpc": "2.0",
                 "id": 1,
@@ -269,10 +179,8 @@ async def monitor_node(
                 raw_msg = await ws.recv()
                 msg = json.loads(raw_msg)
 
-                # --- Handle responses to our JSON-RPC requests ---
                 if "id" in msg and "result" in msg:
                     if msg["id"] == 1:
-                        # newHeads subscription confirmation
                         heads_sub_id = msg["result"]
                         print(f"[{name}] newHeads sub id: {heads_sub_id}")
                         continue
@@ -282,7 +190,6 @@ async def monitor_node(
                         kind, meta = outstanding.pop(req_id)
                         result = msg.get("result")
 
-                        # ----- Full block from eth_getBlockByHash -----
                         if kind == "block" and result:
                             block = result
                             block_hash = block.get("hash")
@@ -308,7 +215,6 @@ async def monitor_node(
                             gas_used = hex_to_int(block.get("gasUsed")) or 0
                             gas_limit = hex_to_int(block.get("gasLimit")) or 0
 
-                            # NEW: base fee and burnt fees at block level
                             base_fee_per_gas = hex_to_int(
                                 block.get("baseFeePerGas")
                             ) or 0
@@ -317,7 +223,6 @@ async def monitor_node(
                             txs = block.get("transactions", []) or []
                             total_tx = len(txs)
 
-                            # Create aggregator for this block
                             agg = {
                                 "block_hash": block_hash,
                                 "block_number": block_number,
@@ -329,14 +234,12 @@ async def monitor_node(
                                 "pending_receipts": total_tx,
                                 "success_count": 0,
                                 "fee_total_wei": 0,
-                                # NEW: for fees breakdown
                                 "base_fee_per_gas": base_fee_per_gas,
                                 "burnt_fees_wei": burnt_fees_wei,
                             }
                             blocks_in_progress[block_hash] = agg
 
                             if total_tx == 0:
-                                # No tx, finalize immediately
                                 record = build_block_record(agg)
                                 writer.add_record(record)
 
@@ -347,18 +250,12 @@ async def monitor_node(
                                 )
                                 blocks_in_progress.pop(block_hash, None)
                             else:
-                                # Request receipts for each tx
                                 for tx in txs:
                                     tx_hash = tx.get("hash")
                                     if not tx_hash:
                                         continue
                                     rid = get_request_id()
-                                    outstanding[rid] = (
-                                        "receipt",
-                                        {
-                                            "block_hash": block_hash,
-                                        },
-                                    )
+                                    outstanding[rid] = ("receipt", {"block_hash": block_hash})
                                     receipt_req = {
                                         "jsonrpc": "2.0",
                                         "id": rid,
@@ -367,13 +264,11 @@ async def monitor_node(
                                     }
                                     await ws.send(json.dumps(receipt_req))
 
-                        # ----- Receipt from eth_getTransactionReceipt -----
                         elif kind == "receipt" and result:
                             meta = dict(meta)
                             block_hash = meta["block_hash"]
                             agg = blocks_in_progress.get(block_hash)
                             if not agg:
-                                # Block already finalized or unknown; skip
                                 continue
 
                             receipt = result
@@ -381,10 +276,13 @@ async def monitor_node(
                             success = status == "0x1"
 
                             gas_used_tx = hex_to_int(receipt.get("gasUsed")) or 0
-                            effective_gas_price = hex_to_int(
-                                receipt.get("effectiveGasPrice")
-                                or receipt.get("gasPrice")
-                            ) or 0
+                            effective_gas_price = (
+                                hex_to_int(
+                                    receipt.get("effectiveGasPrice")
+                                    or receipt.get("gasPrice")
+                                )
+                                or 0
+                            )
 
                             fee = gas_used_tx * effective_gas_price
 
@@ -393,7 +291,6 @@ async def monitor_node(
                             agg["fee_total_wei"] += fee
                             agg["pending_receipts"] -= 1
 
-                            # All receipts for this block collected?
                             if agg["pending_receipts"] <= 0:
                                 block_number = agg["block_number"]
                                 total_tx = agg["total_transactions"]
@@ -413,25 +310,21 @@ async def monitor_node(
                                     f"success_rate={success_rate:.2f}%"
                                 )
 
-                                # Remove aggregator
                                 blocks_in_progress.pop(block_hash, None)
 
-                    continue  # done with id-handling
+                    continue
 
-                # --- Handle subscription notifications (newHeads) ---
                 if msg.get("method") == "eth_subscription":
                     params = msg.get("params", {})
                     sub_id = params.get("subscription")
                     result = params.get("result")
 
                     if heads_sub_id and sub_id == heads_sub_id:
-                        # result is a block header object
                         block = result or {}
                         block_hash = block.get("hash")
                         if not block_hash:
                             continue
 
-                        # Fetch full block (with tx objects)
                         rid = get_request_id()
                         outstanding[rid] = ("block", {})
                         block_req = {
@@ -441,8 +334,6 @@ async def monitor_node(
                             "params": [block_hash, True],
                         }
                         await ws.send(json.dumps(block_req))
-
-                # Ignore other notifications/errors
 
     except asyncio.CancelledError:
         print(f"[{name}] Monitor task cancelled")
@@ -458,14 +349,6 @@ async def monitor_with_failover(
     writer: JsonBlockWriter,
     duration: int,
 ) -> None:
-    """
-    Run monitor_node on exactly one endpoint at a time.
-
-    If the current monitor task exits (connection error, unexpected stop,
-    etc.), automatically switch to the next endpoint in `endpoints`.
-
-    This loop continues until `duration` seconds have elapsed.
-    """
     if not endpoints:
         print("No endpoints provided to monitor_with_failover()")
         return
@@ -490,10 +373,8 @@ async def monitor_with_failover(
                 print("Monitoring duration elapsed, stopping failover loop.")
                 break
 
-            # If no task is running or the current one finished, start/rotate
             if current_task is None or current_task.done():
                 if current_task is not None:
-                    # Consume exception so it doesn't get reported as "never retrieved"
                     try:
                         _ = current_task.exception()
                     except asyncio.CancelledError:
@@ -512,7 +393,6 @@ async def monitor_with_failover(
                     monitor_node(name, addr, writer)
                 )
 
-            # Sleep a bit, but not past the overall end_time
             await asyncio.sleep(min(1.0, max(0.1, remaining)))
     finally:
         if current_task and not current_task.done():
@@ -522,11 +402,6 @@ async def monitor_with_failover(
 
 
 async def main_async(args: argparse.Namespace, writer: JsonBlockWriter) -> None:
-    """
-    Load eth-network-services.json, collect all EL nodes (name starts with 'el-')
-    that have a non-null/non-empty 'ws' field, and monitor them with
-    single-connection failover.
-    """
     services_path = Path(args.ws_file)
     if not services_path.is_file():
         raise FileNotFoundError(f"Services file not found at {services_path}")
@@ -548,7 +423,6 @@ async def main_async(args: argparse.Namespace, writer: JsonBlockWriter) -> None:
         name = entry.get("name")
         ws_addr = entry.get("ws")
 
-        # Only EL nodes
         if not isinstance(name, str) or not name.startswith("el-"):
             continue
 
@@ -565,7 +439,6 @@ async def main_async(args: argparse.Namespace, writer: JsonBlockWriter) -> None:
     for n, a in endpoints:
         print(f"  - {n}: {a}")
 
-    # Run a single monitor at a time, with automatic failover
     await monitor_with_failover(endpoints, writer, args.duration)
 
 

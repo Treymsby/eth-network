@@ -1,0 +1,457 @@
+Test,Phase,Metric,Besu - Lighthouse,Equalweight - Lighthouse,Geth - Lighthouse,Mainnet - Lighthouse,Nethermind - Lighthouse
+BigBlock,Phase 1,Avg CPU %,145.66,75.65,20.47,51.32,66.95
+BigBlock,Phase 2,Avg CPU %,235.62,146.00,106.88,124.06,101.99
+BigBlock,Phase 1,Median CPU %,88.00,54.00,15.00,38.00,49.00
+BigBlock,Phase 2,Median CPU %,217.00,78.00,46.00,58.00,75.00
+BigBlock,Phase 1,Min CPU %,0.0000,0.0000,0.0000,0.0000,0.0000
+BigBlock,Phase 2,Min CPU %,29.00,14.00,9.00,15.00,20.00
+BigBlock,Phase 1,Max CPU %,1573.00,558.00,182.00,335.00,451.00
+BigBlock,Phase 2,Max CPU %,1023.00,960.00,845.00,840.90,747.00
+BigBlock,Phase 1,Avg CPU % per node,12.13,6.30,1.70,4.27,5.57
+BigBlock,Phase 2,Avg CPU % per node,19.63,12.16,8.90,10.33,8.49
+BigBlock,Phase 1,Median CPU % per node,7.33,4.50,1.25,3.16,4.08
+BigBlock,Phase 2,Median CPU % per node,18.08,6.50,3.83,4.83,6.25
+BigBlock,Phase 1,Min CPU % per node,0.0000,0.0000,0.0000,0.0000,0.0000
+BigBlock,Phase 2,Min CPU % per node,2.41,1.16,0.7500,1.25,1.66
+BigBlock,Phase 1,Max CPU % per node,131.08,46.50,15.16,27.91,37.58
+BigBlock,Phase 2,Max CPU % per node,85.25,80.00,70.41,70.07,62.25
+BigBlock,Phase 1,Avg Gas Gwei,2.46,2.22,2.10,2.19,2.31
+BigBlock,Phase 2,Avg Gas Gwei,2.33,2.38,2.22,2.33,2.38
+BigBlock,Phase 1,Median Gas Gwei,2.16,2.14,2.05,2.10,2.14
+BigBlock,Phase 2,Median Gas Gwei,2.19,2.22,2.13,2.20,2.22
+BigBlock,Phase 1,Min Gas Gwei,2.04,2.03,2.02,2.03,2.03
+BigBlock,Phase 2,Min Gas Gwei,2.03,2.03,2.02,2.03,2.03
+BigBlock,Phase 1,Max Gas Gwei,200.76,100.04,100.02,100.45,200.76
+BigBlock,Phase 2,Max Gas Gwei,3.25,3.50,2.84,3.33,3.49
+BigBlock,Phase 1,Avg Latency ms,6926.78,6929.02,8092.33,7048.25,6458.76
+BigBlock,Phase 2,Avg Latency ms,12448.43,12678.02,12860.17,12821.93,12572.49
+BigBlock,Phase 1,Median Latency ms,6895.00,6884.50,8090,7012,6411.00
+BigBlock,Phase 2,Median Latency ms,11374,12633.50,13032.50,12900.50,12762
+BigBlock,Phase 1,Min Latency ms,689,223,2131,485,485
+BigBlock,Phase 2,Min Latency ms,859,1582,2694,1975,1416
+BigBlock,Phase 1,Max Latency ms,27641,14114,14129,14119,12442
+BigBlock,Phase 2,Max Latency ms,41521,41986,20316,31790,20349
+BigBlock,Phase 1,Avg Net RX MB/s,4.75,4.39,4.25,4.15,4.28
+BigBlock,Phase 2,Avg Net RX MB/s,13.83,13.87,13.99,14.17,13.86
+BigBlock,Phase 1,Median Net RX MB/s,4.96,4.54,4.33,4.17,4.34
+BigBlock,Phase 2,Median Net RX MB/s,14.25,14.18,14.27,14.40,14.19
+BigBlock,Phase 1,Min Net RX MB/s,0.0292,0.0120,0.0163,0.0014,0.0063
+BigBlock,Phase 2,Min Net RX MB/s,8.09,8.00,8.05,8.15,8.14
+BigBlock,Phase 1,Max Net RX MB/s,8.17,8.11,8.08,8.18,8.09
+BigBlock,Phase 2,Max Net RX MB/s,18.40,18.51,18.79,19.47,18.26
+BigBlock,Phase 1,Avg Net TX MB/s,5.94,5.54,5.29,5.18,5.37
+BigBlock,Phase 2,Avg Net TX MB/s,48.34,47.87,47.26,46.76,47.55
+BigBlock,Phase 1,Median Net TX MB/s,6.16,5.68,5.32,5.19,5.43
+BigBlock,Phase 2,Median Net TX MB/s,50.50,49.56,48.65,48.15,49.13
+BigBlock,Phase 1,Min Net TX MB/s,0.1881,0.1184,0.1615,0.0101,0.0481
+BigBlock,Phase 2,Min Net TX MB/s,10.20,10.08,9.98,10.19,10.23
+BigBlock,Phase 1,Max Net TX MB/s,10.22,10.15,9.97,10.15,10.13
+BigBlock,Phase 2,Max Net TX MB/s,76.06,76.30,76.98,77.22,76.25
+BigBlock,Phase 1,Avg RAM GB,8.31,5.22,1.36,4.54,6.72
+BigBlock,Phase 2,Avg RAM GB,12.39,8.94,5.07,7.85,9.23
+BigBlock,Phase 1,Median RAM GB,8.64,5.22,1.41,4.56,6.94
+BigBlock,Phase 2,Median RAM GB,12.67,9.28,5.00,8.11,9.59
+BigBlock,Phase 1,Min RAM GB,6.39,4.62,0.8515,4.08,4.88
+BigBlock,Phase 2,Min RAM GB,9.20,5.09,1.76,4.15,5.16
+BigBlock,Phase 1,Max RAM GB,9.28,5.72,1.76,4.96,7.46
+BigBlock,Phase 2,Max RAM GB,14.40,11.17,7.48,10.13,11.25
+BigBlock,Phase 1,Avg RAM GB per node,0.6932,0.4352,0.1140,0.3788,0.5606
+BigBlock,Phase 2,Avg RAM GB per node,1.03,0.7453,0.4231,0.6547,0.7695
+BigBlock,Phase 1,Median RAM GB per node,0.7205,0.4358,0.1179,0.3805,0.5786
+BigBlock,Phase 2,Median RAM GB per node,1.05,0.7738,0.4167,0.6758,0.7992
+BigBlock,Phase 1,Min RAM GB per node,0.5329,0.3852,0.0709,0.3402,0.4069
+BigBlock,Phase 2,Min RAM GB per node,0.7667,0.4244,0.1468,0.3460,0.4306
+BigBlock,Phase 1,Max RAM GB per node,0.7735,0.4770,0.1468,0.4140,0.6218
+BigBlock,Phase 2,Max RAM GB per node,1.20,0.9311,0.6236,0.8442,0.9375
+BigBlock,Phase 1,TPS,11.93,11.46,5.96,9.76,11.09
+BigBlock,Phase 2,TPS,22.40,22.25,21.77,22.20,22.39
+BigBlock,Phase 1,TX Count,4298,4126,2149,3517,3994
+BigBlock,Phase 2,TX Count,8603,8546,8360,8526,8601
+BigBlock,Phase 1,Avg Spam Submitted,139.45,134.32,71.22,113.70,129.48
+BigBlock,Phase 2,Avg Spam Submitted,261.66,257.78,251.51,258.06,259.90
+BigBlock,Phase 1,Median Spam Submitted,151,150,0,150,150
+BigBlock,Phase 2,Median Spam Submitted,271,270,270,270,269
+BigBlock,Phase 1,Min Spam Submitted,0,0,0,0,0
+BigBlock,Phase 2,Min Spam Submitted,152,0,0,0,0
+BigBlock,Phase 1,Max Spam Submitted,155,152,152,152,152
+BigBlock,Phase 2,Max Spam Submitted,288,288,287,358,287
+BigBlock,Phase 1,Avg Spam Pending,24.87,35.93,27.19,23.93,15.96
+BigBlock,Phase 2,Avg Spam Pending,143.48,165.75,172.60,173,174
+BigBlock,Phase 1,Median Spam Pending,27,38,0,11,17
+BigBlock,Phase 2,Median Spam Pending,141,183,191,190,196
+BigBlock,Phase 1,Min Spam Pending,0,0,0,0,0
+BigBlock,Phase 2,Min Spam Pending,35,0,0,0,0
+BigBlock,Phase 1,Max Spam Pending,34,58,60,64,24
+BigBlock,Phase 2,Max Spam Pending,250,201,204,203,204
+BigBlock,Phase 1,Avg Spam Confirmed,138.35,133.06,69.29,113.38,128.70
+BigBlock,Phase 2,Avg Spam Confirmed,260.69,258.96,253.33,258.36,260.63
+BigBlock,Phase 1,Median Spam Confirmed,150,150,0,150,150
+BigBlock,Phase 2,Median Spam Confirmed,255,265,265,265,265
+BigBlock,Phase 1,Min Spam Confirmed,0,0,0,0,0
+BigBlock,Phase 2,Min Spam Confirmed,151,65,0,108,146
+BigBlock,Phase 1,Max Spam Confirmed,151,171,151,171,151
+BigBlock,Phase 2,Max Spam Confirmed,346,319,284,352,276
+BigBlock,Phase 1,Avg Block Gas Used %,11.29,10.90,6.05,9.40,10.57
+BigBlock,Phase 2,Avg Block Gas Used %,96.88,97.81,95.19,97.88,98.62
+BigBlock,Phase 1,Median Block Gas Used %,11.40,11.40,4.58,11.40,11.40
+BigBlock,Phase 2,Median Block Gas Used %,99.88,99.96,99.98,99.97,99.97
+BigBlock,Phase 1,Min Block Gas Used %,0.0000,0.0000,0.0000,0.0000,0.0000
+BigBlock,Phase 2,Min Block Gas Used %,11.69,44.18,0.0000,43.38,60.66
+BigBlock,Phase 1,Max Block Gas Used %,23.76,23.76,19.70,15.79,19.70
+BigBlock,Phase 2,Max Block Gas Used %,99.99,99.99,100.00,100.00,99.99
+BigBlock,Phase 1,Avg Block Size kB,20.01,19.30,10.55,16.60,18.70
+BigBlock,Phase 2,Avg Block Size kB,3562.53,3610.95,3510.01,3616.59,3642.66
+BigBlock,Phase 1,Median Block Size kB,21.21,21.22,9.22,21.22,21.22
+BigBlock,Phase 2,Median Block Size kB,3719.12,3689.03,3689.05,3689.04,3689.15
+BigBlock,Phase 1,Min Block Size kB,0.6132,0.6191,0.6259,0.6191,0.6191
+BigBlock,Phase 2,Min Block Size kB,21.68,1804.14,0.6259,1621.19,2287.52
+BigBlock,Phase 1,Max Block Size kB,22.00,24.10,22.01,24.10,22.00
+BigBlock,Phase 2,Max Block Size kB,3991.24,3900.33,3719.48,3900.85,3749.51
+BigBlock,Phase 1,Total Gas Used,157590261,152073625,84421945,131212905,147454096
+BigBlock,Phase 2,Total Gas Used,1438718496,1452487923,1413616250,1453648041,1464573741
+BigBlock,1-64,Total TX Count (1-64),12901,12672,10509,12043,12595
+BigBlock,Phase 1,Total Spam Submitted,4323,4164,2208,3525,4014
+BigBlock,Phase 2,Total Spam Submitted,8635,8507,8300,8516,8577
+BigBlock,1-64,Total Spam Submitted (1-64),12958,12671,10508,12041,12591
+HighCompute,Phase 1,Avg CPU %,151.56,72.24,28.02,49.21,62.98
+HighCompute,Phase 2,Avg CPU %,251.39,144.82,119.18,118.53,83.57
+HighCompute,Phase 1,Median CPU %,91.50,50.00,26.00,38.00,47.00
+HighCompute,Phase 2,Median CPU %,91.00,50.00,26.00,37.00,46.00
+HighCompute,Phase 1,Min CPU %,0.0000,0.0000,0.0000,0.0000,0.0000
+HighCompute,Phase 2,Min CPU %,17.00,14.00,5.00,13.00,17.00
+HighCompute,Phase 1,Max CPU %,1482.00,502.00,178.00,306.00,483.00
+HighCompute,Phase 2,Max CPU %,1858.00,1196.00,1394.00,973.00,535.00
+HighCompute,Phase 1,Avg CPU % per node,12.63,6.02,2.33,4.10,5.24
+HighCompute,Phase 2,Avg CPU % per node,20.94,12.06,9.93,9.87,6.96
+HighCompute,Phase 1,Median CPU % per node,7.62,4.16,2.16,3.16,3.91
+HighCompute,Phase 2,Median CPU % per node,7.58,4.16,2.16,3.08,3.83
+HighCompute,Phase 1,Min CPU % per node,0.0000,0.0000,0.0000,0.0000,0.0000
+HighCompute,Phase 2,Min CPU % per node,1.41,1.16,0.4166,1.08,1.41
+HighCompute,Phase 1,Max CPU % per node,123.50,41.83,14.83,25.50,40.25
+HighCompute,Phase 2,Max CPU % per node,154.83,99.66,116.16,81.08,44.58
+HighCompute,Phase 1,Avg Gas Gwei,2.46,2.22,2.22,2.14,2.42
+HighCompute,Phase 2,Avg Gas Gwei,2.18,2.16,2.24,2.16,2.25
+HighCompute,Phase 1,Median Gas Gwei,2.16,2.14,2.14,2.08,2.12
+HighCompute,Phase 2,Median Gas Gwei,2.13,2.11,2.15,2.14,2.16
+HighCompute,Phase 1,Min Gas Gwei,2.04,2.03,2.03,2.03,2.03
+HighCompute,Phase 2,Min Gas Gwei,2.03,2.03,2.03,2.02,2.02
+HighCompute,Phase 1,Max Gas Gwei,200.76,100.04,100.04,100.03,200.76
+HighCompute,Phase 2,Max Gas Gwei,2.42,2.40,2.78,2.51,2.73
+HighCompute,Phase 1,Avg Latency ms,6878.18,7466.86,8130.69,7349.68,6440.80
+HighCompute,Phase 2,Avg Latency ms,38100.00,29433.85,68040.64,52908.53,68008.24
+HighCompute,Phase 1,Median Latency ms,6872,7449,8115.00,7295.50,6380
+HighCompute,Phase 2,Median Latency ms,31790.00,28157.50,66541.50,50746.50,67049
+HighCompute,Phase 1,Min Latency ms,706,65,2118,518,448
+HighCompute,Phase 2,Min Latency ms,739,692,2269,504,472
+HighCompute,Phase 1,Max Latency ms,26858,14200,14356,14204,71999
+HighCompute,Phase 2,Max Latency ms,320207,213965,134209,179794,132458
+HighCompute,Phase 1,Avg Net RX MB/s,4.47,4.35,4.19,4.15,4.12
+HighCompute,Phase 2,Avg Net RX MB/s,7.99,8.02,7.90,8.26,7.99
+HighCompute,Phase 1,Median Net RX MB/s,4.56,4.43,4.26,4.12,4.18
+HighCompute,Phase 2,Median Net RX MB/s,8.00,8.03,7.90,8.26,8.01
+HighCompute,Phase 1,Min Net RX MB/s,0.0212,0.0200,0.0155,0.0046,0.0011
+HighCompute,Phase 2,Min Net RX MB/s,7.88,7.92,7.85,8.16,7.83
+HighCompute,Phase 1,Max Net RX MB/s,7.94,7.97,7.85,8.16,8.04
+HighCompute,Phase 2,Max Net RX MB/s,8.09,8.09,7.97,8.34,8.12
+HighCompute,Phase 1,Avg Net TX MB/s,5.63,5.51,5.34,5.19,5.19
+HighCompute,Phase 2,Avg Net TX MB/s,10.31,10.32,10.17,10.52,10.27
+HighCompute,Phase 1,Median Net TX MB/s,5.73,5.59,5.41,5.16,5.23
+HighCompute,Phase 2,Median Net TX MB/s,10.32,10.35,10.18,10.52,10.29
+HighCompute,Phase 1,Min Net TX MB/s,0.1314,0.1740,0.1499,0.0261,0.0105
+HighCompute,Phase 2,Min Net TX MB/s,10.00,10.07,9.95,10.17,10.08
+HighCompute,Phase 1,Max Net TX MB/s,10.00,9.98,9.90,10.14,10.06
+HighCompute,Phase 2,Max Net TX MB/s,10.53,10.50,10.37,10.67,10.40
+HighCompute,Phase 1,Avg RAM GB,8.20,5.48,1.51,4.56,6.75
+HighCompute,Phase 2,Avg RAM GB,20.19,7.67,2.18,5.39,5.33
+HighCompute,Phase 1,Median RAM GB,8.38,5.66,1.63,4.45,6.98
+HighCompute,Phase 2,Median RAM GB,21.46,7.92,2.19,5.56,5.34
+HighCompute,Phase 1,Min RAM GB,6.29,4.76,0.8407,4.17,4.85
+HighCompute,Phase 2,Min RAM GB,9.41,5.37,1.95,4.44,5.12
+HighCompute,Phase 1,Max RAM GB,9.90,5.93,1.95,5.03,7.50
+HighCompute,Phase 2,Max RAM GB,22.31,8.41,2.37,5.96,5.55
+HighCompute,Phase 1,Avg RAM GB per node,0.6835,0.4572,0.1265,0.3807,0.5628
+HighCompute,Phase 2,Avg RAM GB per node,1.68,0.6393,0.1823,0.4499,0.4442
+HighCompute,Phase 1,Median RAM GB per node,0.6987,0.4719,0.1361,0.3716,0.5817
+HighCompute,Phase 2,Median RAM GB per node,1.78,0.6603,0.1831,0.4633,0.4454
+HighCompute,Phase 1,Min RAM GB per node,0.5246,0.3973,0.0700,0.3481,0.4042
+HighCompute,Phase 2,Min RAM GB per node,0.7849,0.4478,0.1629,0.3701,0.4274
+HighCompute,Phase 1,Max RAM GB per node,0.8257,0.4941,0.1629,0.4194,0.6250
+HighCompute,Phase 2,Max RAM GB per node,1.85,0.7015,0.1981,0.4974,0.4626
+HighCompute,Phase 1,TPS,11.91,11.40,11.40,8.87,10.40
+HighCompute,Phase 2,TPS,11.42,11.92,7.89,8.28,8.14
+HighCompute,Phase 1,TX Count,4289,4107,4104,3194,3747
+HighCompute,Phase 2,TX Count,4386,4578,3030,3182,3129
+HighCompute,Phase 1,Avg Spam Submitted,139.32,134.32,134.22,104.03,121.41
+HighCompute,Phase 2,Avg Spam Submitted,132.03,137.24,99.06,116.39,103.21
+HighCompute,Phase 1,Median Spam Submitted,150,150,150,150,150
+HighCompute,Phase 2,Median Spam Submitted,150,151,104,149,103
+HighCompute,Phase 1,Min Spam Submitted,0,0,0,0,0
+HighCompute,Phase 2,Min Spam Submitted,1,0,0,0,0
+HighCompute,Phase 1,Max Spam Submitted,152,152,151,152,152
+HighCompute,Phase 2,Max Spam Submitted,189,187,155,155,155
+HighCompute,Phase 1,Avg Spam Pending,29.19,40.06,47.80,25.54,16.12
+HighCompute,Phase 2,Avg Spam Pending,374.03,300.69,524.15,471.93,526.81
+HighCompute,Phase 1,Median Spam Pending,31,49,53,27,18
+HighCompute,Phase 2,Median Spam Pending,351,337,500,471,486
+HighCompute,Phase 1,Min Spam Pending,0,0,0,0,0
+HighCompute,Phase 2,Min Spam Pending,10,9,14,11,14
+HighCompute,Phase 1,Max Spam Pending,39,58,59,64,26
+HighCompute,Phase 2,Max Spam Pending,1009,736,1009,1009,1009
+HighCompute,Phase 1,Avg Spam Confirmed,138.06,132.45,132.35,103,120.58
+HighCompute,Phase 2,Avg Spam Confirmed,132.90,138.72,91.81,96.42,94.81
+HighCompute,Phase 1,Median Spam Confirmed,150,149,150,148,150
+HighCompute,Phase 2,Median Spam Confirmed,1,1,1,1,1
+HighCompute,Phase 1,Min Spam Confirmed,0,0,0,0,0
+HighCompute,Phase 2,Min Spam Confirmed,1,1,1,1,1
+HighCompute,Phase 1,Max Spam Confirmed,150,171,151,171,150
+HighCompute,Phase 2,Max Spam Confirmed,1000,802,1000,1000,1000
+HighCompute,Phase 1,Avg Block Gas Used %,11.27,10.84,10.84,8.60,10.04
+HighCompute,Phase 2,Avg Block Gas Used %,82.36,83.12,91.33,88.65,91.47
+HighCompute,Phase 1,Median Block Gas Used %,11.40,11.40,11.40,11.27,11.40
+HighCompute,Phase 2,Median Block Gas Used %,100.00,100.00,100.00,100.00,100.00
+HighCompute,Phase 1,Min Block Gas Used %,0.0000,0.0000,0.0000,0.0000,0.0000
+HighCompute,Phase 2,Min Block Gas Used %,9.65,11.27,11.40,10.64,11.40
+HighCompute,Phase 1,Max Block Gas Used %,23.76,23.76,23.76,23.76,13.07
+HighCompute,Phase 2,Max Block Gas Used %,100.00,100.00,100.00,100.00,100.00
+HighCompute,Phase 1,Avg Block Size kB,19.97,19.21,19.20,15.16,17.64
+HighCompute,Phase 2,Avg Block Size kB,19.26,20.28,13.61,14.24,13.95
+HighCompute,Phase 1,Median Block Size kB,21.21,21.11,21.23,20.80,21.22
+HighCompute,Phase 2,Median Block Size kB,0.7314,0.7441,0.7441,0.7441,0.7373
+HighCompute,Phase 1,Min Block Size kB,0.6132,0.6191,0.6259,0.6191,0.6191
+HighCompute,Phase 2,Min Block Size kB,0.7304,0.7314,0.7431,0.7314,0.7363
+HighCompute,Phase 1,Max Block Size kB,22.00,24.10,21.89,24.10,22.00
+HighCompute,Phase 2,Max Block Size kB,129.48,106.48,129.49,129.49,129.50
+HighCompute,Phase 1,Total Gas Used,157282250,151328031,151225380,120098971,140070342
+HighCompute,Phase 2,Total Gas Used,1223173747,1234344596,1356331096,1316566826,1358410176
+HighCompute,1-64,Total TX Count (1-64),8675,8685,7134,6376,6876
+HighCompute,Phase 1,Total Spam Submitted,4319,4164,4161,3225,3764
+HighCompute,Phase 2,Total Spam Submitted,4357,4529,3269,3841,3406
+HighCompute,1-64,Total Spam Submitted (1-64),8676,8693,7430,7066,7170
+HighGas,Phase 1,Avg CPU %,147.36,70.00,21.63,47.63,65.94
+HighGas,Phase 2,Avg CPU %,129.21,73.54,36.41,57.33,66.31
+HighGas,Phase 1,Median CPU %,93.00,53.00,17.50,36.00,49.00
+HighGas,Phase 2,Median CPU %,93.00,49.00,29.00,38.00,50.00
+HighGas,Phase 1,Min CPU %,0.0000,0.0000,0.0000,0.0000,0.0000
+HighGas,Phase 2,Min CPU %,8.00,13.00,9.00,13.00,19.00
+HighGas,Phase 1,Max CPU %,1783.70,520.00,186.00,357.00,498.00
+HighGas,Phase 2,Max CPU %,1835.00,418.00,144.00,552.00,546.00
+HighGas,Phase 1,Avg CPU % per node,12.28,5.83,1.80,3.96,5.49
+HighGas,Phase 2,Avg CPU % per node,10.76,6.12,3.03,4.77,5.52
+HighGas,Phase 1,Median CPU % per node,7.75,4.41,1.45,3.00,4.08
+HighGas,Phase 2,Median CPU % per node,7.75,4.08,2.41,3.16,4.16
+HighGas,Phase 1,Min CPU % per node,0.0000,0.0000,0.0000,0.0000,0.0000
+HighGas,Phase 2,Min CPU % per node,0.6666,1.08,0.7500,1.08,1.58
+HighGas,Phase 1,Max CPU % per node,148.64,43.33,15.50,29.75,41.50
+HighGas,Phase 2,Max CPU % per node,152.91,34.83,12.00,46.00,45.50
+HighGas,Phase 1,Avg Gas Gwei,2.46,2.16,2.10,2.13,2.39
+HighGas,Phase 2,Avg Gas Gwei,2.35,2.33,2.25,2.30,2.39
+HighGas,Phase 1,Median Gas Gwei,2.16,2.10,2.06,2.08,2.14
+HighGas,Phase 2,Median Gas Gwei,2.21,2.19,2.14,2.18,2.23
+HighGas,Phase 1,Min Gas Gwei,2.04,2.03,2.02,2.03,2.04
+HighGas,Phase 2,Min Gas Gwei,2.03,2.03,2.02,2.02,2.03
+HighGas,Phase 1,Max Gas Gwei,200.76,100.03,100.03,100.03,200.76
+HighGas,Phase 2,Max Gas Gwei,3.27,3.30,2.94,3.21,3.53
+HighGas,Phase 1,Avg Latency ms,6926.81,6923.90,8056.44,7103.41,6467.67
+HighGas,Phase 2,Avg Latency ms,25313.18,10044.31,10326.25,11939.54,9084.04
+HighGas,Phase 1,Median Latency ms,6906.50,6892,7980,7125,6462
+HighGas,Phase 2,Median Latency ms,20318.50,9511,10318.50,10154,9069
+HighGas,Phase 1,Min Latency ms,730,175,2171,184,467
+HighGas,Phase 2,Min Latency ms,767,377,1990,525,488
+HighGas,Phase 1,Max Latency ms,27827,14549,14144,14507,48643
+HighGas,Phase 2,Max Latency ms,106878,29389,19803,59876,18805
+HighGas,Phase 1,Avg Net RX MB/s,4.52,4.25,3.93,4.12,4.21
+HighGas,Phase 2,Avg Net RX MB/s,8.19,8.29,8.30,8.03,8.21
+HighGas,Phase 1,Median Net RX MB/s,4.65,4.31,3.89,4.11,4.26
+HighGas,Phase 2,Median Net RX MB/s,8.20,8.30,8.34,8.04,8.23
+HighGas,Phase 1,Min Net RX MB/s,0.0227,0.0081,0.0020,0.0122,0.0029
+HighGas,Phase 2,Min Net RX MB/s,8.07,8.19,8.09,7.88,8.06
+HighGas,Phase 1,Max Net RX MB/s,8.08,8.11,8.03,7.95,8.02
+HighGas,Phase 2,Max Net RX MB/s,8.28,8.35,8.43,8.15,8.29
+HighGas,Phase 1,Avg Net TX MB/s,5.69,5.33,4.92,5.17,5.32
+HighGas,Phase 2,Avg Net TX MB/s,10.55,10.65,10.60,10.37,10.56
+HighGas,Phase 1,Median Net TX MB/s,5.82,5.36,4.84,5.12,5.37
+HighGas,Phase 2,Median Net TX MB/s,10.59,10.72,10.69,10.42,10.62
+HighGas,Phase 1,Min Net TX MB/s,0.1377,0.0677,0.0215,0.0752,0.0342
+HighGas,Phase 2,Min Net TX MB/s,10.18,10.26,10.02,9.94,10.12
+HighGas,Phase 1,Max Net TX MB/s,10.16,10.13,9.93,9.92,10.08
+HighGas,Phase 2,Max Net TX MB/s,10.76,10.84,10.93,10.50,10.80
+HighGas,Phase 1,Avg RAM GB,8.37,5.23,1.37,4.64,6.79
+HighGas,Phase 2,Avg RAM GB,9.73,5.44,2.06,4.55,5.40
+HighGas,Phase 1,Median RAM GB,8.61,5.16,1.41,4.56,7.03
+HighGas,Phase 2,Median RAM GB,9.76,5.48,2.07,4.53,5.40
+HighGas,Phase 1,Min RAM GB,6.35,4.68,0.8467,4.25,4.81
+HighGas,Phase 2,Min RAM GB,8.95,5.04,1.76,4.30,5.09
+HighGas,Phase 1,Max RAM GB,9.24,5.85,1.76,5.07,7.50
+HighGas,Phase 2,Max RAM GB,10.14,5.72,2.37,4.76,5.72
+HighGas,Phase 1,Avg RAM GB per node,0.6976,0.4366,0.1149,0.3873,0.5663
+HighGas,Phase 2,Avg RAM GB per node,0.8113,0.4541,0.1720,0.3793,0.4501
+HighGas,Phase 1,Median RAM GB per node,0.7178,0.4304,0.1175,0.3804,0.5861
+HighGas,Phase 2,Median RAM GB per node,0.8134,0.4573,0.1728,0.3776,0.4502
+HighGas,Phase 1,Min RAM GB per node,0.5298,0.3905,0.0705,0.3543,0.4012
+HighGas,Phase 2,Min RAM GB per node,0.7464,0.4202,0.1468,0.3589,0.4248
+HighGas,Phase 1,Max RAM GB per node,0.7700,0.4880,0.1467,0.4229,0.6252
+HighGas,Phase 2,Max RAM GB per node,0.8450,0.4766,0.1976,0.3969,0.4771
+HighGas,Phase 1,TPS,11.93,9.80,6.79,8.54,11.53
+HighGas,Phase 2,TPS,13.10,13.60,13.38,13.61,13.66
+HighGas,Phase 1,TX Count,4298,3529,2445,3075,4153
+HighGas,Phase 2,TX Count,5032,5225,5138,5229,5249
+HighGas,Phase 1,Avg Spam Submitted,139.41,114.90,79.74,100.35,134.32
+HighGas,Phase 2,Avg Spam Submitted,161.69,157.30,154.84,157.33,158.51
+HighGas,Phase 1,Median Spam Submitted,151,150,113,150,150
+HighGas,Phase 2,Median Spam Submitted,164,163,163,164,163
+HighGas,Phase 1,Min Spam Submitted,0,0,0,0,0
+HighGas,Phase 2,Min Spam Submitted,127,0,0,0,0
+HighGas,Phase 1,Max Spam Submitted,153,152,152,152,153
+HighGas,Phase 2,Max Spam Submitted,167,167,166,166,166
+HighGas,Phase 1,Avg Spam Pending,23.67,27.48,30.90,14.32,11.48
+HighGas,Phase 2,Avg Spam Pending,292.93,78.12,59.42,94.24,58.66
+HighGas,Phase 1,Median Spam Pending,26,30,28,12,12
+HighGas,Phase 2,Median Spam Pending,335,75,54,70,55
+HighGas,Phase 1,Min Spam Pending,0,0,0,0,0
+HighGas,Phase 2,Min Spam Pending,33,0,0,1,0
+HighGas,Phase 1,Max Spam Pending,33,55,64,37,18
+HighGas,Phase 2,Max Spam Pending,491,157,104,348,105
+HighGas,Phase 1,Avg Spam Confirmed,138.35,113.80,78.83,99.16,133.74
+HighGas,Phase 2,Avg Spam Confirmed,152.48,158.33,155.69,158.45,159.06
+HighGas,Phase 1,Median Spam Confirmed,150,148,131,148,150
+HighGas,Phase 2,Median Spam Confirmed,119,184,175,163,185
+HighGas,Phase 1,Min Spam Confirmed,0,0,0,0,0
+HighGas,Phase 2,Min Spam Confirmed,15,25,0,42,36
+HighGas,Phase 1,Max Spam Confirmed,150,173,151,172,151
+HighGas,Phase 2,Max Spam Confirmed,458,295,189,414,189
+HighGas,Phase 1,Avg Block Gas Used %,11.29,9.45,6.79,8.33,10.96
+HighGas,Phase 2,Avg Block Gas Used %,97.06,97.71,95.91,97.52,98.17
+HighGas,Phase 1,Median Block Gas Used %,11.40,11.34,11.40,11.40,11.40
+HighGas,Phase 2,Median Block Gas Used %,99.98,99.99,99.98,99.97,99.98
+HighGas,Phase 1,Min Block Gas Used %,0.0000,0.0000,0.0000,0.0000,0.0000
+HighGas,Phase 2,Min Block Gas Used %,12.11,48.21,0.0000,29.58,48.98
+HighGas,Phase 1,Max Block Gas Used %,23.76,23.62,23.76,13.35,23.62
+HighGas,Phase 2,Max Block Gas Used %,100.00,99.99,99.99,99.99,99.99
+HighGas,Phase 1,Avg Block Size kB,20.01,16.68,11.89,14.67,19.42
+HighGas,Phase 2,Avg Block Size kB,21.70,22.50,22.14,22.51,22.60
+HighGas,Phase 1,Median Block Size kB,21.21,20.92,17.82,20.92,21.22
+HighGas,Phase 2,Median Block Size kB,16.15,26.02,24.85,23.13,26.26
+HighGas,Phase 1,Min Block Size kB,0.6132,0.6191,0.6259,0.6191,0.6191
+HighGas,Phase 2,Min Block Size kB,2.83,4.26,0.6259,6.45,5.72
+HighGas,Phase 1,Max Block Size kB,22.00,25.60,22.55,24.28,22.53
+HighGas,Phase 2,Max Block Size kB,63.08,40.15,26.67,54.71,26.67
+HighGas,Phase 1,Total Gas Used,157589942,131832381,94751511,116310141,152979951
+HighGas,Phase 2,Total Gas Used,1441379819,1451129330,1424400020,1448274251,1457869330
+HighGas,1-64,Total TX Count (1-64),9330,8754,7583,8304,9402
+HighGas,Phase 1,Total Spam Submitted,4322,3562,2472,3111,4164
+HighGas,Phase 2,Total Spam Submitted,5336,5191,5110,5192,5231
+HighGas,1-64,Total Spam Submitted (1-64),9658,8753,7582,8303,9395
+MaxTx,Phase 1,Avg CPU %,180.91,88.82,29.55,64.68,76.45
+MaxTx,Phase 2,Avg CPU %,722.39,293.97,272.79,241.20,173.86
+MaxTx,Phase 1,Median CPU %,93.00,52.00,26.00,40.00,49.00
+MaxTx,Phase 2,Median CPU %,774.50,212.00,320.00,234.50,55.00
+MaxTx,Phase 1,Min CPU %,0.0000,0.0000,0.0000,0.0000,0.0000
+MaxTx,Phase 2,Min CPU %,159.00,14.00,10.00,14.00,23.00
+MaxTx,Phase 1,Max CPU %,1825.00,849.00,355.00,588.00,954.00
+MaxTx,Phase 2,Max CPU %,1856.00,1576.00,1207.00,1168.00,944.00
+MaxTx,Phase 1,Avg CPU % per node,15.07,7.40,2.46,5.39,6.37
+MaxTx,Phase 2,Avg CPU % per node,60.19,24.49,22.73,20.10,14.48
+MaxTx,Phase 1,Median CPU % per node,7.75,4.33,2.16,3.33,4.08
+MaxTx,Phase 2,Median CPU % per node,64.54,17.66,26.66,19.54,4.58
+MaxTx,Phase 1,Min CPU % per node,0.0000,0.0000,0.0000,0.0000,0.0000
+MaxTx,Phase 2,Min CPU % per node,13.25,1.16,0.8333,1.16,1.91
+MaxTx,Phase 1,Max CPU % per node,152.08,70.75,29.58,49.00,79.50
+MaxTx,Phase 2,Max CPU % per node,154.66,131.33,100.58,97.33,78.66
+MaxTx,Phase 1,Avg Gas Gwei,2.89,2.48,2.62,2.46,2.62
+MaxTx,Phase 2,Avg Gas Gwei,2.51,2.12,2.59,2.18,2.02
+MaxTx,Phase 1,Median Gas Gwei,2.16,2.08,2.08,2.06,2.06
+MaxTx,Phase 2,Median Gas Gwei,2.29,2.09,2.35,2.18,2.02
+MaxTx,Phase 1,Min Gas Gwei,2.04,2.04,2.04,2.04,2.04
+MaxTx,Phase 2,Min Gas Gwei,2.04,2.04,2.05,2.05,2.02
+MaxTx,Phase 1,Max Gas Gwei,200.76,100.04,200.76,100.04,200.76
+MaxTx,Phase 2,Max Gas Gwei,3.94,2.35,4.33,2.39,2.04
+MaxTx,Phase 1,Avg Latency ms,6966.26,7146.68,8522.55,7705.07,6914.64
+MaxTx,Phase 2,Avg Latency ms,117450.01,29028.97,21044.83,28059.57,51242.41
+MaxTx,Phase 1,Median Latency ms,6930,7294.50,8781,8061.50,7079.00
+MaxTx,Phase 2,Median Latency ms,131486,22261.00,20471,21642,57096.00
+MaxTx,Phase 1,Min Latency ms,751,236,121,472,499
+MaxTx,Phase 2,Min Latency ms,10922,472,11492,527,575
+MaxTx,Phase 1,Max Latency ms,26646,14214,46055,14380,71758
+MaxTx,Phase 2,Max Latency ms,212608,99750,31057,77652,131255
+MaxTx,Phase 1,Avg Net RX MB/s,4.76,4.13,4.04,4.09,4.24
+MaxTx,Phase 2,Avg Net RX MB/s,10.16,8.74,9.44,9.19,8.36
+MaxTx,Phase 1,Median Net RX MB/s,4.93,4.22,4.10,4.17,4.33
+MaxTx,Phase 2,Median Net RX MB/s,10.24,8.70,9.46,9.38,8.36
+MaxTx,Phase 1,Min Net RX MB/s,0.0213,0.0056,0.0027,0.0072,0.0057
+MaxTx,Phase 2,Min Net RX MB/s,8.41,7.76,7.98,7.97,7.99
+MaxTx,Phase 1,Max Net RX MB/s,8.39,7.77,7.99,7.97,7.94
+MaxTx,Phase 2,Max Net RX MB/s,11.36,9.73,10.64,10.03,8.74
+MaxTx,Phase 1,Avg Net TX MB/s,5.93,5.23,5.12,5.16,5.33
+MaxTx,Phase 2,Avg Net TX MB/s,14.78,12.46,13.83,13.33,11.42
+MaxTx,Phase 1,Median Net TX MB/s,6.11,5.32,5.17,5.20,5.39
+MaxTx,Phase 2,Median Net TX MB/s,15.09,12.35,13.99,13.82,11.46
+MaxTx,Phase 1,Min Net TX MB/s,0.1285,0.0462,0.0213,0.0338,0.0593
+MaxTx,Phase 2,Min Net TX MB/s,10.54,9.86,10.02,10.08,10.07
+MaxTx,Phase 1,Max Net TX MB/s,10.49,9.80,10.02,10.02,9.98
+MaxTx,Phase 2,Max Net TX MB/s,17.48,15.07,16.70,15.55,12.69
+MaxTx,Phase 1,Avg RAM GB,8.71,5.24,1.52,4.61,6.65
+MaxTx,Phase 2,Avg RAM GB,16.10,7.99,5.02,7.43,7.25
+MaxTx,Phase 1,Median RAM GB,9.02,5.36,1.64,4.70,6.84
+MaxTx,Phase 2,Median RAM GB,16.04,7.83,5.17,7.47,7.37
+MaxTx,Phase 1,Min RAM GB,6.64,4.58,0.8388,4.13,4.78
+MaxTx,Phase 2,Min RAM GB,11.86,5.74,2.06,4.75,5.92
+MaxTx,Phase 1,Max RAM GB,11.51,5.79,2.04,4.99,7.40
+MaxTx,Phase 2,Max RAM GB,18.57,10.54,7.48,9.33,8.52
+MaxTx,Phase 1,Avg RAM GB per node,0.7261,0.4374,0.1272,0.3841,0.5543
+MaxTx,Phase 2,Avg RAM GB per node,1.34,0.6660,0.4185,0.6197,0.6045
+MaxTx,Phase 1,Median RAM GB per node,0.7520,0.4473,0.1373,0.3919,0.5700
+MaxTx,Phase 2,Median RAM GB per node,1.33,0.6526,0.4316,0.6229,0.6145
+MaxTx,Phase 1,Min RAM GB per node,0.5535,0.3822,0.0699,0.3442,0.3988
+MaxTx,Phase 2,Min RAM GB per node,0.9888,0.4785,0.1720,0.3963,0.4936
+MaxTx,Phase 1,Max RAM GB per node,0.9598,0.4832,0.1705,0.4162,0.6167
+MaxTx,Phase 2,Max RAM GB per node,1.54,0.8786,0.6239,0.7781,0.7100
+MaxTx,Phase 1,TPS,11.95,16.77,16.79,15.91,15.43
+MaxTx,Phase 2,TPS,176.85,130.11,173.03,136.88,65.16
+MaxTx,Phase 1,TX Count,4305,6038,6047,5730,5558
+MaxTx,Phase 2,TX Count,67913,49966,66445,52565,25022
+MaxTx,Phase 1,Avg Spam Submitted,139.29,264.67,264.51,253.83,248.67
+MaxTx,Phase 2,Avg Spam Submitted,2120.75,1479.33,1947.39,1534.33,785.66
+MaxTx,Phase 1,Median Spam Submitted,150,150,150,150,150
+MaxTx,Phase 2,Median Spam Submitted,2041,1864,2045,1980,803
+MaxTx,Phase 1,Min Spam Submitted,0,0,0,0,0
+MaxTx,Phase 2,Min Spam Submitted,1569,0,0,0,157
+MaxTx,Phase 1,Max Spam Submitted,152,4190,4224,4192,4197
+MaxTx,Phase 2,Max Spam Submitted,3713,2268,2172,2319,2054
+MaxTx,Phase 1,Avg Spam Pending,30.90,106.64,107.87,88.25,89.29
+MaxTx,Phase 2,Avg Spam Pending,2331.69,2815.93,2253.66,2761.12,3478.12
+MaxTx,Phase 1,Median Spam Pending,33,37,30,14,24
+MaxTx,Phase 2,Median Spam Pending,2258,2447,2388,2441,3425
+MaxTx,Phase 1,Min Spam Pending,0,0,0,0,0
+MaxTx,Phase 2,Min Spam Pending,1623,1039,0,227,3016
+MaxTx,Phase 1,Max Spam Pending,42,2187,2181,2159,2181
+MaxTx,Phase 2,Max Spam Pending,3071,4159,2431,4202,4038
+MaxTx,Phase 1,Avg Spam Confirmed,137.96,194.12,194.16,184.19,178.38
+MaxTx,Phase 2,Avg Spam Confirmed,2057.96,1514.12,2013.48,1592.87,760.30
+MaxTx,Phase 1,Median Spam Confirmed,150,150,150,150,150
+MaxTx,Phase 2,Median Spam Confirmed,2052,1989,2046,2042,807
+MaxTx,Phase 1,Min Spam Confirmed,0,0,0,0,0
+MaxTx,Phase 2,Min Spam Confirmed,1869,147,818,117,197
+MaxTx,Phase 1,Max Spam Confirmed,151,2048,2076,2048,2048
+MaxTx,Phase 2,Max Spam Confirmed,2142,2142,2095,2142,1226
+MaxTx,Phase 1,Avg Block Gas Used %,13.74,16.17,16.14,15.39,15.16
+MaxTx,Phase 2,Avg Block Gas Used %,99.98,74.88,98.19,78.62,39.80
+MaxTx,Phase 1,Median Block Gas Used %,11.40,11.40,11.40,11.40,11.40
+MaxTx,Phase 2,Median Block Gas Used %,99.99,99.96,99.97,99.96,42.06
+MaxTx,Phase 1,Min Block Gas Used %,0.0000,0.0000,0.0000,0.0000,0.0000
+MaxTx,Phase 2,Min Block Gas Used %,99.95,10.91,41.34,7.04,13.42
+MaxTx,Phase 1,Max Block Gas Used %,89.73,98.92,99.96,98.12,98.56
+MaxTx,Phase 2,Max Block Gas Used %,99.99,99.99,99.98,99.99,62.41
+MaxTx,Phase 1,Avg Block Size kB,21.02,27.36,27.35,25.98,25.33
+MaxTx,Phase 2,Avg Block Size kB,240.72,178.26,235.82,187.39,91.48
+MaxTx,Phase 1,Median Block Size kB,21.21,21.22,21.23,21.21,21.22
+MaxTx,Phase 2,Median Block Size kB,240.23,235.16,239.76,239.09,96.92
+MaxTx,Phase 1,Min Block Size kB,0.6132,0.6191,0.6259,0.6259,0.6191
+MaxTx,Phase 2,Min Block Size kB,225.55,20.61,97.26,15.29,26.50
+MaxTx,Phase 1,Max Block Size kB,54.98,239.12,242.16,238.53,238.86
+MaxTx,Phase 2,Max Block Size kB,247.42,247.43,243.68,247.44,145.80
+MaxTx,Phase 1,Total Gas Used,191675288,225698416,225243476,214788667,211484356
+MaxTx,Phase 2,Total Gas Used,1484827621,1112064772,1458242970,1167556061,591176020
+MaxTx,1-64,Total TX Count (1-64),72218,56004,72492,58295,30580
+MaxTx,Phase 1,Total Spam Submitted,4318,8205,8200,7869,7709
+MaxTx,Phase 2,Total Spam Submitted,69985,48818,64264,50633,25927
+MaxTx,1-64,Total Spam Submitted (1-64),74303,57023,72464,58502,33636

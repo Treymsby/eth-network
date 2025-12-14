@@ -1,0 +1,221 @@
+%NOTES = Explain how metrics are calc via python. ADD How charts and shit is being created. ALSO ADD Node setups!
+
+\chapter{Implementation}
+\label{chap:implementation}
+The implementation developed in this thesis consists of three main components: a private, multi-client Ethereum test network orchestrated with Kurtosis on top of Docker; a workload generator based on Spamoor together with custom Solidity contracts tailored for different gas-intensive workloads; and a monitoring and data-collection pipeline built around Prometheus, Grafana, and custom Python scripts. Figure~\ref{fig:architecture} provides a high-level architectural overview of the Environment.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/architecture_dark.png}
+    \caption{Environment Overview}
+    \label{fig:architecture}
+\end{figure}
+
+\section{Private Ethereum Test Network}
+\subsection{Network orchestration with Kurtosis and Docker}
+
+Test networks are deployed using Kurtosis, which acts as an orchestration layer on top of Docker. All clients, images, ports, parameters, and additional services are defined declaratively in the configuration file \texttt{network\_params.yaml}. For each experiment, Kurtosis launches an isolated ``enclave'', and inside this enclave each client and service is deployed as a separate Docker container. Within an enclave, Kurtosis provides an isolated virtual network so that nodes communicate over container-internal networking rather than the host's external interfaces. Each \texttt{participant} in the configuration represents one Ethereum node consisting of an execution client (EL) and a consensus client (CL).
+\\
+\\
+The configuration snippet in Listing~\ref{lst:participants-config} deploys 12~EL Docker containers and 12~CL Docker containers, creating 12~Geth+Lighthouse nodes:
+
+\begin{lstlisting}[caption={Kurtosis participant configuration for 12 Geth + Lighthouse nodes},label={lst:participants-config}]
+participants:
+  - el_type: geth
+    el_image: "ethereum/client-go:v1.16.7"
+    el_max_cpu: 2000
+    el_max_mem: 4024
+    cl_type: lighthouse
+    cl_image: "sigp/lighthouse:v8.0.0"
+    cl_max_cpu: 500
+    cl_max_mem: 512
+    count: 12
+    supernode: true
+\end{lstlisting}
+
+For each participant, the configuration specifies the execution client image (e.g., \texttt{ethereum/client-go:v1.16.7} for Geth), the consensus client image (e.g., \texttt{sigp/lighthouse:v8.0.0} for Lighthouse), resource limits for the EL and CL containers, and the number of instances of this participant type. By changing the \texttt{count} values for different EL types, different network compositions can be realized, such as a Geth-only network.
+\\
+\\
+Each participant is started as a separate pair of Docker containers (one EL and one CL) with the specified CPU and memory limits. Kurtosis handles container creation, network wiring, environment variables, and service discovery, so that the individual nodes form a functioning Ethereum network without manual container management.
+
+\subsection{Kurtosis Command-Line Interface}
+
+Most of the interactions with the test network are performed through the Kurtosis command-line interface (CLI). The CLI is used to create and destroy enclaves, pass experiment-specific parameters, and inspect the state of running services. In particular, each experiment is started by invoking \texttt{kurtosis run} with the corresponding Kurtosis module and the YAML configuration file \texttt{network\_params.yaml} as an arguments file, which ensures that experiments are reproducible and parameterizable from a single source of truth.
+
+During an experiment, the CLI is further used to list active enclaves, inspect individual services (e.g., specific EL or CL containers), and verify that all nodes have joined the network and progressed to the expected slot/epoch. After the measurement phase completes, the enclave is torn down via the CLI, which removes the associated containers and their virtual network. A typical experiment run is started with:
+
+\begin{lstlisting}[caption={Example Kurtosis command used to start an experiment},label={lst:kurtosis-cli}]
+kurtosis run <module> <enclave-name> --args-file network_params.yaml
+\end{lstlisting}
+
+\section{Execution client configuration}
+\label{sec:exec-client-config}
+
+Each execution client is configured entirely via command-line flags. Although the flag syntax differs slightly across implementations, Nethermind, Geth, and Besu follow the same structural pattern. A example command configurations for all nethermind is provided in Appendix~\ref{code}.
+\\
+\\
+Logging and the data directory are parameterised for reuse across experiments. JSON-RPC, WebSocket and metrics endpoints are exposed on \texttt{0.0.0.0} with configurable ports, while the Engine API (used by the consensus client) is bound separately via \texttt{EngineHost}/\texttt{EnginePort} and secured via a shared JWT secret mounted into the container. Public networking is enabled by setting the external IP and reusing a single TCP port for discovery and P2P traffic. All concrete port numbers (e.g.\ \texttt{RPC\_PORT\_NUM}, \texttt{WS\_PORT\_NUM}, \texttt{ENGINE\_RPC\_PORT\_NUM}, \texttt{METRICS\_PORT\_NUM}, \texttt{discovery\_port\_tcp}) are derived and injected by Kurtosis from scenario variables, ensuring consistent, non-conflicting assignments across the testbed.
+
+\subsection{Network parameters and genesis configuration}
+
+Global network parameters are defined in the \texttt{network\_params} section of \texttt{network\_params.yaml}. The network identity is set to \texttt{"kurtosis"}, and the network ID \texttt{"42069"} is used as both the Ethereum network ID and the chain ID on the execution layer:
+
+\begin{lstlisting}[caption={Global network parameters and genesis configuration},label={lst:network-params}]
+network_params:
+  network: "kurtosis"
+  network_id: "42069"
+  seconds_per_slot: 12
+  slots_per_epoch: 32
+  deposit_contract_address: "0x00000000219ab540356cBB839Cbe05303d7705Fa"
+  withdrawal_address: "0x8943545177806ED17B9F23F0a21ee5948eCaa776"
+  num_validator_keys_per_node: 128
+  preregistered_validator_count: 0
+  genesis_gaslimit: 45000000
+  prefunded_accounts:
+    '{"0x1111111111111111111111111111111111111111":{"balance":"100000ETH"},
+    ...
+    "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef":{"balance":"100000ETH"}}'
+
+  gas_limit: 45000000
+\end{lstlisting}
+
+Consensus timing follows the standard Ethereum proof-of-stake configuration: slots are 12~seconds long, and 32~slots form an epoch. The staking configuration specifies the deposit contract address on the execution layer, a common withdrawal address used for the generated validators, and the number of validator keys per node. Validator keys are derived automatically from participants rather than preregistered, so that each consensus node controls a fixed number of validators (in this case 128), and the total validator set size is proportional to the number of nodes.
+
+Gas-related parameters include the genesis gas limit and the target runtime gas limit. In the experiments, both the genesis block and the runtime configuration use a gas limit of 45~million gas, so that each block can include one or a few extremely gas-heavy transactions, or many small ones. To ensure that workload generators always have sufficient funds, the genesis configuration also contains a set of prefunded accounts. These are simple externally owned accounts with large balances (for example, 100{,}000~ETH each). Spamoor draws from these accounts when sending high-volume or high-gas transactions.
+
+When starting the network, Kurtosis reads \texttt{network\_params.yaml} and automatically derives all client-specific configuration from it. In particular, the Kurtosis Ethereum package generates a common execution-layer \texttt{genesis.json} (including chain ID, gas limits, prefunded accounts, and the deposit contract address) and corresponding consensus-layer configuration files (slots per epoch, seconds per slot, and validator keys) for all nodes. These generated files are mounted into the EL and CL containers at start-up so that every client instance shares an identical genesis and timing configuration without any additional, manual genesis generation step.
+
+
+\subsection{Additional services}
+
+In addition to the core execution and consensus clients, the configuration defines several additional services under \texttt{additional\_services}:
+
+\begin{lstlisting}[caption={Additional services deployed alongside the Ethereum clients},label={lst:additional-services}]
+additional_services:
+  - spamoor
+  - prometheus
+  - grafana
+  - dora
+\end{lstlisting}
+
+Spamoor is deployed as the transaction spam generator. Prometheus scrapes node metrics, and Grafana visualizes these metrics in dashboards. Dora the Explorer, a lightweight Ethereum block explorer, is deployed primarily for HTTP API access, debugging, and sanity checks to ensure that the network has been deployed correctly.
+
+All of these services are instantiated from Docker images provided by the Kurtosis Ethereum package. By default, Kurtosis uses the latest available image version for each service, but the configuration also allows overriding the image name and tag, so that experiments can be repeated with pinned or custom images if required.
+
+Metrics export for Ethereum nodes is enabled via an Ethereum metrics exporter, which normalizes client-specific metrics into a common Prometheus format. Prometheus is configured with a retention time of one day and a limited on-disk storage size, which is sufficient for the time-bounded experiments conducted in this work. In addition, it performs scraping of the exporter and node ports every 15 seconds.
+
+
+\section{Workload Generation}
+The second major component of the system is the workload generator. It is based on \texttt{spamoor}, a transaction spammer that reads YAML scenario descriptions and sends transactions according to these specifications. To create the four stress tests, bespoke Solidity contracts were implemented and deployed on the test network.
+
+\subsection{spamoor Scenario Framework}
+
+Each workload is described in a YAML file, such as \texttt{bigblock-tasks.yaml}, \texttt{highcompute-tasks.yaml}, \texttt{highgas-task.yaml}, \texttt{max-tx-tasks.yaml}, or \texttt{baseline.yaml}, as a scenario.
+
+The global configuration includes parameters such as a deterministic seed for pseudo-random behavior, the target throughput (number of transactions per slot), the maximum number of pending transactions held in the mempool before sending more, the number of funded wallets used as senders, and the rebroadcast interval for resubmitting unconfirmed transactions. It also defines the gas pricing strategy by specifying base fee and priority fee values, refilling parameters (amount, balance threshold, and interval), and the total number of transactions to be sent. The complete baseline scenario configuration is provided in Appendix \ref{app:baseline_yaml}..
+
+The task configuration is divided into an initialization phase and an execution phase. The initialization phase is executed once at the start of the scenario and typically deploys the relevant contract. The execution phase contains one or more tasks, which are executed repeatedly according to the configured throughput. Tasks can be simple value transfers or contract calls and load ABI definitions.
+
+The Solidity snippets shown in this chapter are simplified, illustrative excerpts intended to highlight the core ideas of each workload. The complete contract source code is provided in Appendix~\ref{app:smart-contracts} and in the project repository.
+
+\subsection{Baseline EOA and ERC-20 Traffic}
+To establish a reference point for comparison, a pair of baseline scenarios is defined in \texttt{baseline.yaml}.
+
+The first baseline scenario, named \texttt{eoatx} and described as ``EOA transfers'', consists solely of basic ETH transfers. Its configuration specifies a seed \texttt{eoatx-baseline} so that the pseudo-random behavior is reproducible, and a throughput of 100~transactions per slot. Up to 800~transactions may remain pending, and 200~wallets are used as senders, which avoids nonce bottlenecks on a single account. The gas pricing is configured with a base fee of 20~gwei and a priority fee of 2~gwei. Each transfer uses a random amount of ETH up to a small limit (configured via the \texttt{amount} field), and both the transfer amounts and recipient addresses are randomized. The wallets are automatically refilled when their balance falls below 0.5~ETH, with a refill amount of 1~ETH and a refill interval of ten minutes, so that they do not run out of funds. Transactions are logged, and \texttt{spamoor} will rebroadcast unconfirmed transactions after a fixed delay of 60~seconds. This scenario provides a relatively dense but realistic stream of simple ETH transfers.
+
+The second baseline scenario, named \texttt{erctx} and described as ``ERC-20 transfers'', introduces token contracts and ERC-20 token transfers. Its configuration uses a separate seed \texttt{erctx-baseline}, a throughput of 50~transactions per slot, and a smaller maximum number of pending transactions and wallets than the EOA-only scenario. The gas pricing again uses a 20~gwei base fee and a 2~gwei priority fee, but the transfer amounts now refer to token units instead of ETH. The scenario deploys ERC-20 contracts and then performs token transfers with randomized amounts and randomized recipients, subject to a specified transfer amount limit. The refilling logic ensures that spam wallets maintain at least 1~ETH of balance, with refills of 2~ETH at a shorter interval, because token transfers still require ETH to pay gas.
+
+\subsection{BigSizeBlock Calldata Spam}
+
+The BigSizeBlock Calldata Spam scenario is defined in \texttt{bigblock-tasks.yaml} and centers around the \texttt{BigSizeBlockContract.sol} smart contract:
+
+\begin{lstlisting}[caption={BigSizeBlockContract for calldata-filling transactions},label={lst:bigsizeblock-contract}]
+contract BigSizeBlockContract {
+    function padBlock(bytes calldata padding) external pure {
+    }
+}
+\end{lstlisting}
+
+The contract’s single function, \texttt{padBlock}, accepts arbitrary-length calldata and performs no storage or computation. Its only effect is to include the padding bytes in the transaction, and therefore in the block. In the corresponding \texttt{spamoor} scenario, the initialization task deploys \texttt{BigSizeBlockContract} once. The execution phase then calls \texttt{padBlock} repeatedly with a very long zero-filled \texttt{bytes} argument. The \texttt{bytes} string is inlined in the YAML file as a long sequence of zero bytes. The scenario uses a relatively high throughput of 130~transactions per slot and moderate gas limits per call, so that blocks become large in terms of calldata size while the per-transaction computation remains minimal.
+
+\subsection{HighComputation CPU Spam}
+
+To stress the CPU subsystems of execution clients, the Keccak256 CPU Spam scenario uses the \texttt{Keccak256From32Bytes.sol} smart contract:
+
+\begin{lstlisting}[caption={HighComputeContract for CPU and memory-intensive workload},label={lst:highcompute-contract}]
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+library Keccak256From32BytesLib {
+    function keccak256From32Bytes(bytes32 input) internal pure returns (bytes32) {
+        return keccak256(abi.encodePacked(input));
+    }
+}
+\end{lstlisting}
+
+The key idea of this workload is to burn gas purely through repeated Keccak-256 hashing of fixed-size inputs. The library \texttt{Keccak256From32BytesLib} exposes the helper \texttt{keccak256From32Bytes(bytes32)}, which computes \texttt{keccak256(abi.encodePacked(input))} on a single 32-byte word. The benchmark contract links against this library and drives the helper in a tight loop over changing 32-byte values so that each call to the contract performs many Keccak-256 rounds while touching only a small, fixed amount of memory. This makes the scenario strongly CPU-bound while keeping memory usage modest.
+
+In \texttt{highcompute-tasks.yaml}, the \texttt{Keccak256 CPU Spam} task-runner scenario wires this contract into the \texttt{spamoor} harness. The \texttt{init} phase deploys the precompiled \texttt{Keccak256From32Bytes} bytecode with a deployment gas limit of 45{,}000{,}000~gas and zero value, and the \texttt{execution} phase repeatedly issues plain calls (empty \texttt{call\_data}) to the deployed instance, again with a 45{,}000{,}000~gas limit per transaction. The driver keeps at most 10~transactions pending, uses up to 20~funded wallets, and targets a throughput of 5~transactions per slot, maintaining a steady stream of heavy, hashing-only transactions without overwhelming the generator itself. Overall, this configuration is tuned to saturate the CPU.
+
+\subsection{HighGas Storage}
+The HighGas Storage scenario uses \texttt{HighGasContract.sol}, which focuses on expensive storage operations:
+
+\begin{lstlisting}[caption={HighGasContract for storage-heavy workload},label={lst:highgas-contract}]
+contract HighGasContract {
+    mapping(uint256 => uint256) public store;
+    uint256 public sink;
+
+    event DidWork(uint256 indexed i, bytes32 hashResult, uint256 valueWritten);
+
+    function burnGas(uint256 iterations) external {
+        // For each iteration:
+        //   - SLOAD from `store`
+        //   - keccak256 hashing of multiple values
+        //   - SSTORE to `store`
+        //   - emit DidWork(...)
+    }
+}
+\end{lstlisting}
+
+This contract maintains a mapping \texttt{store} from \texttt{uint256} keys to \texttt{uint256} values, together with a global \texttt{sink} accumulator that is updated on every write so that the optimizer cannot prune the work. The only workload function, \texttt{burnGas(uint256 iterations)}, runs a loop for the requested number of \texttt{iterations}. In each iteration it loads the current value from \texttt{store[i]}, derives a new value using a \texttt{keccak256} hash over the loop index and current state, writes the result back into \texttt{store[i]}, updates \texttt{sink}, and emits the \texttt{DidWork} event with the loop index, hash result, and stored value. This pattern forces an expensive combination of \texttt{SLOAD}, \texttt{KECCAK256}, \texttt{SSTORE} (in particular zero$\rightarrow$non-zero writes), and logging on every iteration, so the gas cost scales linearly with \texttt{iterations} and is dominated by storage operations.
+
+The \texttt{highgas-task.yaml} scenario \emph{HighGas Storage/Gas Spam} wires this contract into the \texttt{spamoor} task runner. In the \texttt{init} section it deploys the compiled \texttt{HighGasContract} bytecode (via \texttt{HighGasContract.bin}) with a deployment gas limit of 6{,}000{,}000~gas and zero value. In the \texttt{execution} section it repeatedly calls \texttt{burnGas(340)} on the deployed instance with a per-transaction gas limit of 3{,}000{,}000~gas and no ETH transfer. The runner is configured with a throughput of 15~task cycles per slot, at most 20~pending transactions and 20~funded wallets, and fees of 20~gwei base fee plus a 2~gwei priority fee. Together, this keeps a steady stream of storage- and event-heavy transactions in the mempool, stressing the execution clients’ gas accounting and storage subsystem via dense \texttt{SLOAD}/\texttt{SSTORE} activity and frequent \texttt{DidWork} logs.
+
+\subsection{Max-TPS EOA Spam}
+
+The Max-TPS EOA Spam scenario, described in \texttt{max-tx-tasks.yaml}, is designed to approximate the maximum transaction throughput for each network configuration. Unlike the previous scenarios, it does not deploy any contract. Instead, it sends a continuous stream of simple EOA-to-EOA transfers with a gas limit of 21{,}000~gas per transaction, which corresponds to a standard ETH transfer. Transactions are sent to random target addresses in order to spread them across many recipients and avoid creating hotspots.
+
+The scenario sets the throughput to a very high value, at 4{,}000~transactions per slot, and uses a large number of wallets to avoid nonce bottlenecks on individual senders. All wallets are prefunded from the genesis configuration, and the refilling mechanism ensures that they never run out of ETH during the run. This workload is used to characterize an upper bound on throughput when transactions have minimal complexity, while still filling the block.
+
+\section{Monitoring and Data Collection}
+
+The third major component of the experimental setup is the monitoring and data collection pipeline. It combines container-level metrics from Prometheus and Grafana with a set of Python collectors that query the Ethereum execution clients and the workload generator. Together, these tools capture node-level resource usage, block- and transaction-level information, and aggregated workload statistics from \texttt{spamoor}. All collectors write JSON files that are consumed by the analysis in the evaluation chapter.
+
+\subsection{Node-level resource metrics}
+
+Prometheus collects standard container and host metrics (CPU utilisation, memory usage, network traffic, disk utilisation, and basic block production statistics) from all nodes participating in the experiment. Grafana dashboards built on top of these metrics provide an interactive view of resource usage per container. Prometheus is configured with a short retention time (one day) and a capped storage size, which is sufficient for each experiment while keeping monitoring overhead low.
+
+To obtain resource usage at the level of individual client processes, a separate sampler, \texttt{cpu\_mem\_net\_colletion.py}, periodically scans the process table for Geth, Nethermind and Besu instances. For each matching process it derives a stable node identifier from client-specific command-line options, falling back to a client-name--plus--PID label when needed. The sampler is implemented on top of \texttt{psutil} and is typically run with elevated privileges so that all client processes can be inspected.
+
+At each sampling step the script measures, for every client process, accumulated CPU time since start, CPU utilisation over the last interval, resident memory size, and the fraction of system memory in use. It aggregates these per-process values into network-wide totals and appends a JSON object in JSON-lines format to \texttt{data/client\_metrics.json}. Each record contains an ISO-8601 timestamp, the sampling interval, a list of per-process metrics, and a \texttt{totals} block. The sampling interval, output path, and optional total duration are configurable via command-line flags.
+
+\subsection{Block-level metrics from WebSocket}
+
+Block-level statistics are obtained via \texttt{block\_metrics\_ws.py}. The script reads execution-layer WebSocket endpoints from \texttt{eth-network-services.json}, filters for entries whose names start with \texttt{el-} and have a non-empty \texttt{ws} field, and monitors one such node at a time with automatic failover. It subscribes to the \texttt{newHeads} stream and, for every announced head, retrieves the corresponding full block (including transactions) and the receipts for all transactions.
+
+For each block, the collector records structural metrics such as block number, hash, timestamp, size, and total gas limit and gas used. It also computes EIP-1559 fee metrics by extracting the block base fee (\texttt{baseFeePerGas}) and deriving the total burnt fees (gas used multiplied by the base fee) and the remaining priority fees. The resulting JSON record includes gas usage percentage, counts of successful and failed transactions, and a \texttt{fees} object containing the total transaction fees, base fee per gas, absolute and relative burnt fees, and residual priority fees.
+
+To keep memory usage bounded while retaining a single JSON document per experiment, the script streams its output using a \texttt{JsonBlockWriter}. Block records are buffered and flushed to \texttt{data/block\_metrics.json} as elements of a single top-level JSON array once a configurable transaction threshold (\texttt{--flush-tx-count}) is reached. The monitoring run is time-bounded via a \texttt{--duration} flag; if the connection to the current node drops, the script switches to the next endpoint and continues until the configured duration has elapsed.
+
+\subsection{Transaction-level metrics from WebSocket}
+
+While \texttt{block\_metrics\_ws.py} summarises blocks, \texttt{tx\_metrics\_ws.py} focuses on individual transactions and their end-to-end confirmation latency. It reads the same \texttt{eth-network-services.json} file, selects execution-layer entries with WebSocket endpoints, and monitors one node at a time with automatic failover. For the active node it establishes subscriptions to \texttt{newPendingTransactions} and \texttt{newHeads}. When a pending transaction hash is observed, the script records the Unix timestamp of first observation; when a new head arrives, it fetches the corresponding block and, for any transaction previously seen as pending, obtains its receipt and computes the latency between first observation and confirmation.
+
+For each confirmed transaction, the script constructs a compact record with three parts. The \texttt{tx} block contains the node name, transaction hash, block number, index within the block, a global sequence number, the encoding type, a list of inferred semantic categories (for example coin transfer, contract call, or token transfer), and a success flag. The \texttt{time} block stores first-seen and confirmed timestamps (ISO-8601) and the derived latency in milliseconds. The \texttt{gas} block records gas used and gas limit, the effective gas price from the receipt, the maximum fee per gas, the base fee per gas from the block header, and the resulting priority fee per gas. Records are streamed to \texttt{data/tx\_metrics.json} via an asynchronous JSON writer that collects transactions in batches (by default 100) and writes them as a single top-level JSON array.
+
+\subsection{Mempool metrics from spamoor}
+
+The workload generator \texttt{spamoor} exposes an HTTP dashboard that summarises the traffic it has produced. The script \texttt{fetch\_spamoor\_dashboard.py} reads the base URL for \texttt{spamoor} from \texttt{ports.json}, appends the path \texttt{/api/graphs/dashboard}, and retrieves the resulting endpoint via HTTP GET. The response body is parsed as JSON; if parsing fails, the raw response is wrapped in a JSON object under the key \texttt{\_non\_json\_response} so that it can still be stored and inspected. In either case, the script writes the payload to \texttt{data/spamoor\_dashboard.json}, creating the \texttt{data/} directory if necessary. One snapshot is taken per experimental run, providing a ground-truth view of \texttt{spamoor}'s time series and counters, including the numbers of submitted, pending (mempool), and confirmed transactions, which can then be cross-checked against the block- and transaction-level measurements above.
+
+\section{Experiment Orchestration}
+The individual components described above are tied together by a small set of orchestration scripts. The shell script \texttt{start\_network\_and\_metrics.sh} bootstraps the experimental network, launches all required services, and starts the metric collection tools, ensuring that the environment reaches a stable state before any workload is applied. The Python script \texttt{import\_spamoor\_spammers.py} then configures and triggers the spam workload by programmatically registering and controlling the individual spammers via the Spamoor API. Together, these scripts provide a reproducible and largely automated workflow that initializes the infrastructure, executes the desired experiment scenario, and cleanly terminates the run.

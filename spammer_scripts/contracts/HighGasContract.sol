@@ -12,7 +12,6 @@ contract HighGasContract {
     ///         - KECCAK256 hashing
     ///         - SSTORE (expensive, especially zero -> non-zero)
     ///         - LOG/emit event
-    /// @param iterations Number of loop iterations. Keep it small or tx will OOG.
     function burnGas(uint256 iterations) external {
         // loop with multiple expensive operations.
         for (uint256 i = 0; i < iterations; ++i) {

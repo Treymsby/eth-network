@@ -33,5 +33,4 @@
             call_fn_name: "burnGas"
             call_args: ["340"]
             gas_limit: 3000000
-            # Gas Waister with high tips to be prio in queue. 3M per tx * 20 = 60M
             amount: 0

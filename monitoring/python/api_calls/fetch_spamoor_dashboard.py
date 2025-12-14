@@ -2,8 +2,6 @@
 """
 Reads 'spamoor' from ports.json, calls /api/graphs/dashboard,
 and saves the response to data/spamoor_dashboard.json.
-
-No flags, standard-library only.
 """
 
 import json

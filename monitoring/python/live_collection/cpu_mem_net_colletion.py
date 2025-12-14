@@ -11,19 +11,6 @@ Per process:
   - Memory Usage (kB, RSS)
   - Memory Usage %
 
-Totals (all those processes together):
-  - CPU Usage (seconds)
-  - CPU Usage %
-  - Memory Usage (kB)
-  - Memory Usage %
-
-Output:
-  - one JSON object per line in client_metrics.json
-
-Requirements:
-  - psutil (pip install psutil)
-  - run this script as root (sudo python3 metrics.py)
-  - optional: --duration SECONDS (how long the script should run)
 """
 
 import argparse
@@ -33,13 +20,11 @@ import time
 
 import psutil
 
-# ========= CONFIG DEFAULTS =========
-SAMPLE_INTERVAL = 10  # default seconds between samples
+SAMPLE_INTERVAL = 10
 OUTPUT_FILE = "data/client_metrics.json"
 
 TARGET_NAMES = {"geth", "nethermind"}
-BESU_KEYWORD = "besu"  # for java-based Besu client (java cmdline contains "besu")
-# ===================================
+BESU_KEYWORD = "besu"
 
 
 def parse_args():
@@ -99,14 +84,11 @@ def _get_flag_value(cmdline, prefixes):
     for i, arg in enumerate(cmdline):
         for prefix in prefixes:
             if arg.startswith(prefix):
-                # form --flag=value or --flag=extip:IP
                 if "=" in arg:
                     value = arg.split("=", 1)[1]
-                    # handle "--nat=extip:IP"
                     if value.startswith("extip:"):
                         return value.split("extip:", 1)[1]
                     return value
-                # form --flag value
                 if i + 1 < len(cmdline):
                     return cmdline[i + 1]
     return None
@@ -135,7 +117,6 @@ def extract_node_name(proc: psutil.Process) -> str:
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
         return f"unknown-{proc.pid}"
 
-    # normalize a "client name" for java/besu
     client = name
     cmd_str_lower = " ".join(cmd).lower()
     if name == "java" and BESU_KEYWORD in cmd_str_lower:
@@ -143,7 +124,6 @@ def extract_node_name(proc: psutil.Process) -> str:
 
     ip = None
     if client == "geth":
-        # Prefer explicit nat extip, then p2p-host
         ip = _get_flag_value(
             cmd,
             ["--nat=extip:", "--nat=", "--p2p-host=", "--p2p.host="],
@@ -156,7 +136,6 @@ def extract_node_name(proc: psutil.Process) -> str:
     if ip:
         return f"{client}-{ip}"
 
-    # No IP; try datadir/data-path
     path = None
     if client == "geth":
         path = _get_flag_value(cmd, ["--datadir=", "--datadir"])
@@ -169,7 +148,6 @@ def extract_node_name(proc: psutil.Process) -> str:
         base = path.rstrip("/").split("/")[-1]
         return f"{client}-{base}"
 
-    # Absolute fallback
     return f"{client}-{proc.pid}"
 
 
@@ -184,18 +162,13 @@ def collect_process_metrics(proc: psutil.Process, prev_cpu_info, sample_time_mon
     try:
         with proc.oneshot():
             pid = proc.pid
-
-            # CPU times
             cpu_times = proc.cpu_times()
             cpu_time_total = cpu_times.user + cpu_times.system
-
-            # Memory
             mem_info = proc.memory_info()
             mem_percent = proc.memory_percent()
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
         return None
 
-    # Compute CPU % using deltas vs previous sample
     prev = prev_cpu_info.get(pid)
     if prev is not None:
         dt_wall = sample_time_monotonic - prev["timestamp"]
@@ -205,10 +178,8 @@ def collect_process_metrics(proc: psutil.Process, prev_cpu_info, sample_time_mon
         else:
             cpu_percent = 0.0
     else:
-        # First time we see this PID, can't compute interval % yet
         cpu_percent = 0.0
 
-    # Update prev_cpu_info for next iteration
     prev_cpu_info[pid] = {
         "cpu_time": cpu_time_total,
         "timestamp": sample_time_monotonic,
@@ -216,7 +187,6 @@ def collect_process_metrics(proc: psutil.Process, prev_cpu_info, sample_time_mon
 
     node_name = extract_node_name(proc)
 
-    # ---- Human-friendly rounding ----
     cpu_time_total = round(cpu_time_total, 3)
     cpu_percent = round(cpu_percent, 1)
     mem_kb = int(mem_info.rss / 1024)
@@ -233,12 +203,11 @@ def collect_process_metrics(proc: psutil.Process, prev_cpu_info, sample_time_mon
 
 def main(duration, base_interval, output_file):
     start_time = time.monotonic()
-    prev_cpu_info = {}  # pid -> {"cpu_time": float, "timestamp": float}
+    prev_cpu_info = {}
 
     while True:
         loop_start = time.monotonic()
 
-        # If duration is set, check remaining time & adjust interval
         if duration is not None:
             elapsed = loop_start - start_time
             remaining = duration - elapsed
@@ -248,17 +217,14 @@ def main(duration, base_interval, output_file):
         else:
             interval = base_interval
 
-        # Timestamp (UTC, Z suffix)
         timestamp = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
 
-        # Per-process metrics
         processes_data = []
         for proc in find_target_processes():
             data = collect_process_metrics(proc, prev_cpu_info, loop_start)
             if data is not None:
                 processes_data.append(data)
 
-        # Totals (in kB and rounded)
         total_cpu_seconds = round(
             sum(p["cpu_usage_seconds"] for p in processes_data), 3
         )
@@ -289,11 +255,9 @@ def main(duration, base_interval, output_file):
         except OSError as e:
             print(f"Error writing to {output_file}: {e}")
 
-        # Check duration again after work is done
         if duration is not None and (time.monotonic() - start_time) >= duration:
             break
 
-        # Sleep until next interval (best-effort)
         elapsed_this_loop = time.monotonic() - loop_start
         sleep_time = interval - elapsed_this_loop
         if sleep_time > 0:

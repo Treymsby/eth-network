@@ -1,42 +1,5 @@
-# - scenario: taskrunner
-#   name: "HighCompute CPU+Memory Spam"
-#   description: "Burn CPU and memory with HighComputeContract (nested loops + hashes)"
-#   config:
-#     seed: highcompute-taskrunner
-#     refill_amount: 5000000000000000000      # 5 ETH in wei
-#     refill_balance: 1000000000000000000     # 1 ETH in wei
-#     refill_interval: 600
-#     total_count: 0
-#     throughput: 1                           # a bit lower, this is pretty heavy
-#     max_pending: 2
-#     max_wallets: 20
-#     rebroadcast: 120
-#     base_fee: 20
-#     tip_fee: 2
-#     tasks_config: |-
-#       init:
-#         - type: deploy
-#           name: highcompute
-#           data:
-#             contract_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.bin"
-#             gas_limit: 6000000
-#             amount: 0
-
-#       execution:
-#         # HighComputeContract.burnCpuAndMemory(uint256 iterations, uint256 arraySize)
-#         - type: call
-#           name: burn-cpu-mem
-#           data:
-#             target: "{contract:highcompute}"
-#             call_abi_file: "https://raw.githubusercontent.com/Treymsby/eth-network/refs/heads/main/spammer_scripts/contracts/build/HighComputeContract.abi"
-#             call_fn_name: "burnCpuAndMemory"
-#             # One Big Computational Tx approx 59 Million Gas.
-#             call_args: ["107", "128"]
-#             gas_limit: 60000000
-#             amount: 0
-
 - scenario: taskrunner
-  name: 'HighCompute CPU'
+  name: 'Keccak256 CPU SPAM'
   description: Test for Keccak256From32Bytes operations
   config:
     await_txs: false

@@ -16,25 +16,21 @@ TASK_URLS = {
 
 
 def load_spamoor_url(ports_file: Path) -> str:
-    """Read ports.json and return the spamoor base URL."""
     if not ports_file.is_file():
         raise FileNotFoundError(f"ports file not found: {ports_file}")
 
     with ports_file.open("r", encoding="utf-8") as f:
         ports = json.load(f)
 
-    # key is "spamoor" in your example
     try:
         base_url = ports["spamoor"]
     except KeyError:
         raise KeyError('"spamoor" key not found in ports.json')
 
-    # strip trailing slash if any
     return base_url.rstrip("/")
 
 
 def post_json(url: str, payload: dict):
-    """Helper to POST JSON and print status."""
     print(f"[POST] {url}  payload={payload}")
     try:
         resp = requests.post(url, json=payload, headers={"accept": "application/json"})
@@ -52,7 +48,6 @@ def post_json(url: str, payload: dict):
 
 
 def simple_post(url: str):
-    """Helper to POST with no body."""
     print(f"[POST] {url}")
     try:
         resp = requests.post(url, headers={"accept": "application/json"})
@@ -95,14 +90,12 @@ def main():
         action="store_true",
         help="If set, only perform imports and skip the start/pause sequence.",
     )
-    # NEW: separate start delay (first timer)
     parser.add_argument(
         "--start-delay",
         type=int,
         default=384,
         help="Delay (in seconds) before starting spammer 102, default: 360",
     )
-    # Existing delay now effectively the second timer
     parser.add_argument(
         "--delay",
         type=int,
@@ -116,7 +109,6 @@ def main():
     base_url = load_spamoor_url(ports_file)
     print(f"Using spamoor base URL: {base_url}")
 
-    # 1) Run imports (if any)
     if args.imports:
         for task_name in args.imports:
             task_url = TASK_URLS[task_name]
@@ -131,7 +123,6 @@ def main():
         print("\n--no-timers specified, skipping start/pause sequence.")
         return
 
-    # 2) After first delay (360s by default), start spammer 102
     print(f"\nWaiting {args.start_delay} seconds before starting spammer 102...")
     time.sleep(args.start_delay)
 
@@ -139,7 +130,6 @@ def main():
     print("\n=== Starting spammer 102 ===")
     simple_post(start_url)
 
-    # 3) After another delay (384s by default), pause spammers 100, 101, 102
     print(
         f"\nWaiting another {args.delay} seconds before pausing 100, 101, 102..."
     )
