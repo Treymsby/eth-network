@@ -1,37 +1,5 @@
 #!/usr/bin/env python3
-"""
-Visualize client metrics JSON-lines file.
 
-Input format:
-- One JSON object per line (no commas, not a single big JSON array).
-- Each object has:
-    {
-        "timestamp": "...",
-        "interval_seconds": 1,
-        "processes": [
-            {
-                "node_name": "...",
-                "cpu_usage_seconds": ...,
-                "cpu_usage_percent": ...,
-                "memory_usage_kb": ...,
-                "memory_usage_percent": ...
-            },
-            ...
-        ],
-        "totals": {
-            "cpu_usage_seconds": ...,
-            "cpu_usage_percent": ...,
-            "memory_usage_kb": ...,
-            "memory_usage_percent": ...
-        }
-    }
-
-Usage:
-    python plot_client_metrics.py --input client_metrics.json --output plots/
-
-Requirements:
-    pip install matplotlib pandas
-"""
 
 import argparse
 import json

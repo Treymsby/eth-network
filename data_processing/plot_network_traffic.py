@@ -1,23 +1,4 @@
 #!/usr/bin/env python3
-"""
-Plot network node traffic over time from two Grafana CSV exports
-(Received + Transmitted) like the ones produced for the
-network_node_bytes_total_* metrics.
-
-X-axis: seconds since the first sample.
-Y-axis: Kb/s or Mb/s (chosen automatically per chart).
-
-Usage example:
-    python plot_network_traffic.py \
-        --input network_node_bytes_total_received-....csv \
-                network_node_bytes_total_transmit-....csv \
-        --output ./plots
-
-The --input flag takes *both* CSV files (order does not matter).
-The script will try to detect which one is "received" vs "transmit"
-from the file name; if that fails and there are exactly two files,
-the first is treated as "received" and the second as "transmit".
-"""
 
 import argparse
 import os

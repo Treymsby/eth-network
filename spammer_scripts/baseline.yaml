@@ -1,5 +1,4 @@
 # -------------------------------- Baseline Traffic --------------------------------
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/eoatx/README.md
 - scenario: eoatx
   name: "EOA transfers"
   description: "Basic ETH transfers with tx/slot throughput"
@@ -19,7 +18,6 @@
     rebroadcast: 60       # Seconds to wait before rebroadcasting
     log_txs: true
 
-# https://github.com/ethpandaops/spamoor/blob/master/scenarios/erctx/README.md
 - scenario: erctx
   name: "ERC-20 transfers"
   description: "Deploy ERC20 contracts and transfer tokens"
