@@ -37,8 +37,5 @@ This project uses **Kurtosis** to orchestrate an Ethereum testnet via `ethpandao
 ---
 
 ## Quickstart
-
-### 1) Start the Kurtosis engine (if needed)
-
-```bash
-sudo kurtosis engine restart
+Run:
+bash start_network_and_metrics.sh
